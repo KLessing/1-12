@@ -18,7 +18,7 @@ dice_instance = {}
 def get_dice_pos(index: int, count: int = 6):
 	# x = img width = 100 pixel; 25 pixel between images, starting at 25 pixel to left border
 	# y = offset for now
-	return ((img_width + offset_x) * (i - 1) + offset_x, offset_y)
+	return ((img_width + offset_x) * (index - 1) + offset_x, offset_y)
 
 # load images and dice instances
 def load():	
@@ -28,6 +28,8 @@ def load():
 		dice_img[i] = pygame.image.load('img/' + str(i) + '.png').convert_alpha()
 		pos = get_dice_pos(i)
 		dice_instance[i] = clickable.Clickable(pos[0], pos[1], dice_img[i], 1)
+
+load()
 
 #game loop
 run = True
