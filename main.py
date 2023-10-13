@@ -4,8 +4,6 @@ import dice
 import random
 
 SCREEN_SIZE = (852, 480)
-OFFSET = 30
-IMG_WIDTH = 100
 
 #create display window
 SCREEN = pygame.display.set_mode(SCREEN_SIZE)
@@ -16,35 +14,6 @@ pygame.display.set_caption('1 - 12')
 dice_img = {}
 selected_dice_img = {}
 current_dice = {}
-
-# calc dice pos dynamically in screen mid according to dice index and count of all dice
-def get_dice_pos(index: int, count: int = 6) -> tuple:
-	# separate all dice into two rows
-	# round down to whole number with //
-	separator = count // 2 
-	height_mid = SCREEN_SIZE[1] // 2
-	
-	if count == 1:
-		# single dice
-		y = height_mid - (IMG_WIDTH // 2)
-		col_index = 0 # the index in the row
-		col_count = 1 # how many columns (dice) are in the row
-	elif index < separator:
-		# top row
-		y = height_mid - IMG_WIDTH - (OFFSET // 2)
-		col_index = index
-		col_count = separator
-	else:
-		# bottom row
-		y = height_mid + (OFFSET // 2)
-		col_index = index - separator
-		col_count = count - separator
-
-	dice_row_width = col_count * IMG_WIDTH + (col_count - 1) * OFFSET
-	dice_row_pos = (SCREEN_SIZE[0] // 2) - (dice_row_width // 2)
-	x = col_index * (IMG_WIDTH + OFFSET) + dice_row_pos
-		
-	return (x, y)
 
 # init images and dice instances for the first move
 def init():	
@@ -59,8 +28,7 @@ def init():
 	# init first move
 	for i in range(0, 6):
 		rdm = random.randrange(1, 7) # rdm 1 - 6
-		pos = get_dice_pos(i)
-		current_dice[i] = dice.Dice(pos[0], pos[1], dice_img[rdm], selected_dice_img[rdm], rdm)
+		current_dice[i] = dice.Dice(dice_img[rdm], selected_dice_img[rdm], rdm, i, 6, SCREEN_SIZE)
 
 def main():
 	init()
