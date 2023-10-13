@@ -1,5 +1,6 @@
 import pygame
 import clickable
+import random
 
 SCREEN_WIDTH = 852
 SCREEN_HEIGHT = 480
@@ -15,7 +16,7 @@ pygame.display.set_caption('1 - 12')
 
 dice_img = {}
 selected_dice_img = {}
-dice_instance = {}
+current_dice = {}
 
 # calc dice pos dynamically in screen mid according to dice index and count of all dice
 def get_dice_pos(index: int, count: int = 6) -> tuple:
@@ -46,16 +47,21 @@ def get_dice_pos(index: int, count: int = 6) -> tuple:
 		
 	return (x, y)
 
-# init images and dice instances
+# init images and dice instances for the first move
 def init():	
 	# use background img, starting at rect top left
 	SCREEN.blit(BACKGROUND, [0, 0])
 
+	# init images
 	for i in range(1, 7):
 		dice_img[i] = pygame.image.load('img/' + str(i) + '.png').convert_alpha()
 		selected_dice_img[i] = pygame.image.load('img/' + str(i) + '_selected.png').convert_alpha()
-		pos = get_dice_pos(i - 1) # used dice will start at 0
-		dice_instance[i] = clickable.Clickable(pos[0], pos[1], dice_img[i], 1)
+
+	# init first move
+	for i in range(0, 6):
+		rdm = random.randrange(1, 7) # rdm 1 - 6
+		pos = get_dice_pos(i)
+		current_dice[i] = clickable.Clickable(pos[0], pos[1], dice_img[rdm], 1, rdm)
 
 def main():
 	init()
@@ -64,9 +70,9 @@ def main():
 	run = True
 	while run:
 		# placeholder: draw all dices instances for now
-		for i in range(1, 7):
-			if dice_instance[i].draw(SCREEN):
-				print(i)
+		for i in range(len(current_dice)):
+			if current_dice[i].draw(SCREEN):
+				print(current_dice[i].value)
 
 		#event handler
 		for event in pygame.event.get():
