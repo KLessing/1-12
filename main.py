@@ -1,5 +1,6 @@
 import pygame
 import clickable
+import dice
 import random
 
 SCREEN_WIDTH = 852
@@ -61,7 +62,7 @@ def init():
 	for i in range(0, 6):
 		rdm = random.randrange(1, 7) # rdm 1 - 6
 		pos = get_dice_pos(i)
-		current_dice[i] = clickable.Clickable(pos[0], pos[1], dice_img[rdm], 1, rdm)
+		current_dice[i] = dice.Dice(pos[0], pos[1], dice_img[rdm], selected_dice_img[rdm], rdm)
 
 def main():
 	init()
@@ -72,7 +73,7 @@ def main():
 		# placeholder: draw all dices instances for now
 		for i in range(len(current_dice)):
 			if current_dice[i].draw(SCREEN):
-				print(current_dice[i].value)
+				print(current_dice[i].value, ":", current_dice[i].clicked)
 
 		#event handler
 		for event in pygame.event.get():
