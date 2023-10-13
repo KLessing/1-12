@@ -1,24 +1,47 @@
 import pygame
 import clickable
 
-#create display window
 SCREEN_WIDTH = 852
 SCREEN_HEIGHT = 480
 
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption('1 - 12')
-
-offset_y = 175
-offset_x = 25
-img_width = 100
+OFFSET = 30
+IMG_WIDTH = 100
 
 dice_img = {}
 dice_instance = {}
 
+#create display window
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption('1 - 12')
+
+# calc dice pos dynamically in screen mid according to dice index and count of all dice
 def get_dice_pos(index: int, count: int = 6):
-	# x = img width = 100 pixel; 25 pixel between images, starting at 25 pixel to left border
-	# y = offset for now
-	return ((img_width + offset_x) * (index - 1) + offset_x, offset_y)
+	# separate all dice into two rows
+	# round down to whole number with //
+	separator = count // 2 
+	height_mid = SCREEN_HEIGHT // 2
+	
+	if count == 1:
+		# single dice
+		y = height_mid - (IMG_WIDTH // 2)
+		col_index = 0 # the index in the row
+		col_count = 1 # how many columns (dice) are in the row
+	elif index < separator:
+		# top row
+		y = height_mid - IMG_WIDTH - (OFFSET // 2)
+		col_index = index
+		col_count = separator
+	else:
+		# bottom row
+		y = height_mid + (OFFSET // 2)
+		col_index = index - separator
+		col_count = count - separator
+
+	dice_row_width = col_count * IMG_WIDTH + (col_count - 1) * OFFSET
+	dice_row_pos = (SCREEN_WIDTH // 2) - (dice_row_width // 2)
+	x = col_index * (IMG_WIDTH + OFFSET) + dice_row_pos
+		
+	return (x, y)
 
 # load images and dice instances
 def load():	
@@ -26,7 +49,7 @@ def load():
 
 	for i in range(1, 7):
 		dice_img[i] = pygame.image.load('img/' + str(i) + '.png').convert_alpha()
-		pos = get_dice_pos(i)
+		pos = get_dice_pos(i - 1) # used dice will start at 0
 		dice_instance[i] = clickable.Clickable(pos[0], pos[1], dice_img[i], 1)
 
 load()
