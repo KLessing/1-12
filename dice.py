@@ -10,8 +10,9 @@ class Dice():
 		self.rect = pygame.Rect(self.pos[0], self.pos[1], width, width)
 		self.img = img
 		self.s_img = s_img
-		self.clicked = False
 		self.value = value
+		self.clicked = False
+
 
 	def draw(self, surface: pygame.display):
 		action = False
