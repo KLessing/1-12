@@ -14,6 +14,7 @@ BACKGROUND = pygame.image.load('img/table_top.png').convert_alpha()
 pygame.display.set_caption('1 - 12')
 
 dice_img = {}
+selected_dice_img = {}
 dice_instance = {}
 
 # calc dice pos dynamically in screen mid according to dice index and count of all dice
@@ -52,6 +53,7 @@ def init():
 
 	for i in range(1, 7):
 		dice_img[i] = pygame.image.load('img/' + str(i) + '.png').convert_alpha()
+		selected_dice_img[i] = pygame.image.load('img/' + str(i) + '_selected.png').convert_alpha()
 		pos = get_dice_pos(i - 1) # used dice will start at 0
 		dice_instance[i] = clickable.Clickable(pos[0], pos[1], dice_img[i], 1)
 
