@@ -13,9 +13,7 @@ class Dice():
 		self.value = value
 		self.clicked = False
 
-
 	def draw(self, surface: pygame.display):
-		action = False
 		# Get mouse position
 		pos = pygame.mouse.get_pos()
 
@@ -25,7 +23,6 @@ class Dice():
 				self.clicked = not self.clicked
 				# prevent click trigger for two seconds
 				pygame.time.delay(200)
-				action = True
 
 		# Draw Clickable img on screen
 		if self.clicked:
@@ -33,8 +30,6 @@ class Dice():
 		else:
 			surface.blit(self.img, (self.rect.x, self.rect.y))
 
-		return action
-	
 	# calc dice pos dynamically in screen mid according to dice index and count of all dice
 	def get_pos(self, index: int, count: int, screen_size: tuple, width: int) -> tuple:
 		# separate all dice into two rows

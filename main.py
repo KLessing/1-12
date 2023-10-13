@@ -13,11 +13,26 @@ pygame.display.set_caption('1 - 12')
 
 dice_img = {}
 selected_dice_img = {}
-current_dice = {}
-buttons = {}
+current_dice = []
+used_dice = []
+buttons = []
+
+def move():
+	# reset screen to draw new dice instances without overlapping
+	SCREEN.blit(BACKGROUND, [0, 0])
+	count = 6 - len(used_dice)
+	current_dice.clear()
+	for i in range(0, count):
+		rdm = random.randrange(1, 7) # rdm 1 - 6
+		current_dice.append(dice.Dice(dice_img[rdm], selected_dice_img[rdm], rdm, i, count, SCREEN_SIZE))
+
+def get_selected_dice():
+	for dice in current_dice:
+		if dice.clicked:
+			used_dice.append(dice.value)
 
 # init images, buttons and dice instances for the first move
-def init():	
+def init():
 	# use background img, starting at rect top left
 	SCREEN.blit(BACKGROUND, [0, 0])
 
@@ -26,18 +41,15 @@ def init():
 	finish_btn_img = pygame.image.load('img/button_finish.png').convert_alpha()
 
 	# init button instances
-	buttons[0] = button.Button(confirm_btn_img, 0.75, "confirm", SCREEN_SIZE)
-	buttons[1] = button.Button(finish_btn_img, 0.75, "finish", SCREEN_SIZE)
+	buttons.append(button.Button(confirm_btn_img, 0.75, "confirm", SCREEN_SIZE))
+	buttons.append(button.Button(finish_btn_img, 0.75, "finish", SCREEN_SIZE))
 
 	# init dice images
 	for i in range(1, 7):
 		dice_img[i] = pygame.image.load('img/' + str(i) + '.png').convert_alpha()
 		selected_dice_img[i] = pygame.image.load('img/' + str(i) + '_selected.png').convert_alpha()
 
-	# init dice instances for first move
-	for i in range(0, 6):
-		rdm = random.randrange(1, 7) # rdm 1 - 6
-		current_dice[i] = dice.Dice(dice_img[rdm], selected_dice_img[rdm], rdm, i, 6, SCREEN_SIZE)
+	move()
 
 def main():
 	init()
@@ -47,16 +59,17 @@ def main():
 	while run:
 		# draw confirm button and listen to click
 		if buttons[0].draw(SCREEN):
-			print("confirm")
+			get_selected_dice()
+			move()
 
 		# draw finish button and listen to click
 		if buttons[1].draw(SCREEN):
-			print("finish")
+			used_dice.clear()
+			move()
 
 		# draw all dice and listen to clicks
-		for i in range(len(current_dice)):
-			if current_dice[i].draw(SCREEN):
-				print(current_dice[i].value, ":", current_dice[i].clicked)
+		for dice in current_dice:
+			dice.draw(SCREEN)
 
 		#event handler
 		for event in pygame.event.get():
