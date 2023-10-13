@@ -7,15 +7,17 @@ SCREEN_HEIGHT = 480
 OFFSET = 30
 IMG_WIDTH = 100
 
+#create display window
+SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+BACKGROUND = pygame.image.load('img/table_top.png').convert_alpha()
+
+pygame.display.set_caption('1 - 12')
+
 dice_img = {}
 dice_instance = {}
 
-#create display window
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption('1 - 12')
-
 # calc dice pos dynamically in screen mid according to dice index and count of all dice
-def get_dice_pos(index: int, count: int = 6):
+def get_dice_pos(index: int, count: int = 6) -> tuple:
 	# separate all dice into two rows
 	# round down to whole number with //
 	separator = count // 2 
@@ -43,39 +45,36 @@ def get_dice_pos(index: int, count: int = 6):
 		
 	return (x, y)
 
-# load images and dice instances
-def load():	
-	background = pygame.image.load('img/table_top.png').convert_alpha()
+# init images and dice instances
+def init():	
+	# use background img, starting at rect top left
+	SCREEN.blit(BACKGROUND, [0, 0])
 
 	for i in range(1, 7):
 		dice_img[i] = pygame.image.load('img/' + str(i) + '.png').convert_alpha()
 		pos = get_dice_pos(i - 1) # used dice will start at 0
 		dice_instance[i] = clickable.Clickable(pos[0], pos[1], dice_img[i], 1)
 
-load()
+def main():
+	init()
 
-#game loop
-run = True
-while run:
+	#game loop
+	run = True
+	while run:
+		# placeholder: draw all dices instances for now
+		for i in range(1, 7):
+			if dice_instance[i].draw(SCREEN):
+				print(i)
 
-	# color backround
-	screen.fill([255, 255, 255]) 
+		#event handler
+		for event in pygame.event.get():
+			pass
+			#quit game (press X)
+			if event.type == pygame.QUIT:
+				run = False
 
-	# use background img, starting at rect top left
-	#screen.blit(background, [0, 0])
+		pygame.display.update()
 
-	# placeholder: draw all dices instances for now
-	for i in range(1, 7):
-		if dice_instance[i].draw(screen):
-			print(i)
+	pygame.quit()
 
-	#event handler
-	for event in pygame.event.get():
-		pass
-		#quit game (press X)
-		if event.type == pygame.QUIT:
-			run = False
-
-	pygame.display.update()
-
-pygame.quit()
+main()
