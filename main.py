@@ -1,6 +1,7 @@
 import pygame
 import button
 import dice
+import draw_only_dice
 import random
 
 SCREEN_SIZE = (852, 480)
@@ -26,10 +27,21 @@ def move():
 		rdm = random.randrange(1, 7) # rdm 1 - 6
 		current_dice.append(dice.Dice(dice_img[rdm], selected_dice_img[rdm], rdm, i, count, SCREEN_SIZE))
 
-def get_selected_dice():
+def set_selected_dice():
+	selected_dice = []
+
+	for dice in used_dice:
+		selected_dice.append(dice.value)
+
 	for dice in current_dice:
 		if dice.clicked:
-			used_dice.append(dice.value)
+			selected_dice.append(dice.value)
+
+	used_dice.clear()
+	selected_dice.sort(reverse=True)
+
+	for index, value in enumerate(selected_dice):
+		used_dice.append(draw_only_dice.DrawOnlyDice(dice_img[value], value, index, len(selected_dice), 0.5))
 
 # init images, buttons and dice instances for the first move
 def init():
@@ -59,7 +71,7 @@ def main():
 	while run:
 		# draw confirm button and listen to click
 		if buttons[0].draw(SCREEN):
-			get_selected_dice()
+			set_selected_dice()
 			move()
 
 		# draw finish button and listen to click
@@ -69,6 +81,9 @@ def main():
 
 		# draw all dice and listen to clicks
 		for dice in current_dice:
+			dice.draw(SCREEN)
+
+		for dice in used_dice:
 			dice.draw(SCREEN)
 
 		#event handler
