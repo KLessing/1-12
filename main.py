@@ -45,6 +45,18 @@ def set_selected_dice():
 	for index, value in enumerate(selected_dice):
 		used_dice.append(draw_only_dice.DrawOnlyDice(dice_img[value], value, index, 0.5))
 
+def updateScore():
+	new_score = {}
+	# init with previous values
+	for i in range(1, 13):
+		new_score[i] = scores[0].values[i]
+
+	for dice in (used_dice):
+		if new_score[dice.value] < 5:
+			new_score[dice.value] += 1
+	
+	scores[0] = score.SCORE(new_score, SCREEN_SIZE[0])
+
 # init images, buttons and dice instances for the first move
 def init():
 	# set game name
@@ -87,6 +99,7 @@ def main():
 
 		# draw finish button and listen to click
 		if buttons[1].draw(SCREEN):
+			updateScore()
 			used_dice.clear()
 			move()
 
