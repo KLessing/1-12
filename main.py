@@ -2,6 +2,7 @@ import pygame
 import button
 import dice
 import draw_only_dice
+import score
 import random
 
 SCREEN_SIZE = (852, 480)
@@ -10,16 +11,17 @@ SCREEN_SIZE = (852, 480)
 SCREEN = pygame.display.set_mode(SCREEN_SIZE)
 BACKGROUND = pygame.image.load('img/table_top.png').convert_alpha()
 
-pygame.display.set_caption('1 - 12')
-
 dice_img = {}
 selected_dice_img = {}
 current_dice = []
 used_dice = []
 buttons = []
+scores = []
+
+# TODO: Playername: Score: 1-12: 0-5
 
 def move():
-	# reset screen to draw new dice instances without overlapping
+	# reset screen to draw the background image for new dice instances without overlapping
 	SCREEN.blit(BACKGROUND, [0, 0])
 	count = 6 - len(used_dice)
 	current_dice.clear()
@@ -45,16 +47,25 @@ def set_selected_dice():
 
 # init images, buttons and dice instances for the first move
 def init():
-	# use background img, starting at rect top left
-	SCREEN.blit(BACKGROUND, [0, 0])
+	# set game name
+	pygame.display.set_caption('1 - 12')
+	# global init (needed for fonts etc.)
+	pygame.init()
 
 	# init button images
 	confirm_btn_img = pygame.image.load('img/button_confirm.png').convert_alpha()
 	finish_btn_img = pygame.image.load('img/button_finish.png').convert_alpha()
 
 	# init button instances
-	buttons.append(button.Button(confirm_btn_img, 0.75, "confirm", SCREEN_SIZE))
-	buttons.append(button.Button(finish_btn_img, 0.75, "finish", SCREEN_SIZE))
+	buttons.append(button.Button(confirm_btn_img, 0.8, "confirm", SCREEN_SIZE))
+	buttons.append(button.Button(finish_btn_img, 0.8, "finish", SCREEN_SIZE))
+
+	# init score # TODO for player
+	score_init = {}
+	for i in range(1, 13):
+		score_init[i] = 0
+
+	scores.append(score.SCORE(score_init, SCREEN_SIZE[0]))
 
 	# init dice images
 	for i in range(1, 7):
@@ -79,12 +90,15 @@ def main():
 			used_dice.clear()
 			move()
 
-		# draw all dice and listen to clicks
+		# draw all dice and listen to clicks in object
 		for dice in current_dice:
 			dice.draw(SCREEN)
 
 		for dice in used_dice:
 			dice.draw(SCREEN)
+
+		# draw score #TODO for current player
+		scores[0].draw(SCREEN)
 
 		#event handler
 		for event in pygame.event.get():

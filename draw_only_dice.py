@@ -2,7 +2,6 @@ import pygame
 
 OFFSET = 15
 
-#button class
 class DrawOnlyDice():
 	def __init__(self, img: pygame.image, value: int, index: int, scale: float):
 		width = img.get_width() * scale

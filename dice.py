@@ -2,7 +2,6 @@ import pygame
 
 OFFSET = 30
 
-# Dice class
 class Dice():
 	def __init__(self, img: pygame.image, s_img: pygame.image, value: int, index: int, count: int, screen_size: tuple):
 		width = img.get_width()

@@ -2,7 +2,6 @@ import pygame
 
 OFFSET = 25
 
-#button class
 class Button():
 	def __init__(self, img: pygame.image, scale: float, value: str, screen_size: tuple):
 		width = img.get_width() * scale
