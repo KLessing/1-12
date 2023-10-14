@@ -41,7 +41,7 @@ def set_selected_dice():
 	selected_dice.sort(reverse=True)
 
 	for index, value in enumerate(selected_dice):
-		used_dice.append(draw_only_dice.DrawOnlyDice(dice_img[value], value, index, len(selected_dice), 0.5))
+		used_dice.append(draw_only_dice.DrawOnlyDice(dice_img[value], value, index, 0.5))
 
 # init images, buttons and dice instances for the first move
 def init():
