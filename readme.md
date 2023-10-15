@@ -2,21 +2,22 @@
 
 Work in Progress
 
+
 TODO List
-
-Score update 7-12
-Score update validation
-
-Use streaks for score (| | |)
 
 Highlight current used score
 
-Multiple players with individual scores
 
 Direct dice selection validation
-(selection valid for already used dice?)
+
 Disable confirm button
+
 Show red button
+
+
+Use streaks for score (| | |)
+
+Multiple players with individual scores
 
 Win Screen
 
@@ -24,9 +25,16 @@ ___
 
 (Finish move confirmation)
 
+Allow move confirmation only when selected numbers are not already collected?
+
 Save & Load
+
 Scoreboard
+
 Animation
+
 AI
+
 App
+
 Tutorial
