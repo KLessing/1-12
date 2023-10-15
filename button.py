@@ -3,20 +3,29 @@ import pygame
 OFFSET = 25
 
 class Button():
-	def __init__(self, img: pygame.image, scale: float, value: str, screen_size: tuple):
+	def __init__(self, img: pygame.image, scale: float, value: str, screen_size: tuple, disabled: bool = False):
 		width = img.get_width() * scale
 		height = img.get_height() * scale
 		self.pos = self.get_pos(value, screen_size, width, height)
 		self.rect = pygame.Rect(self.pos[0], self.pos[1], width, height)
 		self.img = pygame.transform.scale(img, (width, height))
 		self.clicked = False
+		self.disabled = disabled
 
 	def draw(self, surface):
 		action = False
-		#get mouse position
+
+		# draw button on screen
+		surface.blit(self.img, (self.rect.x, self.rect.y))
+
+		# don't check click when disabled
+		if self.disabled:
+			return action
+		
+		# get mouse position
 		pos = pygame.mouse.get_pos()
 
-		#check mouseover and clicked conditions
+		# check mouseover and clicked conditions
 		if self.rect.collidepoint(pos):
 			if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
 				self.clicked = True
@@ -24,9 +33,6 @@ class Button():
 
 		if pygame.mouse.get_pressed()[0] == 0:
 			self.clicked = False
-
-		#draw button on screen
-		surface.blit(self.img, (self.rect.x, self.rect.y))
 
 		return action
 	

@@ -18,7 +18,19 @@ used_dice = []
 buttons = []
 scores = []
 
+# load confirm button images only once on initialization for reuse
+# 0 = enabled, 1 = disabled
+confirm_btn_imgs = []
+
 # TODO: Playername: Score: 1-12: 0-5
+
+def enable_confirm_btn():
+	if buttons[0].disabled:
+		buttons[0] = button.Button(confirm_btn_imgs[0], 0.8, "confirm", SCREEN_SIZE, False)
+
+def disable_confirm_btn():
+	if not buttons[0].disabled:
+		buttons[0] = button.Button(confirm_btn_imgs[1], 0.8, "confirm", SCREEN_SIZE, True)
 
 def move():
 	# reset screen to draw the background image for new dice instances without overlapping
@@ -28,6 +40,8 @@ def move():
 	for i in range(0, count):
 		rdm = random.randrange(1, 7) # rdm 1 - 6
 		current_dice.append(dice.Dice(dice_img[rdm], selected_dice_img[rdm], rdm, i, count, SCREEN_SIZE))
+	# disable confirm button before any selection
+	disable_confirm_btn()	
 
 def is_first_move():
 	return len(used_dice) == 0
@@ -73,7 +87,8 @@ def validate_selection():
 		# TODO for second move check if selection equals hightlighted score
 		pass
 
-	# TODO always disable confirmation on move start
+	# TODO remove placeholder
+	return True
 
 def update_score():
 	new_score = {}
@@ -95,11 +110,12 @@ def init():
 	pygame.init()
 
 	# init button images
-	confirm_btn_img = pygame.image.load('img/button_confirm.png').convert_alpha()
+	confirm_btn_imgs.append(pygame.image.load('img/button_confirm.png').convert_alpha())
+	confirm_btn_imgs.append(pygame.image.load('img/button_confirm_disabled.png').convert_alpha())
 	finish_btn_img = pygame.image.load('img/button_finish.png').convert_alpha()
 
 	# init button instances
-	buttons.append(button.Button(confirm_btn_img, 0.8, "confirm", SCREEN_SIZE))
+	buttons.append(button.Button(confirm_btn_imgs[0], 0.8, "confirm", SCREEN_SIZE))
 	buttons.append(button.Button(finish_btn_img, 0.8, "finish", SCREEN_SIZE))
 
 	# init score # TODO for player
@@ -136,7 +152,10 @@ def main():
 		# draw all dice and listen to clicks in object
 		for dice in current_dice:
 			if dice.draw(SCREEN):
-				validate_selection()
+				if validate_selection():
+					enable_confirm_btn()
+				else:
+					disable_confirm_btn()
 
 
 		for dice in used_dice:

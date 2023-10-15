@@ -7,13 +7,7 @@ TODO List
 
 Highlight current used score
 
-
 Direct dice selection validation
-
-Disable confirm button
-
-Show red button
-
 
 Use streaks for score (| | |)
 
