@@ -24,6 +24,9 @@ confirm_btn_imgs = []
 
 # TODO: Playername: Score: 1-12: 0-5
 
+def highlight_score_numbers(numbers: [int] = []):
+	scores[0] = score.SCORE(scores[0].values, SCREEN_SIZE[0], numbers)
+
 def enable_confirm_btn():
 	if buttons[0].disabled:
 		buttons[0] = button.Button(confirm_btn_imgs[0], 0.8, "confirm", SCREEN_SIZE, False)
@@ -69,12 +72,16 @@ def validate_selection():
 
 	# nothing selected: disable confirmation
 	if len(selected_current_dice_values) == 0:
+		if is_first_move():
+			highlight_score_numbers()
 		return False
 	
 	# are all numbers equal? 
 	# use set to group values and check length
 	if len(set(all_selected_dice)) == 1:
-		# TODO highlight score for this number
+		# highlight score for this number
+		highlight_score_numbers([all_selected_dice[0]])
+
 		# TODO allow move but also check for number combination
 		pass
 	

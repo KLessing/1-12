@@ -5,11 +5,11 @@ LINE_OFFSET = 30
 WIDTH = 100
 HEIGTH = 500
 
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+STANDARD_COLOR = (255, 255, 255)
+HIGHLIGHT_COLOR = (0, 0, 0)
 
 class SCORE():
-	def __init__(self, values: [str], screen_width: int):
+	def __init__(self, values: [str], screen_width: int, highlights: [int] = []):
 		self.x = screen_width - WIDTH + OFFSET
 		self.values = values
 
@@ -22,7 +22,10 @@ class SCORE():
 			if key < 10:
 				# indent one-digit numbers
 				txt = ' ' + txt
-			self.text.append(font.render(txt , True, WHITE))
+			if key in highlights:
+				self.text.append(font.render(txt , True, HIGHLIGHT_COLOR))
+			else:
+				self.text.append(font.render(txt , True, STANDARD_COLOR))
 
 	def draw(self, surface):
 		for line, text in enumerate(self.text):
