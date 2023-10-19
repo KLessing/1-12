@@ -94,6 +94,8 @@ def validate_selection():
 		# TODO for second move check if selection equals hightlighted score
 		pass
 
+	# TODO check if number already completed
+
 	# TODO remove placeholder
 	return True
 
@@ -113,12 +115,8 @@ def init():
 	buttons.append(button.Button(confirm_btn_imgs[0], 0.8, "confirm", SCREEN_SIZE))
 	buttons.append(button.Button(finish_btn_img, 0.8, "finish", SCREEN_SIZE))
 
-	# init score # TODO for player
-	score_init = {}
-	for i in range(1, 13):
-		score_init[i] = 0
-
-	scores.append(score.SCORE(score_init, SCREEN_SIZE[0]))
+	# init scores # TODO multiplayer
+	scores.append(score.Score(SCREEN_SIZE[0]))
 
 	# init dice images
 	for i in range(1, 7):
