@@ -25,7 +25,7 @@ confirm_btn_imgs = []
 # TODO: Playername: Score: 1-12: 0-5
 
 def highlight_score_numbers(numbers: [int] = []):
-	scores[0] = score.SCORE(scores[0].values, SCREEN_SIZE[0], numbers)
+	scores[0].generate_text(numbers)
 
 def enable_confirm_btn():
 	if buttons[0].disabled:
