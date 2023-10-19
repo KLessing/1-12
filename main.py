@@ -97,18 +97,6 @@ def validate_selection():
 	# TODO remove placeholder
 	return True
 
-def update_score():
-	new_score = {}
-	# init with previous values
-	for i in range(1, 13):
-		new_score[i] = scores[0].values[i]
-
-	for dice in (used_dice):
-		if new_score[dice.value] < 5:
-			new_score[dice.value] += 1
-	
-	scores[0] = score.SCORE(new_score, SCREEN_SIZE[0])
-
 # init images, buttons and dice instances for the first move
 def init():
 	# set game name
@@ -152,7 +140,7 @@ def main():
 
 		# draw finish button and listen to click
 		if buttons[1].draw(SCREEN):
-			update_score()
+			scores[0].update(get_used_dice_values())
 			used_dice.clear()
 			move()
 
