@@ -82,26 +82,25 @@ def get_value_combinations(values):
 		else:
 			return set()
 	
-	# save all combinations for the first value
-	combinations = {values[0]}
-	for i in range(1, len(values)):
-		current_combination = values[0] + values[i]
-		if current_combination >= 7:
-			combinations.add(current_combination)
+	combinations = set()
 
-	# remove all combination which are not already in set
-	for i in range(1, len(values)):
+	# get all combinations which are equal for all values
+	for i, value in enumerate(values):
 		# save the current single value
-		current_combinations = {values[i]}
-		# save all combinations
-		for j in range(0, len(values)):
+		current_combinations = {value}
+		# check all combinations
+		for j, check_value in enumerate(values):
 			# except the current value
 			if j != i:
-				current_combination = values[i] + values[j]
+				current_combination = value + check_value
 				if current_combination >= 7:
 					current_combinations.add(current_combination)
-		# only save the combinations which are equal for all numbers
-		combinations = combinations.intersection(current_combinations)
+		if i == 0:
+			# save combinations for first number
+			combinations = current_combinations
+		else:
+			# only save the combinations which are equal for all numbers
+			combinations = combinations.intersection(current_combinations)
 	
 	return combinations
 
