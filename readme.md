@@ -5,9 +5,7 @@ Work in Progress
 
 TODO List
 
-Highlight current used score
-
-Direct dice selection validation
+Finish validation
 
 Use streaks for score (| | |)
 

@@ -41,7 +41,8 @@ def move():
 	count = 6 - len(used_dice)
 	current_dice.clear()
 	for i in range(0, count):
-		rdm = random.randrange(1, 7) # rdm 1 - 6
+		# roll dice (1-6)
+		rdm = random.randrange(1, 7) 
 		current_dice.append(dice.Dice(dice_img[rdm], selected_dice_img[rdm], rdm, i, count, SCREEN_SIZE))
 	# disable confirm button before any selection
 	disable_confirm_btn()	
@@ -66,35 +67,58 @@ def set_selected_dice():
 	for index, value in enumerate(selected_dice_values):
 		used_dice.append(draw_only_dice.DrawOnlyDice(dice_img[value], value, index, 0.5))
 
+# combine every number with every other number
+def get_value_combinations(values):
+	if len(values) == 0:
+		return set()
+		
+	# combinations are not possible when the number of values is uneven
+	if len(values) % 2 != 0:
+		# are all numbers equal? 
+		# use set to group values and check length
+		if len(set(values)) == 1:
+			# return the number
+			return {values[0]}
+		else:
+			return set()
+	
+	# save all combinations for the first value
+	combinations = {values[0]}
+	for i in range(1, len(values)):
+		current_combination = values[0] + values[i]
+		if current_combination >= 7:
+			combinations.add(current_combination)
+
+	# remove all combination which are not already in set
+	for i in range(1, len(values)):
+		# save the current single value
+		current_combinations = {values[i]}
+		# save all combinations
+		for j in range(0, len(values)):
+			# except the current value
+			if j != i:
+				current_combination = values[i] + values[j]
+				if current_combination >= 7:
+					current_combinations.add(current_combination)
+		# only save the combinations which are equal for all numbers
+		combinations = combinations.intersection(current_combinations)
+	
+	return combinations
+
 def validate_selection():
-	selected_current_dice_values = get_selected_current_dice_values()
-	all_selected_dice = get_all_selected_dice_values()
+	combinations = get_value_combinations(get_selected_current_dice_values())
 
-	# nothing selected: disable confirmation
-	if len(selected_current_dice_values) == 0:
-		if is_first_move():
-			highlight_score_numbers()
+	if len(combinations) == 0:
+		highlight_score_numbers()
 		return False
-	
-	# are all numbers equal? 
-	# use set to group values and check length
-	if len(set(all_selected_dice)) == 1:
-		# highlight score for this number
-		highlight_score_numbers([all_selected_dice[0]])
-
-		# TODO allow move but also check for number combination
-		pass
-	
-
-	if len(selected_current_dice_values) % 2: # TODO and highlight > 6
-		# TODO check number combination for 7-12
-		pass
 
 	if not is_first_move():
 		# TODO for second move check if selection equals hightlighted score
 		pass
 
 	# TODO check if number already completed
+	
+	highlight_score_numbers(combinations)
 
 	# TODO remove placeholder
 	return True
