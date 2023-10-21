@@ -10,7 +10,7 @@ SELECTED_COLOR = (0, 0, 0)
 COMPLETED_COLOR = (100, 100, 100)
 
 class Score():
-	def __init__(self, screen_width: int):
+	def __init__(self, player_name: str, screen_width: int):
 		self.x = screen_width - WIDTH + OFFSET
 		self.values = {}
 		self.selections = set()
@@ -19,6 +19,9 @@ class Score():
 
 		# use default font (init needed)
 		self.font = pygame.font.Font(None, 30)
+
+		self.player = player_name
+
 		self.text = []
 		self.generate_text()
 

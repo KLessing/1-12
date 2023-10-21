@@ -11,6 +11,8 @@ SCREEN_SIZE = (852, 480)
 SCREEN = pygame.display.set_mode(SCREEN_SIZE)
 BACKGROUND = pygame.image.load('img/table_top.png').convert_alpha()
 
+PLAYER_NAMES = ["Player 1", "Player 2"]
+
 dice_img = {}
 selected_dice_img = {}
 current_dice = []
@@ -18,11 +20,11 @@ used_dice = []
 buttons = []
 scores = []
 
+current_player_index = 0
+
 # load confirm button images only once on initialization for reuse
 # 0 = enabled, 1 = disabled
 confirm_btn_imgs = []
-
-# TODO: Playername: Score: 1-12: 0-5
 
 def enable_confirm_btn():
 	if buttons[0].disabled:
@@ -31,6 +33,15 @@ def enable_confirm_btn():
 def disable_confirm_btn():
 	if not buttons[0].disabled:
 		buttons[0] = button.Button(confirm_btn_imgs[1], 0.8, "confirm", SCREEN_SIZE, True)
+
+def set_next_player():
+	# use global var for overwriting
+	global current_player_index
+
+	if current_player_index == len(PLAYER_NAMES) - 1:
+		current_player_index = 0
+	else:
+		current_player_index += 1
 
 def move():
 	# reset screen to draw the background image for new dice instances without overlapping
@@ -42,7 +53,18 @@ def move():
 		rdm = random.randrange(1, 7) 
 		current_dice.append(dice.Dice(dice_img[rdm], selected_dice_img[rdm], rdm, i, count, SCREEN_SIZE))
 	# disable confirm button before any selection
-	disable_confirm_btn()	
+	disable_confirm_btn()
+
+def end_move():
+	# update score for current player
+	scores[current_player_index].update(len(used_dice))
+	
+	# show score for next player
+	set_next_player()
+	
+	# start new first move for the next player
+	used_dice.clear()
+	move()
 
 def is_first_move():
 	return len(used_dice) == 0
@@ -106,14 +128,14 @@ def validate_selection():
 
 	if not is_first_move():
 		# check combinations with already selected values
-		combinations = combinations.intersection(scores[0].selections)
+		combinations = combinations.intersection(scores[current_player_index].selections)
 		# only update selection when changed 
 		# (e.g. first move 5 5, second move 5, now only single 5 is selected instead of 10)
 		if len(combinations) >= 1:
-			scores[0].set_selection(combinations)
+			scores[current_player_index].set_selection(combinations)
 	else:
 		# selection will stay after first move
-		scores[0].set_selection(combinations)
+		scores[current_player_index].set_selection(combinations)
 
 	if len(combinations) == 0:
 		return False
@@ -136,14 +158,18 @@ def init():
 	buttons.append(button.Button(confirm_btn_imgs[0], 0.8, "confirm", SCREEN_SIZE))
 	buttons.append(button.Button(finish_btn_img, 0.8, "finish", SCREEN_SIZE))
 
-	# init scores # TODO multiplayer
-	scores.append(score.Score(SCREEN_SIZE[0]))
+	# init scores
+	for player_name in PLAYER_NAMES:
+		scores.append(score.Score(player_name, SCREEN_SIZE[0]))
+
+	current_player_index = 0
 
 	# init dice images
 	for i in range(1, 7):
 		dice_img[i] = pygame.image.load('img/' + str(i) + '.png').convert_alpha()
 		selected_dice_img[i] = pygame.image.load('img/' + str(i) + '_selected.png').convert_alpha()
 
+	# start first move
 	move()
 
 def main():
@@ -159,9 +185,7 @@ def main():
 
 		# draw finish button and listen to click
 		if buttons[1].draw(SCREEN):
-			scores[0].update(len(used_dice))
-			used_dice.clear()
-			move()
+			end_move()
 
 		# draw all dice and listen to clicks in object
 		for dice in current_dice:
@@ -175,8 +199,8 @@ def main():
 		for dice in used_dice:
 			dice.draw(SCREEN)
 
-		# draw score #TODO for current player
-		scores[0].draw(SCREEN)
+		# draw score for current player
+		scores[current_player_index].draw(SCREEN)
 
 		#event handler
 		for event in pygame.event.get():

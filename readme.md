@@ -12,13 +12,19 @@ Validation Special Cases
 
 ___
 
-Use streaks for score (| | |)
+Show Player Name
 
-Multiple players with individual scores
+Continue Move when selection is completed
+
+Confirm Button Disable function
 
 Win Screen
 
 ___
+
+Maybe:
+
+Use streaks for score (| | |)
 
 Finish move confirmation?
 
