@@ -24,9 +24,6 @@ confirm_btn_imgs = []
 
 # TODO: Playername: Score: 1-12: 0-5
 
-def highlight_score_numbers(numbers: [int] = []):
-	scores[0].generate_text(numbers)
-
 def enable_confirm_btn():
 	if buttons[0].disabled:
 		buttons[0] = button.Button(confirm_btn_imgs[0], 0.8, "confirm", SCREEN_SIZE, False)
@@ -107,20 +104,21 @@ def get_value_combinations(values):
 def validate_selection():
 	combinations = get_value_combinations(get_selected_current_dice_values())
 
-	if len(combinations) == 0:
-		highlight_score_numbers()
-		return False
-
 	if not is_first_move():
-		# TODO for second move check if selection equals hightlighted score
-		pass
+		# check combinations with already selected values
+		combinations = combinations.intersection(scores[0].selections)
+		# only update selection when changed 
+		# (e.g. first move 5 5, second move 5, now only single 5 is selected instead of 10)
+		if len(combinations) >= 1:
+			scores[0].set_selection(combinations)
+	else:
+		# selection will stay after first move
+		scores[0].set_selection(combinations)
 
-	# TODO check if number already completed
-	
-	highlight_score_numbers(combinations)
-
-	# TODO remove placeholder
-	return True
+	if len(combinations) == 0:
+		return False
+	else:
+		return True
 
 # init images, buttons and dice instances for the first move
 def init():
@@ -161,7 +159,7 @@ def main():
 
 		# draw finish button and listen to click
 		if buttons[1].draw(SCREEN):
-			scores[0].update(get_used_dice_values())
+			scores[0].update(len(used_dice))
 			used_dice.clear()
 			move()
 

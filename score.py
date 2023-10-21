@@ -13,6 +13,7 @@ class Score():
 	def __init__(self, screen_width: int):
 		self.x = screen_width - WIDTH + OFFSET
 		self.values = {}
+		self.selections = set()
 		for i in range(1, 13):
 			self.values[i] = 0
 
@@ -32,7 +33,7 @@ class Score():
 	
 	# selection = highlight these numbers
 	# (empty param = only standard colored numbers)
-	def generate_text(self, selection: [int] = []):
+	def generate_text(self):
 		self.text = []
 		for key, value in self.values.items():
 			txt = str(key) + " : " + str(value)
@@ -41,16 +42,43 @@ class Score():
 				txt = ' ' + txt
 			if value == 5:
 				self.text.append(self.font.render(txt , True, COMPLETED_COLOR))
-			elif key in selection:
+			elif key in self.selections:
 				self.text.append(self.font.render(txt , True, SELECTED_COLOR))
 			else:
 				self.text.append(self.font.render(txt , True, DEFAULT_COLOR))
 
 	# update the score after the move is finished
 	# (selection will be removed)
-	def update(self, values: [int]):	
-		for value in values:
-			if self.values[value] < 5:
-				self.values[value] += 1
+	def update(self, used_dice_count: int):
+		# nothing selected = no update
+		if used_dice_count == 0:
+			return
+
+		# uneven count of used dice?
+		if used_dice_count % 2 == 1:
+			# get single value (e.g. 5 5 5 instead of 10)
+			real_selection = min(self.selections)
+		else:
+			# otherwise use the number comb (e.g. 10 instead of 5)
+			real_selection = max(self.selections)
+
+			if real_selection >= 7:		
+				# two dice are used for one number comb
+				used_dice_count = used_dice_count // 2
+		
+		# add to score until max is reached
+		if self.values[real_selection] + used_dice_count <= 5:
+			self.values[real_selection] += used_dice_count
+		else:
+			self.values[real_selection] = 5
+
+		# reset selection
+		self.selections = set()
+		self.generate_text()
+		
+
+	def set_selection(self, selection: set = set()):
+		self.selections = selection
+		# reset text for hightlighting
 		self.generate_text()
 			
