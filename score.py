@@ -54,8 +54,8 @@ class Score():
 		if used_dice_count == 0:
 			return
 
-		# uneven count of used dice?
-		if used_dice_count % 2 == 1:
+		# uneven count of used dice or combination already full?
+		if used_dice_count % 2 == 1 or self.values[max(self.selections)] == 5:
 			# get single value (e.g. 5 5 5 instead of 10)
 			real_selection = min(self.selections)
 		else:

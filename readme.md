@@ -10,10 +10,6 @@ Validation Special Cases
 
 3 x 6 + 1 x 2 = 8 instead of invalid
 
-Use single collection when combination is fully collected
-
-(e.g. 8 Complete: 2 x 4 roll, use 4 instead of 8)
-
 ___
 
 Use streaks for score (| | |)
