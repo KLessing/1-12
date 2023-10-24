@@ -11,28 +11,35 @@ COMPLETED_COLOR = (100, 100, 100)
 
 class Score():
 	def __init__(self, player_name: str, screen_width: int):
-		self.x = screen_width - WIDTH + OFFSET
-		self.values = {}
 		self.selections = set()
+		self.x_pos = screen_width - WIDTH + OFFSET
+
+		# init values
+		self.values = {}
 		for i in range(1, 13):
 			self.values[i] = 0
 
 		# use default font (init needed)
 		self.font = pygame.font.Font(None, 30)
-
-		self.player = player_name
-
 		self.text = []
 		self.generate_text()
 
+		player_font = pygame.font.Font(None, 42)
+		self.player_text = player_font.render(player_name , True, DEFAULT_COLOR)
+		self.player_rect = self.player_text.get_rect(center=(screen_width/2, LINE_OFFSET + OFFSET))
+
 	def draw(self, surface: pygame.display):
+		# draw player name
+		surface.blit(self.player_text, self.player_rect)
+
+		# draw score
 		for line, text in enumerate(self.text):
 			pos = self.get_pos(line)
 			rect = pygame.Rect(pos[0], pos[1], WIDTH, HEIGTH)
 			surface.blit(text, rect)
 	
 	def get_pos(self, line: str) -> tuple:
-		return (self.x , line * LINE_OFFSET + OFFSET)
+		return (self.x_pos , line * LINE_OFFSET + OFFSET)
 	
 	# selection = highlight these numbers
 	# (empty param = only standard colored numbers)

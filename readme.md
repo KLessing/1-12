@@ -12,8 +12,6 @@ Validation Special Cases
 
 ___
 
-Show Player Name
-
 Continue Move when selection is completed
 
 Confirm Button Disable function
@@ -31,6 +29,8 @@ Finish move confirmation?
 Allow move confirmation only when selected numbers are not already collected? User responsibility?
 
 ___
+
+pyTest
 
 Save & Load
 

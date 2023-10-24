@@ -162,8 +162,6 @@ def init():
 	for player_name in PLAYER_NAMES:
 		scores.append(score.Score(player_name, SCREEN_SIZE[0]))
 
-	current_player_index = 0
-
 	# init dice images
 	for i in range(1, 7):
 		dice_img[i] = pygame.image.load('img/' + str(i) + '.png').convert_alpha()
