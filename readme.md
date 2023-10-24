@@ -12,7 +12,7 @@ Validation Special Cases
 
 ___
 
-Continue Move when selection is completed
+Validate already collected numbers
 
 Confirm Button Disable function
 
@@ -25,8 +25,6 @@ Maybe:
 Use streaks for score (| | |)
 
 Finish move confirmation?
-
-Allow move confirmation only when selected numbers are not already collected? User responsibility?
 
 ___
 

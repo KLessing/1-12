@@ -59,10 +59,12 @@ def end_move():
 	# update score for current player
 	scores[current_player_index].update(len(used_dice))
 	
-	# show score for next player
-	set_next_player()
+	# check if the user can continue with the next move
+	if not scores[current_player_index].check_continue_move():
+		# otherwise it's the next players turn
+		set_next_player()
 	
-	# start new first move for the next player
+	# start new first move
 	used_dice.clear()
 	move()
 

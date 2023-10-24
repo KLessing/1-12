@@ -12,6 +12,7 @@ COMPLETED_COLOR = (100, 100, 100)
 class Score():
 	def __init__(self, player_name: str, screen_width: int):
 		self.selections = set()
+		self.continue_move = False
 		self.x_pos = screen_width - WIDTH + OFFSET
 
 		# init values
@@ -80,15 +81,25 @@ class Score():
 		if self.values[real_selection] + used_dice_count <= 5:
 			self.values[real_selection] += used_dice_count
 		else:
+			# when the addition would be higher than five: cut to 5
 			self.values[real_selection] = 5
+		
+		# are all dice used or is max reached
+		if used_dice_count == 6 or self.values[real_selection] == 5:
+			# continue move for current player
+			self.continue_move = True
+		else:			
+			self.continue_move = False
 
 		# reset selection
 		self.selections = set()
-		self.generate_text()
-		
+		self.generate_text()		
 
 	def set_selection(self, selection: set = set()):
 		self.selections = selection
 		# reset text for hightlighting
 		self.generate_text()
-			
+
+	# can the current user continue with the next move?
+	def check_continue_move(self):
+		return self.continue_move
