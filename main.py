@@ -17,14 +17,12 @@ dice_img = {}
 selected_dice_img = {}
 current_dice = []
 used_dice = []
-buttons = []
 scores = []
 
-current_player_index = 0
+confirm_btn = {}
+finish_btn = {}
 
-# load confirm button images only once on initialization for reuse
-# 0 = enabled, 1 = disabled
-confirm_btn_imgs = []
+current_player_index = 0
 
 def set_next_player():
 	# use global var for overwriting
@@ -45,7 +43,7 @@ def move():
 		rdm = random.randrange(1, 7) 
 		current_dice.append(dice.Dice(dice_img[rdm], selected_dice_img[rdm], rdm, i, count, SCREEN_SIZE))
 	# disable confirm button before any selection
-	buttons[0].disable()
+	confirm_btn.disable()
 
 def end_move():
 	# update score for current player
@@ -144,15 +142,16 @@ def init():
 	pygame.init()
 
 	# init button images
-	confirm_btn_imgs.append(pygame.image.load('img/button_confirm.png').convert_alpha())
-	confirm_btn_imgs.append(pygame.image.load('img/button_confirm_disabled.png').convert_alpha())
+	confirm_btn_enabled_img = pygame.image.load('img/button_confirm.png').convert_alpha()
+	confirm_btn_disabled_img = pygame.image.load('img/button_confirm_disabled.png').convert_alpha()
 	finish_btn_img = pygame.image.load('img/button_finish.png').convert_alpha()
 
-	# init button instances
-	buttons.append(button.Button(confirm_btn_imgs[0], 0.8, "confirm", SCREEN_SIZE, confirm_btn_imgs[1]))
-	buttons.append(button.Button(finish_btn_img, 0.8, "finish", SCREEN_SIZE))
+	# init global button instances
+	global confirm_btn, finish_btn
+	confirm_btn = button.Button(confirm_btn_enabled_img, 0.8, "confirm", SCREEN_SIZE, confirm_btn_disabled_img)
+	finish_btn = button.Button(finish_btn_img, 0.8, "finish", SCREEN_SIZE)
 
-	# init scores
+	# init scores for all players
 	for player_name in PLAYER_NAMES:
 		scores.append(score.Score(player_name, SCREEN_SIZE[0]))
 
@@ -171,21 +170,21 @@ def main():
 	run = True
 	while run:
 		# draw confirm button and listen to click
-		if buttons[0].draw(SCREEN):
+		if confirm_btn.draw(SCREEN):
 			set_selected_dice()
 			move()
 
 		# draw finish button and listen to click
-		if buttons[1].draw(SCREEN):
+		if finish_btn.draw(SCREEN):
 			end_move()
 
 		# draw all dice and listen to clicks in object
 		for dice in current_dice:
 			if dice.draw(SCREEN):
 				if validate_selection():
-					buttons[0].enable()
+					confirm_btn.enable()
 				else:
-					buttons[0].disable()
+					confirm_btn.disable()
 
 
 		for dice in used_dice:
