@@ -26,14 +26,6 @@ current_player_index = 0
 # 0 = enabled, 1 = disabled
 confirm_btn_imgs = []
 
-def enable_confirm_btn():
-	if buttons[0].disabled:
-		buttons[0] = button.Button(confirm_btn_imgs[0], 0.8, "confirm", SCREEN_SIZE, False)
-
-def disable_confirm_btn():
-	if not buttons[0].disabled:
-		buttons[0] = button.Button(confirm_btn_imgs[1], 0.8, "confirm", SCREEN_SIZE, True)
-
 def set_next_player():
 	# use global var for overwriting
 	global current_player_index
@@ -53,7 +45,7 @@ def move():
 		rdm = random.randrange(1, 7) 
 		current_dice.append(dice.Dice(dice_img[rdm], selected_dice_img[rdm], rdm, i, count, SCREEN_SIZE))
 	# disable confirm button before any selection
-	disable_confirm_btn()
+	buttons[0].disable()
 
 def end_move():
 	# update score for current player
@@ -157,7 +149,7 @@ def init():
 	finish_btn_img = pygame.image.load('img/button_finish.png').convert_alpha()
 
 	# init button instances
-	buttons.append(button.Button(confirm_btn_imgs[0], 0.8, "confirm", SCREEN_SIZE))
+	buttons.append(button.Button(confirm_btn_imgs[0], 0.8, "confirm", SCREEN_SIZE, confirm_btn_imgs[1]))
 	buttons.append(button.Button(finish_btn_img, 0.8, "finish", SCREEN_SIZE))
 
 	# init scores
@@ -191,9 +183,9 @@ def main():
 		for dice in current_dice:
 			if dice.draw(SCREEN):
 				if validate_selection():
-					enable_confirm_btn()
+					buttons[0].enable()
 				else:
-					disable_confirm_btn()
+					buttons[0].disable()
 
 
 		for dice in used_dice:
