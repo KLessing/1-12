@@ -24,6 +24,11 @@ finish_btn = {}
 
 current_player_index = 0
 
+def use_test_values():
+	test_values = [2, 2, 6, 6, 6, 6]
+	for i, val in enumerate(test_values):
+		current_dice.append(dice.Dice(dice_img[val], selected_dice_img[val], val, i, len(test_values), SCREEN_SIZE))
+
 def set_next_player():
 	# use global var for overwriting
 	global current_player_index
@@ -91,6 +96,13 @@ def get_value_combinations(values):
 			# return the number
 			return {values[0]}
 		else:
+			return set()
+
+	# combinations are not possible when more then half values are equal but not all
+	# (e.g. 3 x 6 for 4 values or 4 - 5 x 6 for 6 dice)
+	count_single_values = {i:values.count(i) for i in values}
+	for value_count in count_single_values.values():
+		if value_count > len(values) // 2 and value_count < len(values):
 			return set()
 	
 	combinations = set()

@@ -18,6 +18,8 @@ ___
 
 Maybe:
 
+Dynamic Screen Size
+
 Use streaks for score (| | |)
 
 Finish move confirmation?
