@@ -12,10 +12,6 @@ Validation Special Cases
 
 ___
 
-Validate already collected numbers
-
-Confirm Button Disable function
-
 Win Screen
 
 ___

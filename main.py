@@ -117,6 +117,7 @@ def get_value_combinations(values):
 
 def validate_selection():
 	combinations = get_value_combinations(get_selected_current_dice_values())
+	combinations = scores[current_player_index].remove_collected_values(combinations)
 
 	if not is_first_move():
 		# check combinations with already selected values

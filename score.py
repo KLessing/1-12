@@ -103,3 +103,13 @@ class Score():
 	# can the current user continue with the next move?
 	def check_continue_move(self):
 		return self.continue_move
+
+	# return collection without already collected values
+	def remove_collected_values(self, collection: set):
+		# shallow copy for removal in iteration
+		res = collection.copy()
+		for value in collection:
+			if self.values[value] == 5:
+				res.remove(value)
+		return res
+		
