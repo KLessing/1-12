@@ -56,7 +56,7 @@ def end_move():
 	scores[current_player_index].update(len(used_dice))
 	
 	# check if the user can continue with the next move
-	if not scores[current_player_index].check_continue_move():
+	if not scores[current_player_index].continue_move:
 		# otherwise it's the next players turn
 		set_next_player()
 	
@@ -166,6 +166,12 @@ def validate_selection():
 		return False
 	else:
 		return True
+	
+def draw_win_screen():
+	winner_font = pygame.font.Font(None, 72)
+	winner_text = winner_font.render("YOU WIN!" , True, (255, 255, 255))
+	winner_rect = winner_text.get_rect(center=(SCREEN_SIZE[0] // 2, SCREEN_SIZE[1] // 2))
+	SCREEN.blit(winner_text, winner_rect)
 
 # init images, buttons and dice instances for the first move
 def init():
@@ -211,13 +217,17 @@ def main():
 		if finish_btn.draw(SCREEN):
 			end_move()
 
-		# draw all dice and listen to clicks in object
-		for dice in current_dice:
-			if dice.draw(SCREEN):
-				if validate_selection():
-					confirm_btn.enable()
-				else:
-					confirm_btn.disable()
+
+		if scores[current_player_index].win:
+			draw_win_screen()
+		else:
+			# draw all dice and listen to clicks in object
+			for dice in current_dice:
+				if dice.draw(SCREEN):
+					if validate_selection():
+						confirm_btn.enable()
+					else:
+						confirm_btn.disable()
 
 
 		for dice in used_dice:

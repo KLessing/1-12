@@ -14,6 +14,7 @@ class Score():
 		self.selections = set()
 		self.continue_move = False
 		self.x_pos = screen_width - WIDTH + OFFSET
+		self.win = False
 
 		# init values
 		self.values = {}
@@ -25,6 +26,7 @@ class Score():
 		self.text = []
 		self.generate_text()
 
+		self.player_name = player_name
 		player_font = pygame.font.Font(None, 42)
 		self.player_text = player_font.render(player_name , True, DEFAULT_COLOR)
 		self.player_rect = self.player_text.get_rect(center=(screen_width/2, LINE_OFFSET + OFFSET))
@@ -45,6 +47,7 @@ class Score():
 	# selection = highlight these numbers
 	# (empty param = only standard colored numbers)
 	def generate_text(self):
+		win = True
 		self.text = []
 		for key, value in self.values.items():
 			txt = str(key) + " : " + str(value)
@@ -53,10 +56,13 @@ class Score():
 				txt = ' ' + txt
 			if value == 5:
 				self.text.append(self.font.render(txt , True, COMPLETED_COLOR))
-			elif key in self.selections:
-				self.text.append(self.font.render(txt , True, SELECTED_COLOR))
 			else:
-				self.text.append(self.font.render(txt , True, DEFAULT_COLOR))
+				win = False
+				if key in self.selections:
+					self.text.append(self.font.render(txt , True, SELECTED_COLOR))
+				else:
+					self.text.append(self.font.render(txt , True, DEFAULT_COLOR))
+		self.win = win
 
 	# update the score after the move is finished
 	# (selection will be removed)
@@ -99,10 +105,6 @@ class Score():
 		self.selections = selection
 		# reset text for hightlighting
 		self.generate_text()
-
-	# can the current user continue with the next move?
-	def check_continue_move(self):
-		return self.continue_move
 
 	# return collection without already collected values
 	def remove_collected_values(self, collection: set):

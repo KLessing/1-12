@@ -5,12 +5,17 @@ Work in Progress
 
 TODO List
 
+Fix continue move
 
 Outsource Validation and Game Class
 
 ___
 
-Win Screen
+Next Game & Exit Button
+
+Count - Points
+
+Play till - 112 Points
 
 ___
 
