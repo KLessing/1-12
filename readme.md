@@ -6,9 +6,7 @@ Work in Progress
 TODO List
 
 
-Validation Special Cases
-
-3 x 6 + 1 x 2 = 8 instead of invalid
+Outsource Validation and Game Class
 
 ___
 
