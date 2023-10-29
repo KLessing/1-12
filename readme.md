@@ -5,8 +5,6 @@ Work in Progress
 
 TODO List
 
-Fix continue move
-
 Outsource Validation and Game Class
 
 ___

@@ -71,6 +71,9 @@ class Score():
 		if used_dice_count == 0:
 			return
 
+		# score count which is added to the score value
+		score_count = used_dice_count
+
 		# uneven count of used dice or combination already full?
 		if used_dice_count % 2 == 1 or self.values[max(self.selections)] == 5:
 			# get single value (e.g. 5 5 5 instead of 10)
@@ -81,11 +84,11 @@ class Score():
 
 			if real_selection >= 7:		
 				# two dice are used for one number comb
-				used_dice_count = used_dice_count // 2
+				score_count = used_dice_count // 2
 		
 		# add to score until max is reached
-		if self.values[real_selection] + used_dice_count <= 5:
-			self.values[real_selection] += used_dice_count
+		if self.values[real_selection] + score_count <= 5:
+			self.values[real_selection] += score_count
 		else:
 			# when the addition would be higher than five: cut to 5
 			self.values[real_selection] = 5
