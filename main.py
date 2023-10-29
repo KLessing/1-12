@@ -13,6 +13,8 @@ BACKGROUND = pygame.image.load('img/table_top.png').convert_alpha()
 
 PLAYER_NAMES = ["Player 1", "Player 2"]
 
+TEST_MODUS = False
+
 dice_img = {}
 selected_dice_img = {}
 current_dice = []
@@ -24,11 +26,11 @@ finish_btn = {}
 
 current_player_index = 0
 
-def use_test_values():
-	test_values = [2, 2, 6, 6, 6, 6]
-	#test_values = [6, 6, 6, 1, 4, 3]
-	for i, val in enumerate(test_values):
-		current_dice.append(dice.Dice(dice_img[val], selected_dice_img[val], val, i, len(test_values), SCREEN_SIZE))
+def use_test_values(count: int):
+	test_values = [6, 1, 4, 3, 5, 2]
+	for i in range(0, count):
+		val = test_values[i]
+		current_dice.append(dice.Dice(dice_img[val], selected_dice_img[val], val, i, count, SCREEN_SIZE))
 
 def set_next_player():
 	# use global var for overwriting
@@ -39,15 +41,18 @@ def set_next_player():
 	else:
 		current_player_index += 1
 
+def roll_dice(count: int):
+	for i in range(0, count):
+		# roll dice (1-6)
+		rdm = random.randrange(1, 7) 
+		current_dice.append(dice.Dice(dice_img[rdm], selected_dice_img[rdm], rdm, i, count, SCREEN_SIZE))
+
 def move():
 	# reset screen to draw the background image for new dice instances without overlapping
 	SCREEN.blit(BACKGROUND, [0, 0])
 	count = 6 - len(used_dice)
 	current_dice.clear()
-	for i in range(0, count):
-		# roll dice (1-6)
-		rdm = random.randrange(1, 7) 
-		current_dice.append(dice.Dice(dice_img[rdm], selected_dice_img[rdm], rdm, i, count, SCREEN_SIZE))
+	roll_dice(count) if not TEST_MODUS else use_test_values(count)
 	# disable confirm button before any selection
 	confirm_btn.disable()
 
