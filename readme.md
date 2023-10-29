@@ -5,7 +5,11 @@ Work in Progress
 
 TODO List
 
-Outsource Validation and Game Class
+use validator class without init (@classmethod?)
+
+Keep Double Selection for second move after single selection removal
+
+Outsource Game Class
 
 ___
 
