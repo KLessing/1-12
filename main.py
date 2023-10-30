@@ -3,8 +3,10 @@ import button
 import dice
 import draw_only_dice
 import score
-import validator
 import random
+
+# import only public functions from module
+from validator import *
 
 SCREEN_SIZE = (852, 480)
 
@@ -21,7 +23,6 @@ selected_dice_img = {}
 current_dice = []
 used_dice = []
 scores = []
-validation = validator.Validator()
 
 confirm_btn = {}
 finish_btn = {}
@@ -126,8 +127,8 @@ def init():
 	# start first move
 	move()
 
-def validate_selection():
-	if validation.validate_selection(get_selected_current_dice_values(), scores[current_player_index], is_first_move()):
+def validate():
+	if validate_selection(get_selected_current_dice_values(), scores[current_player_index], is_first_move()):
 		confirm_btn.enable()
 	else:
 		confirm_btn.disable()
@@ -153,7 +154,7 @@ def main():
 			# draw all dice and listen to clicks in object
 			for dice in current_dice:
 				if dice.draw(SCREEN):
-					validate_selection()
+					validate()
 
 		for dice in used_dice:
 			dice.draw(SCREEN)
