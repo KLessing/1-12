@@ -7,8 +7,6 @@ TODO List
 
 Keep Double Selection for second move after single selection removal
 
-Outsource Game Class
-
 ___
 
 Next Game & Exit Button
