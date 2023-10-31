@@ -7,6 +7,8 @@ import random
 # import only public functions from module
 from validator import *
 
+WIN_MSG = "YOU WIN!"
+
 class Game():
     def __init__(self, screen_size: tuple(), player_names: [str], caption: str, test_modus = False):
         # global init (needed for fonts etc.)
@@ -114,7 +116,7 @@ class Game():
         
     def draw_win_screen(self):
         winner_font = pygame.font.Font(None, 72)
-        winner_text = winner_font.render("YOU WIN!" , True, (255, 255, 255))
+        winner_text = winner_font.render(WIN_MSG , True, (255, 255, 255))
         winner_rect = winner_text.get_rect(center=(self.screen_size[0] // 2, self.screen_size[1] // 2))
         self.screen.blit(winner_text, winner_rect)
 
