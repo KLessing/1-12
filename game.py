@@ -11,50 +11,15 @@ WIN_MSG = "YOU WIN!"
 
 class Game():
     def __init__(self, screen_size: tuple(), player_names: [str], caption: str, test_modus = False):
-        # global init (needed for fonts etc.)
-        pygame.init()
-        # set game name
-        pygame.display.set_caption(caption)
-
         self.screen_size = screen_size
         self.player_names = player_names
         self.test_modus = test_modus
 
-        #create display window
-        self.screen = pygame.display.set_mode(self.screen_size)
-
-        # init background image
-        self.background = pygame.image.load('img/table_top.png').convert_alpha()
-
-        # init button images
-        confirm_move_btn_enabled_img = pygame.image.load('img/button_confirm-move.png').convert_alpha()
-        confirm_move_btn_disabled_img = pygame.image.load('img/disabled_button_confirm-move.png').convert_alpha()
-        finish_move_btn_img = pygame.image.load('img/button_end-move.png').convert_alpha()
-        new_game_btn_img = pygame.image.load('img/button_new-game.png').convert_alpha()
-        end_game_btn_img = pygame.image.load('img/button_end-game.png').convert_alpha()
-
-        # init global button instances
-        self.confirm_move_btn = button.Button(confirm_move_btn_enabled_img, 1, "right", self.screen_size, confirm_move_btn_disabled_img)
-        self.finish_move_btn = button.Button(finish_move_btn_img, 1, "left", self.screen_size)
-        self.new_game_btn = button.Button(new_game_btn_img, 1, "right", self.screen_size)
-        self.end_game_btn = button.Button(end_game_btn_img, 1, "left", self.screen_size)
-
-        # init scores for all players
-        self.scores = []
-        for player_name in player_names:
-            self.scores.append(score.Score(player_name, self.screen_size[0]))
-
-        # init dice images
-        self.dice_img = {}
-        self.selected_dice_img = {}
-        for i in range(1, 7):
-            self.dice_img[i] = pygame.image.load('img/' + str(i) + '.png').convert_alpha()
-            self.selected_dice_img[i] = pygame.image.load('img/' + str(i) + '_selected.png').convert_alpha()
+        self.__init_game(caption)
+        self.__init_buttons()
+        self.__init_scores()
+        self.__init_dice()
         
-        self.current_dice = []
-        self.used_dice = []
-        self.current_player_index = 0
-
         # start first move
         self.__move()
 
@@ -76,6 +41,7 @@ class Game():
                     self.__validate()
 
     def show_game_info(self):
+        # draw used dice
         for dice in self.used_dice:
             dice.draw(self.screen)
 
@@ -84,6 +50,51 @@ class Game():
 
 
     """ ----- Private Functions ----- """
+
+    """ --- Init Functions --- """
+
+    def __init_game(self, caption: str):
+        # global init (needed for fonts etc.)
+        pygame.init()
+        # set game name
+        pygame.display.set_caption(caption)
+        #create display window
+        self.screen = pygame.display.set_mode(self.screen_size)
+        # init background image
+        self.background = pygame.image.load('img/table_top.png').convert_alpha()        
+
+    def __init_buttons(self):
+        # init button images
+        confirm_move_btn_enabled_img = pygame.image.load('img/button_confirm-move.png').convert_alpha()
+        confirm_move_btn_disabled_img = pygame.image.load('img/disabled_button_confirm-move.png').convert_alpha()
+        finish_move_btn_img = pygame.image.load('img/button_end-move.png').convert_alpha()
+        new_game_btn_img = pygame.image.load('img/button_new-game.png').convert_alpha()
+        end_game_btn_img = pygame.image.load('img/button_end-game.png').convert_alpha()
+
+        # init global button instances
+        self.confirm_move_btn = button.Button(confirm_move_btn_enabled_img, 1, "right", self.screen_size, confirm_move_btn_disabled_img)
+        self.finish_move_btn = button.Button(finish_move_btn_img, 1, "left", self.screen_size)
+        self.new_game_btn = button.Button(new_game_btn_img, 1, "right", self.screen_size)
+        self.end_game_btn = button.Button(end_game_btn_img, 1, "left", self.screen_size)
+
+    def __init_scores(self):
+        # init scores for all players
+        self.current_player_index = 0
+        self.scores = []
+        for player_name in self.player_names:
+            self.scores.append(score.Score(player_name, self.screen_size[0]))
+
+    def __init_dice(self):
+        # init dice images
+        self.dice_img = {}
+        self.selected_dice_img = {}
+        for i in range(1, 7):
+            self.dice_img[i] = pygame.image.load('img/' + str(i) + '.png').convert_alpha()
+            self.selected_dice_img[i] = pygame.image.load('img/' + str(i) + '_selected.png').convert_alpha()
+        
+        # init empty dice instances
+        self.current_dice = []
+        self.used_dice = []        
 
     """ --- Handle Button Functions --- """
 

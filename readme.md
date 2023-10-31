@@ -7,6 +7,8 @@ TODO List
 
 Keep Double Selection for second move after single selection removal
 
+Enable selection of different combinations (2 x 5 + 6 + 4 = 2 x 10)
+
 ___
 
 Next Game & Exit Button
