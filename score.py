@@ -7,7 +7,6 @@ HEIGTH = 500
 
 DEFAULT_COLOR = (255, 255, 255)
 SELECTED_COLOR = (0, 0, 0)
-COMPLETED_COLOR = (100, 100, 100)
 
 class Score():
 	def __init__(self, player_name: str, screen_width: int):
@@ -50,18 +49,23 @@ class Score():
 		win = True
 		self.text = []
 		for key, value in self.values.items():
-			txt = str(key) + " : " + str(value)
+			txt = str(key) + " : "
+			# add stroke for every collected value
+			for i in range(value):
+				txt += "|"
 			if key < 10:
 				# indent one-digit numbers
 				txt = ' ' + txt
-			if value == 5:
-				self.text.append(self.font.render(txt , True, COMPLETED_COLOR))
-			else:
+			if value != 5:
 				win = False
 				if key in self.selections:
 					self.text.append(self.font.render(txt , True, SELECTED_COLOR))
 				else:
 					self.text.append(self.font.render(txt , True, DEFAULT_COLOR))
+			else:
+				# draw empty line when value collection is complete
+				self.text.append(self.font.render("" , True, DEFAULT_COLOR))
+				
 		self.win = win
 
 	# update the score after the move is finished
