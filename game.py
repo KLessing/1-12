@@ -96,7 +96,7 @@ class Game():
         self.current_dice = []
         self.used_dice = []        
 
-    """ --- Handle Button Functions --- """
+    """ --- Button Functions --- """
 
     def __handle_confirm_move_btn(self):
         # draw confirm button and listen to click
@@ -119,23 +119,47 @@ class Game():
             print("End Game clicked")
             # TODO quit app without exception
 
+    """ --- Dice Functions --- """
+
     def __use_test_values(self, count: int):
         test_values = [6, 1, 4, 3, 5, 2]
         for i in range(0, count):
             val = test_values[i]
             self.current_dice.append(dice.Dice(self.dice_img[val], self.selected_dice_img[val], val, i, count, self.screen_size))
 
-    def __set_next_player(self):
-        if self.current_player_index == len(self.player_names) - 1:
-            self.current_player_index = 0
-        else:
-            self.current_player_index += 1
-
     def __roll_dice(self, count: int):
         for i in range(0, count):
             # roll dice (1-6)
             rdm = random.randrange(1, 7) 
             self.current_dice.append(dice.Dice(self.dice_img[rdm], self.selected_dice_img[rdm], rdm, i, count, self.screen_size))
+
+    def __is_first_move(self):
+        return len(self.used_dice) == 0
+
+    def __get_selected_current_dice_values(self):
+        return [dice.value for dice in self.current_dice if dice.clicked]
+
+    def __get_used_dice_values(self):
+        return [dice.value for dice in self.used_dice]
+
+    def __get_all_selected_dice_values(self):
+        res = self.__get_selected_current_dice_values() + self.__get_used_dice_values()
+        return sorted(res, reverse=True)
+
+    def __set_selected_dice(self):
+        selected_dice_values = self.__get_all_selected_dice_values()
+        self.used_dice.clear()
+
+        for index, value in enumerate(selected_dice_values):
+            self.used_dice.append(draw_only_dice.DrawOnlyDice(self.dice_img[value], value, index, 0.5))
+
+    """ --- Game Functions --- """
+
+    def __set_next_player(self):
+        if self.current_player_index == len(self.player_names) - 1:
+            self.current_player_index = 0
+        else:
+            self.current_player_index += 1
 
     def __move(self):
         # reset screen to draw the background image for new dice instances without overlapping
@@ -158,26 +182,6 @@ class Game():
         # start new first move
         self.used_dice.clear()
         self.__move()
-
-    def __is_first_move(self):
-        return len(self.used_dice) == 0
-
-    def __get_selected_current_dice_values(self):
-        return [dice.value for dice in self.current_dice if dice.clicked]
-
-    def __get_used_dice_values(self):
-        return [dice.value for dice in self.used_dice]
-
-    def __get_all_selected_dice_values(self):
-        res = self.__get_selected_current_dice_values() + self.__get_used_dice_values()
-        return sorted(res, reverse=True)
-
-    def __set_selected_dice(self):
-        selected_dice_values = self.__get_all_selected_dice_values()
-        self.used_dice.clear()
-
-        for index, value in enumerate(selected_dice_values):
-            self.used_dice.append(draw_only_dice.DrawOnlyDice(self.dice_img[value], value, index, 0.5))
         
     def __draw_win_screen(self):
         winner_font = pygame.font.Font(None, 72)
