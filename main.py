@@ -9,17 +9,16 @@ def main():
 	# init game
 	game_instance = game.Game(SCREEN_SIZE, PLAYER_NAMES, CAPTION)
 
-	#game loop
+	# game loop
 	run = True
 	while run:
 		game_instance.handle_buttons()
 		game_instance.handle_game_play()
 		game_instance.show_game_info()
 
-		#event handler
+		# event handler
 		for event in pygame.event.get():
-			pass
-			#quit game (press X)
+			# quit game (press X or End Game Button)
 			if event.type == pygame.QUIT:
 				run = False
 

@@ -115,8 +115,8 @@ class Game():
 
     def __handle_end_game_btn(self):
         if self.end_game_btn.draw(self.screen):
-            print("End Game clicked")
-            # TODO quit app without exception
+            quit_event = pygame.event.Event(pygame.QUIT)
+            pygame.event.post(quit_event)
 
     """ --- Dice Functions --- """
 
