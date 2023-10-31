@@ -11,8 +11,6 @@ Enable selection of different combinations (2 x 5 + 6 + 4 = 2 x 10)
 
 ___
 
-Next Game & Exit Button
-
 Count - Points
 
 Play till - 112 Points

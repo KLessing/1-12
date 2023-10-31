@@ -48,7 +48,6 @@ class Game():
         # draw score for current player
         self.scores[self.current_player_index].draw(self.screen)
 
-
     """ ----- Private Functions ----- """
 
     """ --- Init Functions --- """
@@ -111,8 +110,8 @@ class Game():
 
     def __handle_new_game_btn(self):
         if self.new_game_btn.draw(self.screen):
-            print("New Game clicked")
-            # TODO new Score Init and start move
+            self.__init_scores()
+            self.__move()
 
     def __handle_end_game_btn(self):
         if self.end_game_btn.draw(self.screen):
