@@ -3,10 +3,10 @@ import pygame
 OFFSET = 25
 
 class Button():
-	def __init__(self, img: pygame.image, scale: float, value: str, screen_size: tuple, disabled_img: pygame.image = None):
+	def __init__(self, img: pygame.image, scale: float, pos: str, screen_size: tuple, disabled_img: pygame.image = None):
 		width = img.get_width() * scale
 		height = img.get_height() * scale
-		self.pos = self.get_pos(value, screen_size, width, height)
+		self.pos = self.get_pos(pos, screen_size, width, height)
 		self.rect = pygame.Rect(self.pos[0], self.pos[1], width, height)
 		
 		self.img = pygame.transform.scale(img, (width, height))
@@ -41,11 +41,11 @@ class Button():
 		return action
 	
 	# calc pos for bottom corner: confirm right corner, finish left corner
-	def get_pos(self, value: str, screen_size: tuple, width: int, height: int) -> tuple:
+	def get_pos(self, pos: str, screen_size: tuple, width: int, height: int) -> tuple:
 		y = screen_size[1] - height - OFFSET
-		if value == "confirm":
+		if pos == "right":
 			return (screen_size[0] - width - OFFSET, y)
-		elif value == "finish":
+		elif pos == "left":
 			return (OFFSET, y)
 		
 	def enable(self):

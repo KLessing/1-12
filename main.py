@@ -12,8 +12,7 @@ def main():
 	#game loop
 	run = True
 	while run:
-		game_instance.handle_confirm_btn()
-		game_instance.handle_finish_btn()
+		game_instance.handle_buttons()
 		game_instance.handle_game_play()
 		game_instance.show_game_info()
 

@@ -27,13 +27,17 @@ class Game():
         self.background = pygame.image.load('img/table_top.png').convert_alpha()
 
         # init button images
-        confirm_btn_enabled_img = pygame.image.load('img/button_confirm-move.png').convert_alpha()
-        confirm_btn_disabled_img = pygame.image.load('img/disabled_button_confirm-move.png').convert_alpha()
-        finish_btn_img = pygame.image.load('img/button_end-move.png').convert_alpha()
+        confirm_move_btn_enabled_img = pygame.image.load('img/button_confirm-move.png').convert_alpha()
+        confirm_move_btn_disabled_img = pygame.image.load('img/disabled_button_confirm-move.png').convert_alpha()
+        finish_move_btn_img = pygame.image.load('img/button_end-move.png').convert_alpha()
+        new_game_btn_img = pygame.image.load('img/button_new-game.png').convert_alpha()
+        end_game_btn_img = pygame.image.load('img/button_end-game.png').convert_alpha()
 
         # init global button instances
-        self.confirm_move_btn = button.Button(confirm_btn_enabled_img, 1, "confirm", self.screen_size, confirm_btn_disabled_img)
-        self.finish_move_btn = button.Button(finish_btn_img, 1, "finish", self.screen_size)
+        self.confirm_move_btn = button.Button(confirm_move_btn_enabled_img, 1, "right", self.screen_size, confirm_move_btn_disabled_img)
+        self.finish_move_btn = button.Button(finish_move_btn_img, 1, "left", self.screen_size)
+        self.new_game_btn = button.Button(new_game_btn_img, 1, "right", self.screen_size)
+        self.end_game_btn = button.Button(end_game_btn_img, 1, "left", self.screen_size)
 
         # init scores for all players
         self.scores = []
@@ -54,16 +58,13 @@ class Game():
         # start first move
         self.__move()
 
-    def handle_confirm_btn(self):
-        # draw confirm button and listen to click
-        if self.confirm_move_btn.draw(self.screen):
-            self.__set_selected_dice()
-            self.__move()
-
-    def handle_finish_btn(self):
-        # draw finish button and listen to click
-        if self.finish_move_btn.draw(self.screen):
-            self.__end_move()
+    def handle_buttons(self):
+        if self.scores[self.current_player_index].win:
+            self.__handle_new_game_btn()
+            self.__handle_end_game_btn()
+        else:
+            self.__handle_confirm_move_btn()
+            self.__handle_finish_move_btn()
 
     def handle_game_play(self):
         if self.scores[self.current_player_index].win:
@@ -79,10 +80,33 @@ class Game():
             dice.draw(self.screen)
 
         # draw score for current player
-        self.scores[self.current_player_index].draw(self.screen)        
+        self.scores[self.current_player_index].draw(self.screen)
 
 
-    """ Private Functions """
+    """ ----- Private Functions ----- """
+
+    """ --- Handle Button Functions --- """
+
+    def __handle_confirm_move_btn(self):
+        # draw confirm button and listen to click
+        if self.confirm_move_btn.draw(self.screen):
+            self.__set_selected_dice()
+            self.__move()
+
+    def __handle_finish_move_btn(self):
+        # draw finish button and listen to click
+        if self.finish_move_btn.draw(self.screen):
+            self.__end_move()
+
+    def __handle_new_game_btn(self):
+        if self.new_game_btn.draw(self.screen):
+            print("New Game clicked")
+            # TODO new Score Init and start move
+
+    def __handle_end_game_btn(self):
+        if self.end_game_btn.draw(self.screen):
+            print("End Game clicked")
+            # TODO quit app without exception
 
     def __use_test_values(self, count: int):
         test_values = [6, 1, 4, 3, 5, 2]
