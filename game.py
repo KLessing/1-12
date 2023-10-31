@@ -52,99 +52,27 @@ class Game():
         self.current_player_index = 0
 
         # start first move
-        self.move()
-
-    def use_test_values(self, count: int):
-        test_values = [6, 1, 4, 3, 5, 2]
-        for i in range(0, count):
-            val = test_values[i]
-            self.current_dice.append(dice.Dice(self.dice_img[val], self.selected_dice_img[val], val, i, count, self.screen_size))
-
-    def set_next_player(self):
-        if self.current_player_index == len(self.player_names) - 1:
-            self.current_player_index = 0
-        else:
-            self.current_player_index += 1
-
-    def roll_dice(self, count: int):
-        for i in range(0, count):
-            # roll dice (1-6)
-            rdm = random.randrange(1, 7) 
-            self.current_dice.append(dice.Dice(self.dice_img[rdm], self.selected_dice_img[rdm], rdm, i, count, self.screen_size))
-
-    def move(self):
-        # reset screen to draw the background image for new dice instances without overlapping
-        self.screen.blit(self.background, [0, 0])
-        count = 6 - len(self.used_dice)
-        self.current_dice.clear()
-        self.roll_dice(count) if not self.test_modus else self.use_test_values(count)
-        # disable confirm button before any selection
-        self.confirm_btn.disable()
-
-    def end_move(self):
-        # update score for current player
-        self.scores[self.current_player_index].update(len(self.used_dice))
-        
-        # check if the user can continue with the next move
-        if not self.scores[self.current_player_index].continue_move:
-            # otherwise it's the next players turn
-            self.set_next_player()
-        
-        # start new first move
-        self.used_dice.clear()
-        self.move()
-
-    def is_first_move(self):
-        return len(self.used_dice) == 0
-
-    def get_selected_current_dice_values(self):
-        return [dice.value for dice in self.current_dice if dice.clicked]
-
-    def get_used_dice_values(self):
-        return [dice.value for dice in self.used_dice]
-
-    def get_all_selected_dice_values(self):
-        res = self.get_selected_current_dice_values() + self.get_used_dice_values()
-        return sorted(res, reverse=True)
-
-    def set_selected_dice(self):
-        selected_dice_values = self.get_all_selected_dice_values()
-        self.used_dice.clear()
-
-        for index, value in enumerate(selected_dice_values):
-            self.used_dice.append(draw_only_dice.DrawOnlyDice(self.dice_img[value], value, index, 0.5))
-        
-    def draw_win_screen(self):
-        winner_font = pygame.font.Font(None, 72)
-        winner_text = winner_font.render(WIN_MSG , True, (255, 255, 255))
-        winner_rect = winner_text.get_rect(center=(self.screen_size[0] // 2, self.screen_size[1] // 2))
-        self.screen.blit(winner_text, winner_rect)
-
-    def validate(self):
-        if validate_selection(self.get_selected_current_dice_values(), self.scores[self.current_player_index], self.is_first_move()):
-            self.confirm_btn.enable()
-        else:
-            self.confirm_btn.disable()
+        self.__move()
 
     def handle_confirm_btn(self):
         # draw confirm button and listen to click
         if self.confirm_btn.draw(self.screen):
-            self.set_selected_dice()
-            self.move()
+            self.__set_selected_dice()
+            self.__move()
 
     def handle_finish_btn(self):
         # draw finish button and listen to click
         if self.finish_btn.draw(self.screen):
-            self.end_move()
+            self.__end_move()
 
     def handle_game_play(self):
         if self.scores[self.current_player_index].win:
-            self.draw_win_screen()
+            self.__draw_win_screen()
         else:
             # draw all dice and listen to clicks in object
             for dice in self.current_dice:
                 if dice.draw(self.screen):
-                    self.validate()
+                    self.__validate()
 
     def show_game_info(self):
         for dice in self.used_dice:
@@ -152,3 +80,78 @@ class Game():
 
         # draw score for current player
         self.scores[self.current_player_index].draw(self.screen)        
+
+
+    """ Private Functions """
+
+    def __use_test_values(self, count: int):
+        test_values = [6, 1, 4, 3, 5, 2]
+        for i in range(0, count):
+            val = test_values[i]
+            self.current_dice.append(dice.Dice(self.dice_img[val], self.selected_dice_img[val], val, i, count, self.screen_size))
+
+    def __set_next_player(self):
+        if self.current_player_index == len(self.player_names) - 1:
+            self.current_player_index = 0
+        else:
+            self.current_player_index += 1
+
+    def __roll_dice(self, count: int):
+        for i in range(0, count):
+            # roll dice (1-6)
+            rdm = random.randrange(1, 7) 
+            self.current_dice.append(dice.Dice(self.dice_img[rdm], self.selected_dice_img[rdm], rdm, i, count, self.screen_size))
+
+    def __move(self):
+        # reset screen to draw the background image for new dice instances without overlapping
+        self.screen.blit(self.background, [0, 0])
+        count = 6 - len(self.used_dice)
+        self.current_dice.clear()
+        self.__roll_dice(count) if not self.test_modus else self.__use_test_values(count)
+        # disable confirm button before any selection
+        self.confirm_btn.disable()
+
+    def __end_move(self):
+        # update score for current player
+        self.scores[self.current_player_index].update(len(self.used_dice))
+        
+        # check if the user can continue with the next move
+        if not self.scores[self.current_player_index].continue_move:
+            # otherwise it's the next players turn
+            self.__set_next_player()
+        
+        # start new first move
+        self.used_dice.clear()
+        self.__move()
+
+    def __is_first_move(self):
+        return len(self.used_dice) == 0
+
+    def __get_selected_current_dice_values(self):
+        return [dice.value for dice in self.current_dice if dice.clicked]
+
+    def __get_used_dice_values(self):
+        return [dice.value for dice in self.used_dice]
+
+    def __get_all_selected_dice_values(self):
+        res = self.__get_selected_current_dice_values() + self.__get_used_dice_values()
+        return sorted(res, reverse=True)
+
+    def __set_selected_dice(self):
+        selected_dice_values = self.__get_all_selected_dice_values()
+        self.used_dice.clear()
+
+        for index, value in enumerate(selected_dice_values):
+            self.used_dice.append(draw_only_dice.DrawOnlyDice(self.dice_img[value], value, index, 0.5))
+        
+    def __draw_win_screen(self):
+        winner_font = pygame.font.Font(None, 72)
+        winner_text = winner_font.render(WIN_MSG , True, (255, 255, 255))
+        winner_rect = winner_text.get_rect(center=(self.screen_size[0] // 2, self.screen_size[1] // 2))
+        self.screen.blit(winner_text, winner_rect)
+
+    def __validate(self):
+        if validate_selection(self.__get_selected_current_dice_values(), self.scores[self.current_player_index], self.__is_first_move()):
+            self.confirm_btn.enable()
+        else:
+            self.confirm_btn.disable()
