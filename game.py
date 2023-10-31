@@ -27,13 +27,13 @@ class Game():
         self.background = pygame.image.load('img/table_top.png').convert_alpha()
 
         # init button images
-        confirm_btn_enabled_img = pygame.image.load('img/button_confirm.png').convert_alpha()
-        confirm_btn_disabled_img = pygame.image.load('img/button_confirm_disabled.png').convert_alpha()
-        finish_btn_img = pygame.image.load('img/button_finish.png').convert_alpha()
+        confirm_btn_enabled_img = pygame.image.load('img/button_confirm-move.png').convert_alpha()
+        confirm_btn_disabled_img = pygame.image.load('img/disabled_button_confirm-move.png').convert_alpha()
+        finish_btn_img = pygame.image.load('img/button_end-move.png').convert_alpha()
 
         # init global button instances
-        self.confirm_btn = button.Button(confirm_btn_enabled_img, 0.8, "confirm", self.screen_size, confirm_btn_disabled_img)
-        self.finish_btn = button.Button(finish_btn_img, 0.8, "finish", self.screen_size)
+        self.confirm_move_btn = button.Button(confirm_btn_enabled_img, 1, "confirm", self.screen_size, confirm_btn_disabled_img)
+        self.finish_move_btn = button.Button(finish_btn_img, 1, "finish", self.screen_size)
 
         # init scores for all players
         self.scores = []
@@ -56,13 +56,13 @@ class Game():
 
     def handle_confirm_btn(self):
         # draw confirm button and listen to click
-        if self.confirm_btn.draw(self.screen):
+        if self.confirm_move_btn.draw(self.screen):
             self.__set_selected_dice()
             self.__move()
 
     def handle_finish_btn(self):
         # draw finish button and listen to click
-        if self.finish_btn.draw(self.screen):
+        if self.finish_move_btn.draw(self.screen):
             self.__end_move()
 
     def handle_game_play(self):
@@ -109,7 +109,7 @@ class Game():
         self.current_dice.clear()
         self.__roll_dice(count) if not self.test_modus else self.__use_test_values(count)
         # disable confirm button before any selection
-        self.confirm_btn.disable()
+        self.confirm_move_btn.disable()
 
     def __end_move(self):
         # update score for current player
@@ -152,6 +152,6 @@ class Game():
 
     def __validate(self):
         if validate_selection(self.__get_selected_current_dice_values(), self.scores[self.current_player_index], self.__is_first_move()):
-            self.confirm_btn.enable()
+            self.confirm_move_btn.enable()
         else:
-            self.confirm_btn.disable()
+            self.confirm_move_btn.disable()
