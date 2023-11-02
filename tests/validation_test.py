@@ -41,7 +41,7 @@ MOVE_VALIDATION_TEST_CASES = [
     ({7}, [6, 6, 6, 1], False),    
     ({8}, [4, 4], True),
     ({8, 4}, [4], True),
-    ({8}, [4], False), # TODO previous selection comb needs to be saved and not overwritten (5 + 3 prev and 4 new selection invalid)
+    ({8}, [4], False), # 5 + 3 prev and 4 new selection invalid
 ]
 
 @pytest.mark.parametrize("score, test_case, valid", MOVE_VALIDATION_TEST_CASES)
