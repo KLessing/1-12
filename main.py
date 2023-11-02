@@ -1,4 +1,5 @@
 import pygame
+
 from src import Game
 
 SCREEN_SIZE = (852, 480)

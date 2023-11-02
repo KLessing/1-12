@@ -1,4 +1,4 @@
-from src.score import Score
+from .score import Score
 
 def validate_selection(selection: [int], score: Score, first_move: bool):
     combinations = _get_value_combinations(selection)

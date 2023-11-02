@@ -1,10 +1,11 @@
 import pygame
 import random
-from src.button import Button
-from src.dice import Dice
-from src.draw_only_dice import DrawOnlyDice
-from src.score import Score
-from src.validator import validate_selection
+
+from .button import Button
+from .dice import Dice
+from .draw_only_dice import DrawOnlyDice
+from .score import Score
+from .validator import validate_selection
 
 WIN_MSG = "YOU WIN!"
 
