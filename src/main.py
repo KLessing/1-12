@@ -1,5 +1,5 @@
 import pygame
-import game
+import src.game as game
 
 SCREEN_SIZE = (852, 480)
 PLAYER_NAMES = ["Player 1", "Player 2"]

@@ -1,19 +1,18 @@
 import pygame
-import button
-import dice
-import draw_only_dice
-import score
 import random
-# import only public functions from module
-from validator import *
+import src.button as button
+import src.dice as dice
+import src.draw_only_dice as draw_only_dice
+import src.score as score
+from src.validator import validate_selection
+
 
 WIN_MSG = "YOU WIN!"
 
 class Game():
-    def __init__(self, screen_size: tuple(), player_names: [str], caption: str, test_modus = False):
+    def __init__(self, screen_size: tuple(), player_names: [str], caption: str):
         self.screen_size = screen_size
         self.player_names = player_names
-        self.test_modus = test_modus
 
         self.__init_game(caption)
         self.__init_buttons()
@@ -120,12 +119,6 @@ class Game():
 
     """ --- Dice Functions --- """
 
-    def __use_test_values(self, count: int):
-        test_values = [6, 1, 4, 3, 5, 2]
-        for i in range(0, count):
-            val = test_values[i]
-            self.current_dice.append(dice.Dice(self.dice_img[val], self.selected_dice_img[val], val, i, count, self.screen_size))
-
     def __roll_dice(self, count: int):
         for i in range(0, count):
             # roll dice (1-6)
@@ -165,7 +158,7 @@ class Game():
         self.screen.blit(self.background, [0, 0])
         count = 6 - len(self.used_dice)
         self.current_dice.clear()
-        self.__roll_dice(count) if not self.test_modus else self.__use_test_values(count)
+        self.__roll_dice(count)
         # disable confirm button before any selection
         self.confirm_move_btn.disable()
 
