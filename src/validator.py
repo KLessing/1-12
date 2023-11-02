@@ -1,6 +1,6 @@
-import src.score as score
+from src.score import Score
 
-def validate_selection(selection: [int], score: score.Score, first_move: bool):
+def validate_selection(selection: [int], score: Score, first_move: bool):
     combinations = _get_value_combinations(selection)
     combinations = score.remove_collected_values(combinations)
 

@@ -1,5 +1,5 @@
 import pygame
-import src.game as game
+from src.game import Game
 
 SCREEN_SIZE = (852, 480)
 PLAYER_NAMES = ["Player 1", "Player 2"]
@@ -7,7 +7,7 @@ CAPTION = "1 - 12"
 
 def main():
 	# init game
-	game_instance = game.Game(SCREEN_SIZE, PLAYER_NAMES, CAPTION)
+	game_instance = Game(SCREEN_SIZE, PLAYER_NAMES, CAPTION)
 
 	# game loop
 	run = True

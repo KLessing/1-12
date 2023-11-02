@@ -1,6 +1,5 @@
 import pytest
-from src.game import Game
-from src.validator import validate_selection
+from src import Game, validate_selection
 
 SCREEN_SIZE = (852, 480)
 PLAYER_NAMES = ["Player 1"]
@@ -21,9 +20,10 @@ MOVE_VALIDATION_TEST_CASES = [
     ({}, [5, 3, 6, 2] , True), # 2 x 8
     # Continued Move Tests
     ({1}, [2], False),
-    ({6, 6}, [6, 5], False),
-    ({6, 6}, [6], True),
-    ({6, 6}, [6, 6], True),
+    ({6}, [6, 5], False),
+    ({6}, [6], True),
+    ({12, 6}, [6], True),
+    ({12, 6}, [6, 6], True), # TODO keep 12
     # Keep Combination selection (Gets removed after first single selection)
     ({10, 5}, [5], True),
     ({10, 5}, [5, 5], True),

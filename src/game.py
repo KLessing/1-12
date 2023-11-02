@@ -1,11 +1,10 @@
 import pygame
 import random
-import src.button as button
-import src.dice as dice
-import src.draw_only_dice as draw_only_dice
-import src.score as score
+from src.button import Button
+from src.dice import Dice
+from src.draw_only_dice import DrawOnlyDice
+from src.score import Score
 from src.validator import validate_selection
-
 
 WIN_MSG = "YOU WIN!"
 
@@ -70,17 +69,17 @@ class Game():
         end_game_btn_img = pygame.image.load('img/button_end-game.png').convert_alpha()
 
         # init global button instances
-        self.confirm_move_btn = button.Button(confirm_move_btn_enabled_img, 1, "right", self.screen_size, confirm_move_btn_disabled_img)
-        self.finish_move_btn = button.Button(finish_move_btn_img, 1, "left", self.screen_size)
-        self.new_game_btn = button.Button(new_game_btn_img, 1, "right", self.screen_size)
-        self.end_game_btn = button.Button(end_game_btn_img, 1, "left", self.screen_size)
+        self.confirm_move_btn = Button(confirm_move_btn_enabled_img, 1, "right", self.screen_size, confirm_move_btn_disabled_img)
+        self.finish_move_btn = Button(finish_move_btn_img, 1, "left", self.screen_size)
+        self.new_game_btn = Button(new_game_btn_img, 1, "right", self.screen_size)
+        self.end_game_btn = Button(end_game_btn_img, 1, "left", self.screen_size)
 
     def __init_scores(self):
         # init scores for all players
         self.current_player_index = 0
         self.scores = []
         for player_name in self.player_names:
-            self.scores.append(score.Score(player_name, self.screen_size[0]))
+            self.scores.append(Score(player_name, self.screen_size[0]))
 
     def __init_dice(self):
         # init dice images
@@ -123,7 +122,7 @@ class Game():
         for i in range(0, count):
             # roll dice (1-6)
             rdm = random.randrange(1, 7) 
-            self.current_dice.append(dice.Dice(self.dice_img[rdm], self.selected_dice_img[rdm], rdm, i, count, self.screen_size))
+            self.current_dice.append(Dice(self.dice_img[rdm], self.selected_dice_img[rdm], rdm, i, count, self.screen_size))
 
     def __is_first_move(self):
         return len(self.used_dice) == 0
@@ -143,7 +142,7 @@ class Game():
         self.used_dice.clear()
 
         for index, value in enumerate(selected_dice_values):
-            self.used_dice.append(draw_only_dice.DrawOnlyDice(self.dice_img[value], value, index, 0.5))
+            self.used_dice.append(DrawOnlyDice(self.dice_img[value], value, index, 0.5))
 
     """ --- Game Functions --- """
 
