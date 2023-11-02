@@ -15,19 +15,22 @@ MOVE_VALIDATION_TEST_CASES = [
     ({}, [6, 6, 6, 6] , True), # 4 x 6
     ({}, [6, 1, 4, 3] , True), # 2 x 7
     ({}, [6, 6, 6, 1, 4, 3] , False), # 2 x 7, 2 x 6
+    ({}, [5, 3, 6, 2] , True), # 2 x 8
     # Continued Move Tests
     ({1}, [2], False),
     ({6, 6}, [6, 5], False),
     ({6, 6}, [6], True),
     ({6, 6}, [6, 6], True),
     # TODO Keep Combination selection (Gets removed after first single selection)
-    ({5, 5}, [6, 4, 5, 5], True),
-    ({5, 5}, [5, 5, 6, 4], True),
-    ({5, 5}, [5, 4, 5, 6], True),
+    ({10, 5}, [5], True),
+    ({10, 5}, [5, 5], True),
+    ({10, 5}, [6, 4, 5, 5], True),
+    ({10, 5}, [6, 4], True),
     # TODO Enable selection of different combinations (when one combination is double dice)
     ({}, [5, 5, 6, 4] , True), # 2 x 5 + 6 + 4 = 2 x 10
     ({}, [4, 4, 6, 2] , True), # 2 x 4 + 6 + 2 = 2 x 8
-    ({}, [5, 3, 6, 2] , True), # Works
+    ({10}, [5, 5, 6, 4], True),
+    ({10}, [5, 4, 5, 6], True),    
 ]
 
 @pytest.mark.parametrize("score, test_case, valid", MOVE_VALIDATION_TEST_CASES)

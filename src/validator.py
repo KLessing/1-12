@@ -5,11 +5,9 @@ def validate_selection(selection: [int], score: score.Score, first_move: bool):
     combinations = score.remove_collected_values(combinations)
 
     if not first_move:
-        # check combinations with already selected values
-        combinations = combinations.intersection(score.selections)
-        # only update selection when changed 
-        # (e.g. first move 5 5, second move 5, now only single 5 is selected instead of 10)
-        # TODO Reset needed
+        combinations = _check_previous_selections(combinations, score.selections)
+
+        # only update selection when changed
         if len(combinations) >= 1:
             score.set_selection(combinations)
     else:
@@ -22,6 +20,15 @@ def validate_selection(selection: [int], score: score.Score, first_move: bool):
         return True
     
 """ Private Functions """
+
+def _check_previous_selections(combinations: set(), selections: set()):
+    # double all combinations to keep double selections from intersection when already available in score
+    doubled_combinations = combinations.copy()
+    for combination in combinations:
+        doubled_combinations.add(combination * 2)
+
+    # return combinations with already selected values
+    return doubled_combinations.intersection(selections)
 
 def _validate_uneven_count(values):
     # are all numbers equal? 
