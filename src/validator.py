@@ -43,9 +43,10 @@ def _valid_special_combinations(values):
     # check individual values for special cases
     count_single_values = {i:values.count(i) for i in values}
 
+    # special case selection of all values:
     # when exactly the half of values are equal the other half needs to be the same = only two different values allowed
     # (e.g. 3 x 6 needs 3 x the same other values and not different values)
-    if list(count_single_values.values())[0] == len(values) // 2 and len(count_single_values) != 2:
+    if len(values) == 6 and list(count_single_values.values())[0] == len(values) // 2 and len(count_single_values) != 2:
         return False
     
     # combinations are not possible when more then half values are equal but not all
