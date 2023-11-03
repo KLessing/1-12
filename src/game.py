@@ -93,7 +93,8 @@ class Game():
         
         # init empty dice instances
         self.current_dice = []
-        self.used_dice = []        
+        self.used_dice = []
+        self.used_combinations = set()
 
     """ --- Button Functions --- """
 
@@ -126,9 +127,6 @@ class Game():
             rdm = random.randrange(1, 7) 
             self.current_dice.append(Dice(self.dice_img[rdm], self.selected_dice_img[rdm], rdm, i, count, self.screen_size))
 
-    def __is_first_move(self):
-        return len(self.used_dice) == 0
-
     def __get_selected_current_dice_values(self):
         return [dice.value for dice in self.current_dice if dice.clicked]
 
@@ -155,6 +153,8 @@ class Game():
             self.current_player_index += 1
 
     def __move(self):
+        # save combinations from current selection
+        self.used_combinations = self.scores[self.current_player_index].selections
         # reset screen to draw the background image for new dice instances without overlapping
         self.screen.blit(self.background, [0, 0])
         count = 6 - len(self.used_dice)
@@ -164,6 +164,9 @@ class Game():
         self.confirm_move_btn.disable()
 
     def __end_move(self):
+        # use the selections from the last move
+        self.scores[self.current_player_index].set_selection(self.used_combinations)
+
         # update score for current player
         self.scores[self.current_player_index].update(len(self.used_dice))
         
@@ -171,6 +174,7 @@ class Game():
         if not self.scores[self.current_player_index].continue_move:
             # otherwise it's the next players turn
             self.__set_next_player()
+            self.used_combinations = set()
         
         # start new first move
         self.used_dice.clear()
@@ -184,10 +188,9 @@ class Game():
 
     def __validate(self):
         current_score: Score = self.scores[self.current_player_index]
-        valid_combinations: set() = validate_selection(self.__get_selected_current_dice_values(), self.__get_used_dice_values(), current_score.get_completed_values())
+        valid_combinations: set() = validate_selection(self.__get_selected_current_dice_values(), self.used_combinations, current_score.get_completed_values())
 
-        print(valid_combinations)
-        current_score.set_selection(valid_combinations)
+        self.scores[self.current_player_index].set_selection(valid_combinations)
 
         if len(valid_combinations) > 0:
             self.confirm_move_btn.enable()

@@ -2,15 +2,14 @@
 # selected = already selected combinations from previous move (used dice)
 # collected = full collected values
 # return valid combinations
-def validate_selection(selection: [int], selected: [int], collected: set()):
+def validate_selection(selection: [int], selected: set(), collected: set()):
     combinations = _get_value_combinations(selection)
     combinations = combinations - collected
 
     # check if already selected values available (not first move)
     if len(selected) > 0:
-        used_combinations = _get_value_combinations(selected) # TODO Extra Save (in Score?) after move
         # keep only already validated values from new validation
-        combinations = combinations.intersection(used_combinations)
+        combinations = combinations.intersection(selected)
         
     return combinations
     
