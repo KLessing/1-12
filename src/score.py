@@ -113,12 +113,10 @@ class Score():
 		# reset text for hightlighting
 		self.generate_text()
 
-	# return collection without already collected values
-	def remove_collected_values(self, collection: set):
-		# shallow copy for removal in iteration
-		res = collection.copy()
-		for value in collection:
-			if self.values[value] == 5:
-				res.remove(value)
-		return res
+	def get_completed_values(self):
+		completed = set()
+		for i in range(1, 13):
+			if self.values[i] == 5:
+				completed.add(i)
+		return completed
 		

@@ -1,5 +1,7 @@
 import pytest
-from src import Game, validate_selection
+
+from utils import validate_selection
+from src import Game
 
 SCREEN_SIZE = (852, 480)
 PLAYER_NAMES = ["Player 1"]

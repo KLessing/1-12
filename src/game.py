@@ -1,11 +1,12 @@
 import pygame
 import random
 
+from utils.validations import validate_selection
+
 from .button import Button
 from .dice import Dice
 from .draw_only_dice import DrawOnlyDice
 from .score import Score
-from .validator import validate_selection
 
 WIN_MSG = "YOU WIN!"
 
@@ -182,7 +183,13 @@ class Game():
         self.screen.blit(winner_text, winner_rect)
 
     def __validate(self):
-        if validate_selection(self.__get_selected_current_dice_values(), self.scores[self.current_player_index], self.__is_first_move()):
+        current_score: Score = self.scores[self.current_player_index]
+        valid_combinations: set() = validate_selection(self.__get_selected_current_dice_values(), self.__get_used_dice_values(), current_score.get_completed_values())
+
+        print(valid_combinations)
+        current_score.set_selection(valid_combinations)
+
+        if len(valid_combinations) > 0:
             self.confirm_move_btn.enable()
         else:
             self.confirm_move_btn.disable()

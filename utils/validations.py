@@ -1,23 +1,18 @@
-from .score import Score
-
-def validate_selection(selection: [int], score: Score, first_move: bool):
+# selection = new selection on the field
+# selected = already selected combinations from previous move (used dice)
+# collected = full collected values
+# return valid combinations
+def validate_selection(selection: [int], selected: [int], collected: set()):
     combinations = _get_value_combinations(selection)
-    combinations = score.remove_collected_values(combinations)
+    combinations = combinations - collected
 
-    if not first_move:
-        combinations = combinations.intersection(score.selections)
-
-        # only update selection when changed
-        if len(combinations) >= 1:
-            score.set_selection(combinations)
-    else:
-        # selection will stay after first move
-        score.set_selection(combinations)
-
-    if len(combinations) == 0:
-        return False
-    else:
-        return True
+    # check if already selected values available (not first move)
+    if len(selected) > 0:
+        used_combinations = _get_value_combinations(selected) # TODO Extra Save (in Score?) after move
+        # keep only already validated values from new validation
+        combinations = combinations.intersection(used_combinations)
+        
+    return combinations
     
 """ Private Functions """
 
