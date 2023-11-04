@@ -187,12 +187,17 @@ class Game():
         self.screen.blit(winner_text, winner_rect)
 
     def __validate(self):
+        selection = self.__get_selected_current_dice_values()
         current_score: Score = self.scores[self.current_player_index]
-        valid_combinations: set() = validate_selection(self.__get_selected_current_dice_values(), self.used_combinations, current_score.get_completed_values())
 
-        self.scores[self.current_player_index].set_selection(valid_combinations)
+        if len(selection) > 0:
+            valid_combinations: set() = validate_selection(selection, self.used_combinations, current_score.get_completed_values())
+            current_score.set_selection(valid_combinations)
+        else:
+            # reset selection highlight to previous selection
+            current_score.set_selection(self.used_combinations)
 
-        if len(valid_combinations) > 0:
+        if len(selection) > 0 and len(valid_combinations) > 0:
             self.confirm_move_btn.enable()
         else:
             self.confirm_move_btn.disable()
