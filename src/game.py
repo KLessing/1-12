@@ -94,6 +94,7 @@ class Game():
         # init empty dice instances
         self.current_dice = []
         self.used_dice = []
+        # needed for deselection and to keep selection for move continuation
         self.used_combinations = set()
 
     """ --- Button Functions --- """
@@ -189,7 +190,8 @@ class Game():
 
         if len(selection) > 0:
             valid_combinations: set() = validate_selection(selection, self.used_combinations, current_score.get_completed_values())
-            current_score.set_selection(valid_combinations)
+            if len(valid_combinations):
+                current_score.set_selection(valid_combinations)
         else:
             # reset selection highlight to previous selection
             current_score.set_selection(self.used_combinations)
