@@ -2,7 +2,7 @@ import pygame
 
 from src import Game
 
-PLAYER_NAMES = ["Player 1", "Player 2"]
+PLAYER_NAMES = ["KEVIN", "LELIA"]
 SCREEN_SIZE = (1280, 720)
 CAPTION = "1 - 12"
 

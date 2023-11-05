@@ -45,8 +45,9 @@ class Game():
         for dice in self.used_dice:
             dice.draw(self.screen)
 
-        # draw score for current player
-        self.scores[self.current_player_index].draw(self.screen)
+        # draw score for each player
+        for index, player in enumerate(self.player_names):
+            self.scores[index].draw(self.screen)
 
     """ ----- Private Functions ----- """
 
@@ -80,8 +81,8 @@ class Game():
         # init scores for all players
         self.current_player_index = 0
         self.scores = []
-        for player_name in self.player_names:
-            self.scores.append(Score(player_name, self.screen_size[0]))
+        for index, player_name in enumerate(self.player_names):
+            self.scores.append(Score(player_name, index, self.screen_size[0]))
 
     def __init_dice(self):
         # init dice images
