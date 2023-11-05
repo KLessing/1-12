@@ -73,6 +73,7 @@ class Score():
 	def update(self, used_dice_count: int):
 		# nothing selected = no update
 		if used_dice_count == 0:
+			self.continue_move = False
 			return
 
 		# score count which is added to the score value
@@ -104,8 +105,6 @@ class Score():
 		else:			
 			self.continue_move = False
 
-		# reset selection
-		self.selections = set()
 		self.generate_text()		
 
 	def set_selection(self, selection: set = set()):

@@ -164,17 +164,19 @@ class Game():
         self.confirm_move_btn.disable()
 
     def __end_move(self):
-        # use the selections from the last move
-        self.scores[self.current_player_index].set_selection(self.used_combinations)
-
         # update score for current player
         self.scores[self.current_player_index].update(len(self.used_dice))
         
         # check if the user can continue with the next move
-        if not self.scores[self.current_player_index].continue_move:
-            # otherwise it's the next players turn
-            self.__set_next_player()
+        if self.scores[self.current_player_index].continue_move:
+            # use the selections from the last move
+            self.scores[self.current_player_index].set_selection(self.used_combinations)
+        else:
+            # reset selections for current player
+            self.scores[self.current_player_index].set_selection()
             self.used_combinations = set()
+            self.__set_next_player()
+    
         
         # start new first move
         self.used_dice.clear()
