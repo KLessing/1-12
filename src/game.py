@@ -83,6 +83,7 @@ class Game():
         self.scores = []
         for index, player_name in enumerate(self.player_names):
             self.scores.append(Score(player_name, index, self.screen_size[0]))
+        self.scores[self.current_player_index].set_active(True)
 
     def __init_dice(self):
         # init dice images
@@ -173,8 +174,10 @@ class Game():
         if not self.scores[self.current_player_index].continue_move:
             # reset selections for current player            
             self.used_combinations = set()
-            self.__set_next_player()    
-        
+            self.scores[self.current_player_index].set_active(False)
+            self.__set_next_player()
+            self.scores[self.current_player_index].set_active(True)
+
         # start new first move
         self.used_dice.clear()
         self.__move()

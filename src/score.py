@@ -14,6 +14,7 @@ class Score():
 		self.selections = set()
 		self.continue_move = False
 		self.win = False
+		self.is_active = False
 
 		# score is drawn in the top right
 		# 5 columns, first column contains the number, start at second column for each player index
@@ -41,8 +42,9 @@ class Score():
 		self.generate_text()
 
 	def draw(self, surface: pygame.display):
-		# draw player name
-		surface.blit(self.player_text, self.player_rect)
+		# draw player name to top middle when active
+		if self.is_active:
+			surface.blit(self.player_text, self.player_rect)
 
 		# draw score
 		for line, text in enumerate(self.text):
@@ -128,3 +130,5 @@ class Score():
 				completed.add(i)
 		return completed
 		
+	def set_active(self, active: bool):
+		self.is_active = active
