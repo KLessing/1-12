@@ -97,13 +97,13 @@ class Score():
 		else:
 			# when the addition would be higher than five: cut to 5
 			self.values[real_selection] = 5
+
+		# continue move when all dice are used or collection is full
+		self.continue_move = used_dice_count == 6 or self.values[real_selection] == 5
 		
-		# are all dice used or is max reached
-		if used_dice_count == 6 or self.values[real_selection] == 5:
-			# continue move for current player
-			self.continue_move = True
-		else:			
-			self.continue_move = False
+		# reset selection for next player move or when collection is full
+		if not self.continue_move or self.values[real_selection] == 5:
+			self.set_selection()
 
 		self.generate_text()		
 
