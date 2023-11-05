@@ -24,7 +24,8 @@ MOVE_VALIDATION_TEST_CASES = [
     ([6, 6, 6, 1], {}, set()),
 
     # Continued Move Tests
-    ([4], {8}, set()) # TODO
+    ([4], {8}, set()),
+    ([4], {8, 4}, {4}),
     ([1], {2}, set()),
     ([5, 6], {6}, set()),
     ([6], {6}, {6}),
