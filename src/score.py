@@ -73,9 +73,10 @@ class Score():
 				else:
 					self.text.append(self.score_font.render(txt , True, DEFAULT_COLOR))
 			else:
-				# draw X when value collection is complete
-				# TODO strike threw
-				self.text.append(self.score_font.render("X" , True, DEFAULT_COLOR))
+				# strike through 4 strokes
+				self.score_font.set_strikethrough(True)
+				self.text.append(self.score_font.render(txt[:-1] , True, DEFAULT_COLOR))
+				self.score_font.set_strikethrough(False)
 				
 		self.win = win
 
