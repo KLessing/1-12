@@ -5,7 +5,7 @@ LINE_OFFSET = 37
 LINE_CENTER = 10
 WIDTH = 370
 HEIGTH = 540
-
+MAX_PLAYER_COUNT = 4
 DEFAULT_COLOR = (255, 255, 255)
 SELECTED_COLOR = (0, 0, 0)
 
@@ -18,12 +18,8 @@ class Score():
 
 		# score is drawn in the top right
 		# 5 columns, first column contains the number, start at second column for each player index
-		# TODO player index param
-		# TODO Cut Player name to 5 chars
-		# TODO Max Const
 		column_size = WIDTH // 5
-		max_player_index = 4
-		self.x_pos = screen_width - (column_size * (max_player_index - player_index) - OFFSET)
+		self.x_pos = screen_width - (column_size * (MAX_PLAYER_COUNT - player_index) - OFFSET)
 
 		# init values
 		self.values = {}
@@ -60,7 +56,7 @@ class Score():
 	def generate_text(self):
 		win = True
 		self.text = []
-		self.text.append(self.player_font.render(self.player_name, True, DEFAULT_COLOR))
+		self.text.append(self.player_font.render(self.player_name[:5], True, DEFAULT_COLOR))
 		for key, value in self.values.items():
 			txt = ""
 			# add stroke for every collected value
