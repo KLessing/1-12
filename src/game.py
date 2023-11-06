@@ -7,6 +7,7 @@ from .button import Button
 from .dice import Dice
 from .draw_only_dice import DrawOnlyDice
 from .score import Score
+from .dice_comb_selection import DiceCombSelection
 
 WIN_MSG = "YOU WIN!"
 
@@ -32,7 +33,7 @@ class Game():
             self.__handle_finish_move_btn()
 
     def handle_game_play(self):
-        if self.select_score_button != None:
+        if self.selected_double_number != None:
             self.__handle_selection_btns()
         elif self.scores[self.current_player_index].win:
             self.__draw_win_screen()
@@ -73,31 +74,14 @@ class Game():
         new_game_btn_img = pygame.image.load('img/button_new-game.png').convert_alpha()
         end_game_btn_img = pygame.image.load('img/button_end-game.png').convert_alpha()
 
-        selection_btn_img = {}        
-        selection_btn_img[4] = pygame.image.load('img/button_4.png').convert_alpha()
-        selection_btn_img[5] = pygame.image.load('img/button_5.png').convert_alpha()
-        selection_btn_img[6] = pygame.image.load('img/button_6.png').convert_alpha()
-        selection_btn_img[8] = pygame.image.load('img/button_8.png').convert_alpha()
-        selection_btn_img[10] = pygame.image.load('img/button_10.png').convert_alpha()
-        selection_btn_img[12] = pygame.image.load('img/button_12.png').convert_alpha()
-
-        self.selection_btn_instances = {}
-        for key in selection_btn_img:            
-            if key <= 6:
-                pos = "left"
-            else:
-                pos = "right"
-            self.selection_btn_instances[key] = Button(selection_btn_img[key], 1, pos, self.screen_size)
-
-
         # init global button instances
         self.confirm_move_btn = Button(confirm_move_btn_enabled_img, 1, "right", self.screen_size, confirm_move_btn_disabled_img)
         self.finish_move_btn = Button(finish_move_btn_img, 1, "left", self.screen_size)
         self.new_game_btn = Button(new_game_btn_img, 1, "right", self.screen_size)
         self.end_game_btn = Button(end_game_btn_img, 1, "left", self.screen_size)
 
-        # TODO name
-        self.select_score_button = None
+        self.dice_comb_selection = DiceCombSelection(self.screen_size)
+        self.selected_double_number = None
 
     def __init_scores(self):
         # init scores for all players
@@ -144,11 +128,18 @@ class Game():
             quit_event = pygame.event.Event(pygame.QUIT)
             pygame.event.post(quit_event)
 
-    def __handle_selection_btns(self):
-        self.selection_btn_instances[self.select_score_button].draw(self.screen)
-        self.selection_btn_instances[self.select_score_button * 2].draw(self.screen)
-        # TODO click listener
+    def __handle_selection_btn(self, number: int):
+        if self.selected_double_number and self.dice_comb_selection.draw(number, self.screen):
+            self.scores[self.current_player_index].selections = [number]
+            self.selected_double_number = None
+            self.__move()
 
+    # choose between single and comb selection for two identical selections (e.g. 4 and 4 = 4 or 8)
+    def __handle_selection_btns(self):
+        lowest_number = self.selected_double_number
+        self.__handle_selection_btn(lowest_number)
+        self.__handle_selection_btn(lowest_number * 2)
+        
     """ --- Dice Functions --- """
 
     def __roll_dice(self, count: int):
@@ -183,15 +174,17 @@ class Game():
             self.current_player_index += 1
 
     def __move(self):
+        # reset screen to draw the background image for new dice instances without overlapping
+        self.screen.blit(self.background, [0, 0])
+
         if len(self.scores[self.current_player_index].selections) >= 2:
-            self.select_score_button = min(self.scores[self.current_player_index].selections)
-        else:
-            self.select_score_button = None
+            self.selected_double_number = min(self.scores[self.current_player_index].selections)
+            # stop move for selection
+            return
 
         # save combinations from current selection
         self.used_combinations = self.scores[self.current_player_index].selections
-        # reset screen to draw the background image for new dice instances without overlapping
-        self.screen.blit(self.background, [0, 0])
+
         count = 6 - len(self.used_dice)
         self.current_dice.clear()
         self.__roll_dice(count)
