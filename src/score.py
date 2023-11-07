@@ -101,8 +101,6 @@ class Score():
 	def set_selection(self, selection: int = None):
 		self.current_selection = selection
 		self.generate_text()
-		# reset collected count for new selection
-		self.collected_count = 0
 
 	def get_completed_values(self):
 		completed = set()
@@ -116,4 +114,6 @@ class Score():
 		
 	def set_active(self, active: bool):
 		self.is_active = active
+
+	def reset_collected_count(self):
 		self.collected_count = 0

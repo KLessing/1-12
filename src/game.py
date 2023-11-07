@@ -130,7 +130,7 @@ class Game():
 
     def __handle_selection_btn(self, number: int):
         if self.selected_double_number and self.dice_comb_selection.draw(number, self.screen):
-            self.scores[self.current_player_index].current_selection = number
+            self.scores[self.current_player_index].set_selection(number)
             self.validated_combinations = {number}
             self.selected_double_number = None
             self.__move()
@@ -178,16 +178,18 @@ class Game():
         # reset screen to draw the background image for new dice instances without overlapping
         self.screen.blit(self.background, [0, 0])
 
+        if len(self.validated_combinations) >= 1:
+            single_selection = min(self.validated_combinations)
+
         if len(self.validated_combinations) >= 2:
-            # TODO call function instead of global var use?
-            self.selected_double_number = min(self.validated_combinations)
+            # start selection for single and double combination
+            self.selected_double_number = single_selection
             # stop move for selection
             return
         else:
-            # TODO improve (don't reset every move)
-            # current solution: only one value, so pop random value
-            if len(self.validated_combinations) == 1:
-                self.scores[self.current_player_index].set_selection(list(self.validated_combinations).pop())
+            # set single selection value when not already set
+            if len(self.validated_combinations) == 1 and single_selection != self.scores[self.current_player_index].current_selection:
+                self.scores[self.current_player_index].set_selection(single_selection)
 
         count = 6 - len(self.used_dice)
         self.current_dice.clear()
@@ -213,6 +215,7 @@ class Game():
         if not keep_selection:
             self.validated_combinations = set()
             self.scores[self.current_player_index].set_selection()
+            self.scores[self.current_player_index].reset_collected_count()
 
         # check if the user can continue with the next move        
         if not continue_move:
