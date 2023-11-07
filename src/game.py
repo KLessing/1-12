@@ -203,13 +203,16 @@ class Game():
             if self.scores[self.current_player_index].is_selection_complete():
                 #  end current move but keep player for next move
                 self.__end_move(True)
+            # are all dice used?
+            elif len(self.used_dice) == 6:
+                # end current move but keep player and selection for next move
+                self.__end_move(True, True)
 
-
-
-    def __end_move(self, continue_move: bool = False):
+    def __end_move(self, continue_move: bool = False, keep_selection: bool = False):
         # reset selections for current player
-        self.validated_combinations = set()
-        self.scores[self.current_player_index].set_selection()
+        if not keep_selection:
+            self.validated_combinations = set()
+            self.scores[self.current_player_index].set_selection()
 
         # check if the user can continue with the next move        
         if not continue_move:
