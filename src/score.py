@@ -7,14 +7,15 @@ WIDTH = 370
 HEIGTH = 540
 MAX_PLAYER_COUNT = 4
 DEFAULT_COLOR = (255, 255, 255)
-SELECTED_COLOR = (0, 0, 0)
+SELECTED_COLOR = (255, 0, 0)
 
 class Score():
 	def __init__(self, player_name: str, player_index: int, screen_width: int):
-		self.selections = set()
+		self.current_selection = None
 		self.continue_move = False
 		self.win = False
 		self.is_active = False
+		self.collected_count = 0
 
 		# score is drawn in the top right
 		# 5 columns, first column contains the number, start at second column for each player index
@@ -64,7 +65,7 @@ class Score():
 				txt += "|"
 			if value != 5:
 				win = False
-				if key in self.selections:
+				if key == self.current_selection:
 					self.text.append(self.score_font.render(txt , True, SELECTED_COLOR))
 				else:
 					self.text.append(self.score_font.render(txt , True, DEFAULT_COLOR))
@@ -79,44 +80,32 @@ class Score():
 	# update the score after the move is finished
 	# (selection will be removed)
 	def update(self, used_dice_count: int):
+		current_used_dice_count = used_dice_count - self.collected_count
+		self.collected_count += current_used_dice_count
+
 		# nothing selected = no update
-		if used_dice_count == 0:
+		if current_used_dice_count == 0:
 			self.continue_move = False
 			return
 
 		# score count which is added to the score value
-		score_count = used_dice_count
+		score_count = current_used_dice_count
 
-		# uneven count of used dice or combination already full?
-		if used_dice_count % 2 == 1 or self.values[max(self.selections)] == 5:
-			# get single value (e.g. 5 5 5 instead of 10)
-			real_selection = min(self.selections)
-		else:
-			# otherwise use the number comb (e.g. 10 instead of 5)
-			real_selection = max(self.selections)
-
-			if real_selection >= 7:		
-				# two dice are used for one number comb
-				score_count = used_dice_count // 2
+		if self.current_selection >= 7:		
+			# two dice are used for one number comb
+			score_count = current_used_dice_count // 2
 		
 		# add to score until max is reached
-		if self.values[real_selection] + score_count <= 5:
-			self.values[real_selection] += score_count
+		if self.values[self.current_selection] + score_count <= 5:
+			self.values[self.current_selection] += score_count
 		else:
 			# when the addition would be higher than five: cut to 5
-			self.values[real_selection] = 5
+			self.values[self.current_selection] = 5
 
-		# continue move when all dice are used or collection is full
-		self.continue_move = used_dice_count == 6 or self.values[real_selection] == 5
-		
-		# reset selection for next player move or when collection is full
-		if not self.continue_move or self.values[real_selection] == 5:
-			self.set_selection()
+		self.generate_text()
 
-		self.generate_text()		
-
-	def set_selection(self, selection: set = set()):
-		self.selections = selection
+	def set_selection(self, selection: int = None):
+		self.current_selection = selection
 		# reset text for hightlighting
 		self.generate_text()
 
@@ -129,3 +118,4 @@ class Score():
 		
 	def set_active(self, active: bool):
 		self.is_active = active
+		self.collected_count = 0

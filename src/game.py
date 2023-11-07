@@ -102,8 +102,8 @@ class Game():
         # init empty dice instances
         self.current_dice = []
         self.used_dice = []
-        # needed for deselection and to keep selection for move continuation
-        self.used_combinations = set()
+        # needed for multiple possible combinations for first move (4 + 4 = 4 or 8)
+        self.validated_combinations = set()
 
     """ --- Button Functions --- """
 
@@ -130,7 +130,8 @@ class Game():
 
     def __handle_selection_btn(self, number: int):
         if self.selected_double_number and self.dice_comb_selection.draw(number, self.screen):
-            self.scores[self.current_player_index].selections = [number]
+            self.scores[self.current_player_index].current_selection = number
+            self.validated_combinations = {number}
             self.selected_double_number = None
             self.__move()
 
@@ -177,13 +178,16 @@ class Game():
         # reset screen to draw the background image for new dice instances without overlapping
         self.screen.blit(self.background, [0, 0])
 
-        if len(self.scores[self.current_player_index].selections) >= 2:
-            self.selected_double_number = min(self.scores[self.current_player_index].selections)
+        if len(self.validated_combinations) >= 2:
+            # TODO call function instead of global var use?
+            self.selected_double_number = min(self.validated_combinations)
             # stop move for selection
             return
-
-        # save combinations from current selection
-        self.used_combinations = self.scores[self.current_player_index].selections
+        else:
+            # TODO improve (don't reset every move)
+            # current solution: only one value, so pop random value
+            if len(self.validated_combinations) == 1:
+                self.scores[self.current_player_index].set_selection(list(self.validated_combinations).pop())
 
         count = 6 - len(self.used_dice)
         self.current_dice.clear()
@@ -191,14 +195,16 @@ class Game():
         # disable confirm button before any selection
         self.confirm_move_btn.disable()
 
-    def __end_move(self):
-        # update score for current player
-        self.scores[self.current_player_index].update(len(self.used_dice))
-        
+        # update score for current player when not first move
+        if len(self.used_dice) > 0:
+            self.scores[self.current_player_index].update(len(self.used_dice))
+
+    def __end_move(self):       
         # check if the user can continue with the next move
         if not self.scores[self.current_player_index].continue_move:
             # reset selections for current player            
-            self.used_combinations = set()
+            self.validated_combinations = set()
+            self.scores[self.current_player_index].set_selection()
             self.scores[self.current_player_index].set_active(False)
             self.__set_next_player()
             self.scores[self.current_player_index].set_active(True)
@@ -218,12 +224,10 @@ class Game():
         current_score: Score = self.scores[self.current_player_index]
 
         if len(selection) > 0:
-            valid_combinations: set() = validate_selection(selection, self.used_combinations, current_score.get_completed_values())
-            if len(valid_combinations):
-                current_score.set_selection(valid_combinations)
-        else:
-            # reset selection highlight to previous selection
-            current_score.set_selection(self.used_combinations)
+            prev_selected = {} if current_score.current_selection == None else {current_score.current_selection}
+            valid_combinations: set() = validate_selection(selection, prev_selected, current_score.get_completed_values())
+            if len(valid_combinations) >= 1:
+                self.validated_combinations = valid_combinations
 
         if len(selection) > 0 and len(valid_combinations) > 0:
             self.confirm_move_btn.enable()
