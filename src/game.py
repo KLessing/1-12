@@ -195,16 +195,24 @@ class Game():
         # disable confirm button before any selection
         self.confirm_move_btn.disable()
 
-        # update score for current player when not first move
+        # not first move?
         if len(self.used_dice) > 0:
+            # update score for current player
             self.scores[self.current_player_index].update(len(self.used_dice))
+            # is the current selection completely collected?
+            if self.scores[self.current_player_index].is_selection_complete():
+                #  end current move but keep player for next move
+                self.__end_move(True)
 
-    def __end_move(self):       
-        # check if the user can continue with the next move
-        if not self.scores[self.current_player_index].continue_move:
-            # reset selections for current player            
-            self.validated_combinations = set()
-            self.scores[self.current_player_index].set_selection()
+
+
+    def __end_move(self, continue_move: bool = False):
+        # reset selections for current player
+        self.validated_combinations = set()
+        self.scores[self.current_player_index].set_selection()
+
+        # check if the user can continue with the next move        
+        if not continue_move:
             self.scores[self.current_player_index].set_active(False)
             self.__set_next_player()
             self.scores[self.current_player_index].set_active(True)

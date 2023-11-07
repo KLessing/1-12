@@ -12,7 +12,6 @@ SELECTED_COLOR = (255, 0, 0)
 class Score():
 	def __init__(self, player_name: str, player_index: int, screen_width: int):
 		self.current_selection = None
-		self.continue_move = False
 		self.win = False
 		self.is_active = False
 		self.collected_count = 0
@@ -83,11 +82,6 @@ class Score():
 		current_used_dice_count = used_dice_count - self.collected_count
 		self.collected_count += current_used_dice_count
 
-		# nothing selected = no update
-		if current_used_dice_count == 0:
-			self.continue_move = False
-			return
-
 		# score count which is added to the score value
 		score_count = current_used_dice_count
 
@@ -106,8 +100,9 @@ class Score():
 
 	def set_selection(self, selection: int = None):
 		self.current_selection = selection
-		# reset text for hightlighting
 		self.generate_text()
+		# reset collected count for new selection
+		self.collected_count = 0
 
 	def get_completed_values(self):
 		completed = set()
@@ -115,6 +110,9 @@ class Score():
 			if self.values[i] == 5:
 				completed.add(i)
 		return completed
+	
+	def is_selection_complete(self):
+		return self.values[self.current_selection] == 5
 		
 	def set_active(self, active: bool):
 		self.is_active = active
