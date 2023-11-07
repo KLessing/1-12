@@ -55,8 +55,9 @@ class Score():
 	# (empty param = only standard colored numbers)
 	def generate_text(self):
 		win = True
-		self.text = []
-		self.text.append(self.player_font.render(self.player_name[:5], True, DEFAULT_COLOR))
+		player_name_color = SELECTED_COLOR if self.is_active else DEFAULT_COLOR
+		self.text = [self.player_font.render(self.player_name[:5], True, player_name_color)]
+
 		for key, value in self.values.items():
 			txt = ""
 			# add stroke for every collected value
@@ -64,16 +65,14 @@ class Score():
 				txt += "|"
 			if value != 5:
 				win = False
-				if key == self.current_selection:
-					self.text.append(self.score_font.render(txt , True, SELECTED_COLOR))
-				else:
-					self.text.append(self.score_font.render(txt , True, DEFAULT_COLOR))
+				score_color = SELECTED_COLOR if key == self.current_selection else DEFAULT_COLOR
+				self.text.append(self.score_font.render(txt , True, score_color))
 			else:
 				# strike through 4 strokes
 				self.score_font.set_strikethrough(True)
 				self.text.append(self.score_font.render(txt[:-1] , True, DEFAULT_COLOR))
 				self.score_font.set_strikethrough(False)
-				
+
 		self.win = win
 
 	# update the score after the move is finished
@@ -114,6 +113,7 @@ class Score():
 		
 	def set_active(self, active: bool):
 		self.is_active = active
+		self.generate_text()
 
 	def reset_collected_count(self):
 		self.collected_count = 0
