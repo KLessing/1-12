@@ -1,17 +1,14 @@
 import pygame
 
 OFFSET = 30
+# all dice numbers with corresponding double combination
+RELEVANT_NUMBERS = [4, 5, 6, 8, 10, 12]
 
 class DiceCombSelection():
 	def __init__(self, screen_size):
-		# TODO dynamic
-		self.selection_btn_img = {}        
-		self.selection_btn_img[4] = pygame.image.load('img/button_4.png').convert_alpha()
-		self.selection_btn_img[5] = pygame.image.load('img/button_5.png').convert_alpha()
-		self.selection_btn_img[6] = pygame.image.load('img/button_6.png').convert_alpha()
-		self.selection_btn_img[8] = pygame.image.load('img/button_8.png').convert_alpha()
-		self.selection_btn_img[10] = pygame.image.load('img/button_10.png').convert_alpha()
-		self.selection_btn_img[12] = pygame.image.load('img/button_12.png').convert_alpha()
+		self.selection_btn_img = {}
+		for i in RELEVANT_NUMBERS:
+			self.selection_btn_img[i] = pygame.image.load(f"img/button_{i}.png").convert_alpha()
 
 		# width is equal for all images
 		width = self.selection_btn_img[4].get_width()
