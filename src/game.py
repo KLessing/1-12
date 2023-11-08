@@ -34,6 +34,7 @@ class Game():
 
     def handle_game_play(self):
         if self.selected_double_number != None:
+            self.end_move_btn.disable()
             self.__handle_selection_btns()
         elif self.scores[self.current_player_index].win:
             self.__draw_win_screen()
@@ -70,13 +71,14 @@ class Game():
         # init button images
         confirm_move_btn_enabled_img = pygame.image.load('img/button_confirm-move.png').convert_alpha()
         confirm_move_btn_disabled_img = pygame.image.load('img/disabled_button_confirm-move.png').convert_alpha()
-        finish_move_btn_img = pygame.image.load('img/button_end-move.png').convert_alpha()
+        end_move_btn_enabled_img = pygame.image.load('img/button_end-move.png').convert_alpha()
+        end_move_btn_disabled_img = pygame.image.load('img/disabled_button_end-move.png').convert_alpha()
         new_game_btn_img = pygame.image.load('img/button_new-game.png').convert_alpha()
         end_game_btn_img = pygame.image.load('img/button_end-game.png').convert_alpha()
 
         # init global button instances
         self.confirm_move_btn = Button(confirm_move_btn_enabled_img, 1, "right", self.screen_size, confirm_move_btn_disabled_img)
-        self.finish_move_btn = Button(finish_move_btn_img, 1, "left", self.screen_size)
+        self.end_move_btn = Button(end_move_btn_enabled_img, 1, "left", self.screen_size, end_move_btn_disabled_img)
         self.new_game_btn = Button(new_game_btn_img, 1, "right", self.screen_size)
         self.end_game_btn = Button(end_game_btn_img, 1, "left", self.screen_size)
 
@@ -115,7 +117,7 @@ class Game():
 
     def __handle_finish_move_btn(self):
         # draw finish button and listen to click
-        if self.finish_move_btn.draw(self.screen):
+        if self.end_move_btn.draw(self.screen):
             self.__end_move()
 
     def __handle_new_game_btn(self):
@@ -133,6 +135,7 @@ class Game():
             self.scores[self.current_player_index].set_selection(number)
             self.validated_combinations = {number}
             self.selected_double_number = None
+            self.end_move_btn.enable()
             self.__move()
 
     # choose between single and comb selection for two identical selections (e.g. 4 and 4 = 4 or 8)
@@ -178,6 +181,9 @@ class Game():
         # reset screen to draw the background image for new dice instances without overlapping
         self.screen.blit(self.background, [0, 0])
 
+        # disable confirm button before any selection
+        self.confirm_move_btn.disable()
+
         if len(self.validated_combinations) >= 1:
             single_selection = min(self.validated_combinations)
 
@@ -194,8 +200,6 @@ class Game():
         count = 6 - len(self.used_dice)
         self.current_dice.clear()
         self.__roll_dice(count)
-        # disable confirm button before any selection
-        self.confirm_move_btn.disable()
 
         # not first move?
         if len(self.used_dice) > 0:
