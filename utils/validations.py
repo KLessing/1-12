@@ -1,3 +1,5 @@
+from .globals import MAX_DICE_COUNT
+
 # selection = new selection on the field
 # selected = already selected combinations from previous move (used dice)
 # collected = full collected values
@@ -31,7 +33,7 @@ def _valid_special_combinations(values):
     # special case selection of all values:
     # when exactly the half of values are equal the other half needs to be the same = only two different values allowed
     # (e.g. 3 x 6 needs 3 x the same other values and not different values)
-    if len(values) == 6 and list(count_single_values.values())[0] == len(values) // 2 and len(count_single_values) != 2:
+    if len(values) == MAX_DICE_COUNT and list(count_single_values.values())[0] == len(values) // 2 and len(count_single_values) != 2:
         return False
     
     # combinations are not possible when more then half values are equal but not all
@@ -54,7 +56,7 @@ def _get_valid_combination(values):
             # except the current value
             if j != i:
                 current_combination = value + check_value
-                if current_combination >= 7:
+                if current_combination > MAX_DICE_COUNT:
                     current_combinations.add(current_combination)
         if i == 0:
             # save combinations for first number

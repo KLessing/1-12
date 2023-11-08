@@ -1,4 +1,5 @@
 import pygame
+from utils.globals import MAX_DICE_COUNT
 
 OFFSET = 30
 # all dice numbers with corresponding double combination
@@ -22,7 +23,7 @@ class DiceCombSelection():
 		# Get mouse position
 		pos = pygame.mouse.get_pos()
 
-		rect = self.single_rect if number <= 6 else self.comb_rect
+		rect = self.single_rect if number <= MAX_DICE_COUNT else self.comb_rect
 
 		# Check mouseover and clicked conditions
 		if rect.collidepoint(pos):

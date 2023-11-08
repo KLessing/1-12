@@ -2,6 +2,7 @@ import pygame
 import random
 
 from utils.validations import validate_selection
+from utils.globals import MAX_DICE_COUNT
 
 from .button import Button
 from .dice import Dice
@@ -97,7 +98,7 @@ class Game():
         # init dice images
         self.dice_img = {}
         self.selected_dice_img = {}
-        for i in range(1, 7):
+        for i in range(1, MAX_DICE_COUNT + 1):
             self.dice_img[i] = pygame.image.load('img/' + str(i) + '.png').convert_alpha()
             self.selected_dice_img[i] = pygame.image.load('img/' + str(i) + '_selected.png').convert_alpha()
         
@@ -149,7 +150,7 @@ class Game():
     def __roll_dice(self, count: int):
         for i in range(0, count):
             # roll dice (1-6)
-            rdm = random.randrange(1, 7) 
+            rdm = random.randrange(1, MAX_DICE_COUNT + 1)
             self.current_dice.append(Dice(self.dice_img[rdm], self.selected_dice_img[rdm], rdm, i, count, self.screen_size))
 
     def __get_selected_current_dice_values(self):
@@ -197,7 +198,7 @@ class Game():
             if len(self.validated_combinations) == 1 and single_selection != self.scores[self.current_player_index].current_selection:
                 self.scores[self.current_player_index].set_selection(single_selection)
 
-        count = 6 - len(self.used_dice)
+        count = MAX_DICE_COUNT - len(self.used_dice)
         self.current_dice.clear()
         self.__roll_dice(count)
 
@@ -210,7 +211,7 @@ class Game():
                 #  end current move but keep player for next move
                 self.__end_move(True)
             # are all dice used?
-            elif len(self.used_dice) == 6:
+            elif len(self.used_dice) == MAX_DICE_COUNT:
                 # end current move but keep player and selection for next move
                 self.__end_move(True, True)
 

@@ -1,5 +1,7 @@
 import pygame
 
+from utils.globals import MAX_DICE_COUNT
+
 OFFSET = 15
 LINE_OFFSET = 37
 LINE_CENTER = 10
@@ -84,7 +86,7 @@ class Score():
 		# score count which is added to the score value
 		score_count = current_used_dice_count
 
-		if self.current_selection >= 7:		
+		if self.current_selection > MAX_DICE_COUNT:		
 			# two dice are used for one number comb
 			score_count = current_used_dice_count // 2
 		
