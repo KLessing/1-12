@@ -40,14 +40,11 @@ class Button():
 
 		return action
 	
-	# calc pos for bottom corner: confirm right corner, finish left corner
+	# calc pos for bottom mid
 	def get_pos(self, pos: str, screen_size: tuple, width: int, height: int) -> tuple:
-		y = screen_size[1] - height - OFFSET
-		if pos == "right":
-			return (screen_size[0] - width - OFFSET, y)
-		elif pos == "left":
-			return (OFFSET, y)
-		
+		return (screen_size[0] // 2 + (OFFSET if pos == "right" else - width - OFFSET),
+		  		screen_size[1] - height - OFFSET)
+
 	def enable(self):
 		self.disabled = False
 
