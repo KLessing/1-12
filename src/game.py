@@ -220,7 +220,6 @@ class Game():
         if not keep_selection:
             self.validated_combinations = set()
             self.scores[self.current_player_index].set_selection()
-            self.scores[self.current_player_index].reset_collected_count()
 
         # check if the user can continue with the next move        
         if not continue_move:
@@ -229,6 +228,7 @@ class Game():
             self.scores[self.current_player_index].set_active(True)
 
         # start new first move
+        self.scores[self.current_player_index].reset_collected_count()
         self.used_dice.clear()
         self.__move()
         
