@@ -1,12 +1,13 @@
+import asyncio
 import pygame
 
 from src import Game
 
-PLAYER_NAMES = ["KEVIN", "LELIA"]
+PLAYER_NAMES = ["P1", "P2"]
 SCREEN_SIZE = (1280, 720)
 CAPTION = "1 - 12"
 
-def main():
+async def main():
 	# init game
 	game_instance = Game(SCREEN_SIZE, PLAYER_NAMES, CAPTION)
 
@@ -25,6 +26,9 @@ def main():
 
 		pygame.display.update()
 
+		await asyncio.sleep(0)
+
+
 	pygame.quit()
 
-main()
+asyncio.run(main())
