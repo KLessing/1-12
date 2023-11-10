@@ -13,9 +13,8 @@ from .dice_comb_selection import DiceCombSelection
 WIN_MSG = "YOU WIN!"
 
 class Game():
-    def __init__(self, screen_size: tuple(), player_names: [str], caption: str):
+    def __init__(self, screen_size: tuple(), caption: str):
         self.screen_size = screen_size
-        self.player_names = player_names
 
         self.__init_game(caption)
         self.__init_buttons()
@@ -51,7 +50,7 @@ class Game():
             dice.draw(self.screen)
 
         # draw score for each player
-        for index, player in enumerate(self.player_names):
+        for index in range(self.player_count):
             self.scores[index].draw(self.screen)
 
     """ ----- Private Functions ----- """
@@ -67,6 +66,7 @@ class Game():
         self.screen = pygame.display.set_mode(self.screen_size)
         # init background image
         self.background = pygame.image.load('img/background_1280px.jpg').convert_alpha()
+        self.player_count = 2
 
     def __init_buttons(self):
         # init button images
@@ -90,8 +90,8 @@ class Game():
         # init scores for all players
         self.current_player_index = 0
         self.scores = []
-        for index, player_name in enumerate(self.player_names):
-            self.scores.append(Score(player_name, index, self.screen_size[0]))
+        for index in range(self.player_count):
+            self.scores.append(Score(index, self.screen_size[0]))
         self.scores[self.current_player_index].set_active(True)
 
     def __init_dice(self):
@@ -173,7 +173,7 @@ class Game():
     """ --- Game Functions --- """
 
     def __set_next_player(self):
-        if self.current_player_index == len(self.player_names) - 1:
+        if self.current_player_index == self.player_count - 1:
             self.current_player_index = 0
         else:
             self.current_player_index += 1

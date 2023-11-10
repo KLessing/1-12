@@ -12,7 +12,7 @@ DEFAULT_COLOR = (255, 255, 255)
 SELECTED_COLOR = (255, 0, 0)
 
 class Score():
-	def __init__(self, player_name: str, player_index: int, screen_width: int):
+	def __init__(self, player_index: int, screen_width: int):
 		self.current_selection = None
 		self.win = False
 		self.is_active = False
@@ -28,7 +28,8 @@ class Score():
 		for i in range(1, 13):
 			self.values[i] = 0
 
-		self.player_name = player_name
+		self.player_index = player_index
+		player_name = "PLAYER " + str(self.player_index + 1)
 		player_font = pygame.font.Font(None, 42)
 		self.player_text = player_font.render(player_name , True, DEFAULT_COLOR)
 		self.player_rect = self.player_text.get_rect(center=(screen_width/2, LINE_OFFSET + OFFSET))
@@ -57,8 +58,8 @@ class Score():
 	# (empty param = only standard colored numbers)
 	def generate_text(self):
 		win = True
-		player_name_color = SELECTED_COLOR if self.is_active else DEFAULT_COLOR
-		self.text = [self.player_font.render(self.player_name[:5], True, player_name_color)]
+		player_index_color = SELECTED_COLOR if self.is_active else DEFAULT_COLOR
+		self.text = [self.player_font.render("P" + str(self.player_index + 1), True, player_index_color)]
 
 		for key, value in self.values.items():
 			txt = ""

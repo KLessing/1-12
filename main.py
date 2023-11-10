@@ -3,13 +3,12 @@ import pygame
 
 from src import Game
 
-PLAYER_NAMES = ["P1", "P2"]
 SCREEN_SIZE = (1280, 720)
 CAPTION = "1 - 12"
 
 async def main():
 	# init game
-	game_instance = Game(SCREEN_SIZE, PLAYER_NAMES, CAPTION)
+	game_instance = Game(SCREEN_SIZE, CAPTION)
 
 	# game loop
 	run = True
