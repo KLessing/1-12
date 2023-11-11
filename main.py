@@ -5,10 +5,11 @@ from src import Game
 
 SCREEN_SIZE = (1280, 720)
 CAPTION = "1 - 12"
+PLAYER_COUNT = 2
 
 async def main():
 	# init game
-	game_instance = Game(SCREEN_SIZE, CAPTION)
+	game_instance = Game(SCREEN_SIZE, CAPTION, PLAYER_COUNT)
 
 	# game loop
 	run = True

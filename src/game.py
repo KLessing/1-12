@@ -13,8 +13,9 @@ from .dice_comb_selection import DiceCombSelection
 WIN_MSG = "YOU WIN!"
 
 class Game():
-    def __init__(self, screen_size: tuple(), caption: str):
+    def __init__(self, screen_size: tuple(), caption: str, player_count = int):
         self.screen_size = screen_size
+        self.player_count = player_count
 
         self.__init_game(caption)
         self.__init_buttons()
@@ -66,7 +67,6 @@ class Game():
         self.screen = pygame.display.set_mode(self.screen_size)
         # init background image
         self.background = pygame.image.load('img/background_1280px.jpg').convert_alpha()
-        self.player_count = 2
 
     def __init_buttons(self):
         # init button images
