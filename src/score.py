@@ -10,6 +10,7 @@ HEIGTH = 540
 MAX_PLAYER_COUNT = 4
 DEFAULT_COLOR = (255, 255, 255)
 SELECTED_COLOR = (255, 0, 0)
+FINISHED_COLOR = (0, 255, 0)
 
 class Score():
 	def __init__(self, player_index: int, screen_width: int):
@@ -73,7 +74,7 @@ class Score():
 			else:
 				# strike through 4 strokes
 				self.score_font.set_strikethrough(True)
-				self.text.append(self.score_font.render(txt[:-1] , True, DEFAULT_COLOR))
+				self.text.append(self.score_font.render(txt[:-1] , True, FINISHED_COLOR))
 				self.score_font.set_strikethrough(False)
 
 		self.win = win
