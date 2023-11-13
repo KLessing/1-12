@@ -18,6 +18,8 @@ class Score():
 		self.win = False
 		self.is_active = False
 		self.collected_count = 0
+		# negative sum for each lost game
+		self.global_score = 0 
 
 		# score is drawn in the top right
 		# 5 columns, first column contains the number, start at second column for each player index
@@ -77,6 +79,9 @@ class Score():
 				self.text.append(self.score_font.render(txt[:-1] , True, FINISHED_COLOR))
 				self.score_font.set_strikethrough(False)
 
+		if self.global_score < 0:
+			self.text.append(self.score_font.render(txt , True, DEFAULT_COLOR))
+
 		self.win = win
 
 	# update the score after the move is finished
@@ -121,3 +126,7 @@ class Score():
 
 	def reset_collected_count(self):
 		self.collected_count = 0
+
+	def calc_global_score(self):
+		for key, value in self.values.items():
+			self.global_score += key * (5 - value)

@@ -231,6 +231,13 @@ class Game():
         self.scores[self.current_player_index].reset_collected_count()
         self.used_dice.clear()
         self.__move()
+
+    # TODO use for win state
+    # update global negative score for all players who lost
+    def __update_global_score(self):
+        for index, score in enumerate(self.scores):
+            if index != self.current_player_index:
+                score.calc_global_score()
         
     def __draw_win_screen(self):
         winner_font = pygame.font.Font(None, 72)
