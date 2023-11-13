@@ -34,6 +34,8 @@ class Button():
 			if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
 				self.clicked = True
 				action = True
+				# prevent click trigger for two seconds
+				pygame.time.delay(200)
 
 		if pygame.mouse.get_pressed()[0] == 0:
 			self.clicked = False
