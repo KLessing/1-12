@@ -162,8 +162,9 @@ class Game():
 
     def __handle_new_game_btn(self):
         if self.new_game_btn.draw(self.screen):
-            self.__init_scores()
-            self.__move()
+            self.__reset_score_values()
+            self.game_state = "play"
+            self.__end_move()
 
     def __handle_end_game_btn(self):
         if self.end_game_btn.draw(self.screen):
@@ -282,6 +283,11 @@ class Game():
         for index, score in enumerate(self.scores):
             if index != self.current_player_index:
                 score.calc_global_score()
+
+    def __reset_score_values(self):
+        for score in self.scores:
+            score.reset_values()
+
         
     def __validate(self):
         selection = self.__get_selected_current_dice_values()

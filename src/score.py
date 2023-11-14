@@ -17,18 +17,13 @@ class Score():
 		self.current_selection = None
 		self.is_active = False
 		self.collected_count = 0
-		# negative sum for each lost game
+		# rest values sum for each lost game
 		self.global_score = 0
 
 		# score is drawn in the top right
 		# 5 columns, first column contains the number, start at second column for each player index
 		column_size = WIDTH // 5
 		self.x_pos = screen_width - (column_size * (MAX_PLAYER_COUNT - player_index) - OFFSET)
-
-		# init values
-		self.values = {}
-		for i in range(1, 13):
-			self.values[i] = 0
 
 		self.player_index = player_index
 		player_name = "PLAYER " + str(self.player_index + 1)
@@ -40,6 +35,9 @@ class Score():
 		self.score_font = pygame.font.Font(None, 30)
 		self.player_font = pygame.font.Font(None, 24)
 		self.text = []
+
+		# init values and generate text
+		self.reset_values()
 		self.generate_text()
 
 	def draw(self, surface: pygame.display):
@@ -130,3 +128,8 @@ class Score():
 		for key, value in self.values.items():
 			self.global_score += key * (5 - value)
 		self.generate_text()
+
+	def reset_values(self):
+		self.values = {}
+		for i in range(1, 13):
+			self.values[i] = 0
