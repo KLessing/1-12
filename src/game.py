@@ -19,20 +19,19 @@ class Game():
         self.game_state = "init"
 
     def handle_game_state(self):
+        if self.game_state == "init":
+            self.__handle_init_state()
+            return
+        
+        self.__draw_blank()
+        self.__draw_scores()
+
         match self.game_state:
-            case "init":
-                self.__handle_init_state()
             case "play":
-                self.__draw_blank()
-                self.__draw_scores()
                 self.__handle_play_state()
             case "select":
-                self.__draw_blank()
-                self.__draw_scores()
                 self.handle_selection_state()
             case "win":
-                self.__draw_blank()
-                self.__draw_scores()
                 self.handle_win_state()
 
     """ ----- Private Functions ----- """
