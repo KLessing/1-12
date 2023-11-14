@@ -31,6 +31,30 @@ class Game():
 
     """ ----- Private Functions ----- """
 
+    """ --- Draw Functions --- """
+
+    def __draw_blank(self):
+        self.screen.blit(self.background, [0, 0])
+    
+    def __draw_dice(self):
+        for dice in self.current_dice:
+            if dice.draw(self.screen):
+                self.__validate()
+    
+    def __draw_used_dice(self):
+        for dice in self.used_dice:
+            dice.draw(self.screen)
+
+    def __draw_scores(self):
+        for index in range(self.player_count):
+            self.scores[index].draw(self.screen)
+
+    def __draw_win_screen(self):
+        winner_font = pygame.font.Font(None, 72)
+        winner_text = winner_font.render(WIN_MSG , True, (255, 255, 255))
+        winner_rect = winner_text.get_rect(center=(self.screen_size[0] // 2, self.screen_size[1] // 2))
+        self.screen.blit(winner_text, winner_rect)            
+
     """ --- Handler Functions --- """
 
     def __handle_init_state(self):
@@ -40,25 +64,25 @@ class Game():
     def __handle_play_state(self):
         self.__handle_confirm_move_btn()
         self.__handle_finish_move_btn()
-        # draw dice
-        for dice in self.current_dice:
-            if dice.draw(self.screen):
-                self.__validate()
-        # draw used dice
-        for dice in self.used_dice:
-            dice.draw(self.screen)
-        # draw score for each player
-        for index in range(self.player_count):
-            self.scores[index].draw(self.screen)
+        self.__draw_dice()
+        self.__draw_used_dice()
+        self.__draw_scores()
 
     def handle_selection_state(self):
-        self.end_move_btn.disable()
         self.__handle_selection_btns()
 
     def handle_win_state(self):
         self.__handle_new_game_btn()
         self.__handle_end_game_btn()
         self.__draw_win_screen()
+
+    """ --- Start State --- """
+
+    def start_selection_state(self, single_selection):
+        # start selection for single and double combination
+        self.selected_double_number = single_selection
+        self.end_move_btn.disable()
+        self.game_state = "select"        
 
     """ --- Init Functions --- """
 
@@ -146,11 +170,14 @@ class Game():
             self.scores[self.current_player_index].set_selection(number)
             self.validated_combinations = {number}
             self.selected_double_number = None
+            self.game_state = "play"
             self.end_move_btn.enable()
             self.__move()
 
     # choose between single and comb selection for two identical selections (e.g. 4 and 4 = 4 or 8)
     def __handle_selection_btns(self):
+        self.__draw_blank()
+        self.__draw_scores()        
         lowest_number = self.selected_double_number
         self.__handle_selection_btn(lowest_number)
         self.__handle_selection_btn(lowest_number * 2)
@@ -197,8 +224,7 @@ class Game():
 
     def __move(self):
         # reset screen to draw the background image for new dice instances without overlapping
-        self.screen.blit(self.background, [0, 0])
-
+        self.__draw_blank()
         # disable confirm button before any selection
         self.confirm_move_btn.disable()
 
@@ -206,8 +232,7 @@ class Game():
             single_selection = min(self.validated_combinations)
 
         if len(self.validated_combinations) >= 2:
-            # start selection for single and double combination
-            self.selected_double_number = single_selection
+            self.start_selection_state(single_selection)
             # stop move for selection
             return
         else:
@@ -256,12 +281,6 @@ class Game():
             if index != self.current_player_index:
                 score.calc_global_score()
         
-    def __draw_win_screen(self):
-        winner_font = pygame.font.Font(None, 72)
-        winner_text = winner_font.render(WIN_MSG , True, (255, 255, 255))
-        winner_rect = winner_text.get_rect(center=(self.screen_size[0] // 2, self.screen_size[1] // 2))
-        self.screen.blit(winner_text, winner_rect)
-
     def __validate(self):
         selection = self.__get_selected_current_dice_values()
         current_score: Score = self.scores[self.current_player_index]
