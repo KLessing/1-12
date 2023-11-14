@@ -10,53 +10,63 @@ from .draw_only_dice import DrawOnlyDice
 from .score import Score
 from .dice_comb_selection import DiceCombSelection
 
+CAPTION = "1 - 12"
 WIN_MSG = "YOU WIN!"
 
 class Game():
-    def __init__(self, screen_size: tuple(), caption: str, player_count = int):
+    def __init__(self, screen_size: tuple()):
         self.screen_size = screen_size
-        self.player_count = player_count
+        self.game_state = "init"
 
-        self.__init_game(caption)
-        self.__init_buttons()
-        self.__init_scores()
-        self.__init_dice()
-        
-        # start first move
-        self.__move()
+    def handle_game_state(self):
+        match self.game_state:
+            case "init":
+                self.__handle_init_state()
+            case "play":
+                self.__handle_play_state()
+            case "select":
+                self.handle_selection_state()
+            case "win":
+                self.handle_win_state()
 
-    def handle_buttons(self):
-        if self.scores[self.current_player_index].win:
-            self.__handle_new_game_btn()
-            self.__handle_end_game_btn()
-        else:
-            self.__handle_confirm_move_btn()
-            self.__handle_finish_move_btn()
+    """ ----- Private Functions ----- """
 
-    def handle_game_play(self):
-        if self.selected_double_number != None:
-            self.end_move_btn.disable()
-            self.__handle_selection_btns()
-        elif self.scores[self.current_player_index].win:
-            self.__draw_win_screen()
-        else:
-            # draw all dice and listen to clicks in object
-            for dice in self.current_dice:
-                if dice.draw(self.screen):
-                    self.__validate()
+    """ --- Handler Functions --- """
 
-    def show_game_info(self):
+    def __handle_init_state(self):
+        # TODO start game after player count selection
+        self.__start_game(2)
+
+    def __handle_play_state(self):
+        self.__handle_confirm_move_btn()
+        self.__handle_finish_move_btn()
+        # draw dice
+        for dice in self.current_dice:
+            if dice.draw(self.screen):
+                self.__validate()
         # draw used dice
         for dice in self.used_dice:
             dice.draw(self.screen)
-
         # draw score for each player
         for index in range(self.player_count):
             self.scores[index].draw(self.screen)
 
-    """ ----- Private Functions ----- """
+    def handle_selection_state(self):
+        self.end_move_btn.disable()
+        self.__handle_selection_btns()
+
+    def handle_win_state(self):
+        self.__handle_new_game_btn()
+        self.__handle_end_game_btn()
+        self.__draw_win_screen()
 
     """ --- Init Functions --- """
+
+    def __init_all(self):
+        self.__init_game(CAPTION)
+        self.__init_buttons()
+        self.__init_scores()
+        self.__init_dice()
 
     def __init_game(self, caption: str):
         # global init (needed for fonts etc.)
@@ -172,6 +182,13 @@ class Game():
 
     """ --- Game Functions --- """
 
+    def __start_game(self, player_count):
+        self.player_count = player_count
+        self.__init_all()
+        # start first move
+        self.__move()
+        self.game_state = "play"
+
     def __set_next_player(self):
         if self.current_player_index == self.player_count - 1:
             self.current_player_index = 0
@@ -221,7 +238,7 @@ class Game():
             self.validated_combinations = set()
             self.scores[self.current_player_index].set_selection()
 
-        # check if the user can continue with the next move        
+        # check if the user can continue with the next move
         if not continue_move:
             self.scores[self.current_player_index].set_active(False)
             self.__set_next_player()
@@ -232,7 +249,7 @@ class Game():
         self.used_dice.clear()
         self.__move()
 
-    # TODO use for win state
+    # TODO use once before win state
     # update global negative score for all players who lost
     def __update_global_score(self):
         for index, score in enumerate(self.scores):
