@@ -15,11 +15,10 @@ FINISHED_COLOR = (0, 255, 0)
 class Score():
 	def __init__(self, player_index: int, screen_width: int):
 		self.current_selection = None
-		self.win = False
 		self.is_active = False
 		self.collected_count = 0
 		# negative sum for each lost game
-		self.global_score = 0 
+		self.global_score = 0
 
 		# score is drawn in the top right
 		# 5 columns, first column contains the number, start at second column for each player index
@@ -59,7 +58,7 @@ class Score():
 	
 	# selection = highlight these numbers
 	# (empty param = only standard colored numbers)
-	def generate_text(self):
+	def generate_text(self) -> bool:
 		win = True
 		player_index_color = SELECTED_COLOR if self.is_active else DEFAULT_COLOR
 		self.text = [self.player_font.render("P" + str(self.player_index + 1), True, player_index_color)]
@@ -79,14 +78,14 @@ class Score():
 				self.text.append(self.score_font.render(txt[:-1] , True, FINISHED_COLOR))
 				self.score_font.set_strikethrough(False)
 
-		if self.global_score < 0:
-			self.text.append(self.score_font.render(txt , True, DEFAULT_COLOR))
+		if self.global_score > 0:
+			self.text.append(self.score_font.render("- " + str(self.global_score) , True, DEFAULT_COLOR))
 
-		self.win = win
+		return win
 
 	# update the score after the move is finished
 	# (selection will be removed)
-	def update(self, used_dice_count: int):
+	def update(self, used_dice_count: int) -> bool:
 		current_used_dice_count = used_dice_count - self.collected_count
 		self.collected_count += current_used_dice_count
 
@@ -102,9 +101,9 @@ class Score():
 			self.values[self.current_selection] += score_count
 		else:
 			# when the addition would be higher than five: cut to 5
-			self.values[self.current_selection] = 5
+			self.values[self.current_selection] = 5			
 
-		self.generate_text()
+		return self.generate_text()
 
 	def set_selection(self, selection: int = None):
 		self.current_selection = selection
@@ -130,3 +129,4 @@ class Score():
 	def calc_global_score(self):
 		for key, value in self.values.items():
 			self.global_score += key * (5 - value)
+		self.generate_text()

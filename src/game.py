@@ -23,10 +23,16 @@ class Game():
             case "init":
                 self.__handle_init_state()
             case "play":
+                self.__draw_blank()
+                self.__draw_scores()
                 self.__handle_play_state()
             case "select":
+                self.__draw_blank()
+                self.__draw_scores()
                 self.handle_selection_state()
             case "win":
+                self.__draw_blank()
+                self.__draw_scores()
                 self.handle_win_state()
 
     """ ----- Private Functions ----- """
@@ -66,7 +72,6 @@ class Game():
         self.__handle_finish_move_btn()
         self.__draw_dice()
         self.__draw_used_dice()
-        self.__draw_scores()
 
     def handle_selection_state(self):
         self.__handle_selection_btns()
@@ -175,9 +180,7 @@ class Game():
             self.__move()
 
     # choose between single and comb selection for two identical selections (e.g. 4 and 4 = 4 or 8)
-    def __handle_selection_btns(self):
-        self.__draw_blank()
-        self.__draw_scores()        
+    def __handle_selection_btns(self):   
         lowest_number = self.selected_double_number
         self.__handle_selection_btn(lowest_number)
         self.__handle_selection_btn(lowest_number * 2)
@@ -223,8 +226,6 @@ class Game():
             self.current_player_index += 1
 
     def __move(self):
-        # reset screen to draw the background image for new dice instances without overlapping
-        self.__draw_blank()
         # disable confirm button before any selection
         self.confirm_move_btn.disable()
 
@@ -246,10 +247,12 @@ class Game():
 
         # not first move?
         if len(self.used_dice) > 0:
-            # update score for current player
-            self.scores[self.current_player_index].update(len(self.used_dice))
+            # update score for current player and check for win
+            if self.scores[self.current_player_index].update(len(self.used_dice)):
+                self.__update_global_score()
+                self.game_state = "win"
             # is the current selection completely collected?
-            if self.scores[self.current_player_index].is_selection_complete():
+            elif self.scores[self.current_player_index].is_selection_complete():
                 #  end current move but keep player for next move
                 self.__end_move(True)
             # are all dice used?
@@ -274,7 +277,6 @@ class Game():
         self.used_dice.clear()
         self.__move()
 
-    # TODO use once before win state
     # update global negative score for all players who lost
     def __update_global_score(self):
         for index, score in enumerate(self.scores):
