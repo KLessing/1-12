@@ -129,8 +129,9 @@ class Game():
         self.selected_double_number = None
 
     def __init_scores(self):
+        # choose random player to begin
+        self.current_player_index = random.randrange(0, self.player_count)
         # init scores for all players
-        self.current_player_index = 0
         self.scores = []
         for index in range(self.player_count):
             self.scores.append(Score(index, self.screen_size[0]))
