@@ -9,6 +9,7 @@ from .dice import Dice
 from .draw_only_dice import DrawOnlyDice
 from .score import Score
 from .dice_comb_selection import DiceCombSelection
+from .settings import Settings
 
 CAPTION = "1 - 12"
 WIN_MSG = "YOU WIN!"
@@ -16,14 +17,16 @@ WIN_MSG = "YOU WIN!"
 class Game():
     def __init__(self, screen_size: tuple()):
         self.screen_size = screen_size
+        self.__global_init(CAPTION)
         self.game_state = "init"
 
     def handle_game_state(self):
+        self.__draw_blank()
+
         if self.game_state == "init":
             self.__handle_init_state()
             return
         
-        self.__draw_blank()
         self.__draw_scores()
 
         match self.game_state:
@@ -63,8 +66,10 @@ class Game():
     """ --- Handler Functions --- """
 
     def __handle_init_state(self):
-        # TODO start game after player count selection
-        self.__start_game(2)
+        settings = Settings(self.screen, self.screen_size)
+        clicked_number = settings.draw(self.screen)
+        if clicked_number > 0:
+            self.__start_game(clicked_number)
 
     def __handle_play_state(self):
         self.__handle_confirm_move_btn()
@@ -91,12 +96,11 @@ class Game():
     """ --- Init Functions --- """
 
     def __init_all(self):
-        self.__init_game(CAPTION)
         self.__init_buttons()
         self.__init_scores()
         self.__init_dice()
 
-    def __init_game(self, caption: str):
+    def __global_init(self, caption: str):
         # global init (needed for fonts etc.)
         pygame.init()
         # set game name
