@@ -1,5 +1,5 @@
 import pygame
-from utils.globals import MAX_DICE_COUNT
+from utils.globals import MAX_DICE_COUNT, CLICK_DELAY_MS
 
 OFFSET = 30
 # all dice numbers with corresponding double combination
@@ -29,8 +29,8 @@ class DiceCombSelection():
 		if rect.collidepoint(pos):
 			if pygame.mouse.get_pressed()[0] == 1:
 				action = True
-				# prevent click trigger for two seconds
-				pygame.time.delay(200)
+				# prevent direct dice selection for next dice under the btn
+				pygame.time.delay(CLICK_DELAY_MS)
 
 		# Draw Clickable img on screen
 		surface.blit(self.selection_btn_img[number], (rect.x, rect.y))

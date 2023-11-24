@@ -1,5 +1,7 @@
 import pygame
 
+from utils.globals import CLICK_DELAY_MS
+
 OFFSET = 25
 
 class Button():
@@ -34,8 +36,8 @@ class Button():
 			if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
 				self.clicked = True
 				action = True
-				# prevent click trigger for two seconds
-				pygame.time.delay(200)
+				# prevent unintentional double end move with delay after button is pressed
+				pygame.time.delay(CLICK_DELAY_MS)
 
 		if pygame.mouse.get_pressed()[0] == 0:
 			self.clicked = False

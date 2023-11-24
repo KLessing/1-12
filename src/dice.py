@@ -1,5 +1,7 @@
 import pygame
 
+from utils.globals import CLICK_DELAY_MS
+
 OFFSET = 30
 
 class Dice():
@@ -22,8 +24,9 @@ class Dice():
 			if pygame.mouse.get_pressed()[0] == 1:
 				action = True
 				self.clicked = not self.clicked
-				# prevent click trigger for two seconds
-				pygame.time.delay(200)
+				# delay to prevent multi action for one click
+				# (e.g. constant selection and deselection while button is pressed)
+				pygame.time.delay(CLICK_DELAY_MS)
 
 		# Draw Clickable img on screen
 		if self.clicked:
