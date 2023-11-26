@@ -30,6 +30,7 @@ class Settings():
 		surface.blit(self.msg_text, self.msg_rect)
 		# Draw dice buttons and return selected player count from first clicked dice button or 0
 		for i in range(1, MAX_PLAYER_COUNT + 1):
-			if self.dice_btns[i].draw(self.screen):
+			self.dice_btns[i].draw(self.screen)
+			if self.dice_btns[i].listen_for_click():
 				return i
 		return 0

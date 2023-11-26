@@ -46,7 +46,8 @@ class Game():
     
     def __draw_dice(self):
         for dice in self.current_dice:
-            if dice.draw(self.screen):
+            dice.draw(self.screen)            
+            if dice.listen_for_click():
                 self.__validate()
     
     def __draw_used_dice(self):

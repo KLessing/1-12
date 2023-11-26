@@ -14,27 +14,26 @@ class Dice():
 		self.value = value
 		self.clicked = False
 
-	def draw(self, surface: pygame.display):
-		action = False
+	def listen_for_click(self) -> bool:
 		# Get mouse position
 		pos = pygame.mouse.get_pos()
 
 		# Check mouseover and clicked conditions
 		if self.rect.collidepoint(pos):
 			if pygame.mouse.get_pressed()[0] == 1:
-				action = True
 				self.clicked = not self.clicked
 				# delay to prevent multi action for one click
 				# (e.g. constant selection and deselection while button is pressed)
 				pygame.time.delay(CLICK_DELAY_MS)
+				return True
+		
+		return False
 
-		# Draw Clickable img on screen
+	def draw(self, surface: pygame.display):
 		if self.clicked:
 			surface.blit(self.s_img, (self.rect.x, self.rect.y))
 		else:
 			surface.blit(self.img, (self.rect.x, self.rect.y))
-
-		return action
 
 	# calc dice pos dynamically in screen mid according to dice index and count of all dice
 	def get_pos(self, index: int, count: int, screen_size: tuple, width: int) -> tuple:
