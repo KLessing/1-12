@@ -6,6 +6,8 @@ from src import Game
 SCREEN_SIZE = (1280, 720)
 
 async def main():
+	my_clock = pygame.time.Clock()
+
 	# init game
 	game_instance = Game(SCREEN_SIZE)
 
@@ -24,6 +26,8 @@ async def main():
 
 		await asyncio.sleep(0)
 
+		# Waste time so that frame rate becomes 60 fps
+		my_clock.tick(60)
 
 	pygame.quit()
 
