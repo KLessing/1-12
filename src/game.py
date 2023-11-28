@@ -19,6 +19,9 @@ class Game():
         self.screen_size = screen_size
         self.__global_init(CAPTION)
         self.game_state = "init"
+        self.x = 0
+        self.y = 245
+        self.angle = 0
 
     def handle_game_state(self):
         self.__draw_blank()
@@ -45,8 +48,18 @@ class Game():
         self.screen.blit(self.background, [0, 0])
     
     def __draw_dice(self):
+        if self.x < 460:
+            self.x = (self.x + 5) # % self.screen_size[0]
+
+            self.current_dice[0].update(self.x, 245)
+            self.current_dice[3].update(self.x, 375)
+
+            self.angle += 10
+        else:
+            self.angle = 0
+
         for dice in self.current_dice:
-            dice.draw(self.screen)            
+            dice.draw(self.screen, self.angle)            
             if dice.listen_for_click():
                 self.__validate()
     
