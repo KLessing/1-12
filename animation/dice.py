@@ -30,11 +30,29 @@ edges = (
     (7, 3),
 )
 
+surfaces = (
+    (0, 1, 2, 3),
+    (1, 2, 5, 6),
+    (4, 5, 6, 7),
+    (4, 0, 3, 7),
+    (4, 5, 0, 1),
+    (7, 6, 2, 3)
+)
 
 def Cube():
+    glBegin(GL_QUADS)
+    for surface in surfaces:
+        x = 0
+        for vertex in surface:
+            x+=1
+            glColor3f(1, 1, 1)
+            glVertex3fv(verticies[vertex])
+    glEnd()
+
     glBegin(GL_LINES)
     for edge in edges:
         for vertex in edge:
+            glColor3f(0, 0, 0)
             glVertex3fv(verticies[vertex])
     glEnd()
 
