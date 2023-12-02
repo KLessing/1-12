@@ -43,6 +43,7 @@ def main():
     pygame.init()
     display = (1280, 720)
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
+    my_clock = pygame.time.Clock()
 
     # camera setup
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
@@ -59,7 +60,9 @@ def main():
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         Cube()
         pygame.display.flip()
-        pygame.time.wait(10)
+
+        # Waste time so that frame rate becomes 60 fps
+        my_clock.tick(60)
 
 
 main()
