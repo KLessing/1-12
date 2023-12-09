@@ -39,13 +39,14 @@ surfaces = (
     (7, 6, 2, 3)
 )
 
+textureCoordinates = ((0, 0), (0, 1), (1, 1), (1, 0))
+
 def Cube():
     glBegin(GL_QUADS)
     for surface in surfaces:
         x = 0
         for i, vertex in enumerate(surface):
             x+=1
-            glColor3f(1, 1, 1)
             glTexCoord2fv(textureCoordinates[i])
             glVertex3fv(verticies[vertex])
     glEnd()
@@ -67,6 +68,16 @@ def main():
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
     glTranslatef(0.0,0.0, -5)
 
+    image = pygame.image.load("../img/1.png")
+    datas = pygame.image.tostring(image, 'RGBA')
+    texID = glGenTextures(1)
+
+    glBindTexture(GL_TEXTURE_2D, texID)
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.get_width(), image.get_height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, datas)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+    glEnable(GL_TEXTURE_2D)    
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -74,7 +85,6 @@ def main():
                 quit()
 
         glRotatef(1, 3, 1, 1)
-        #glTranslatef(0.01, 0.01, 0)
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         Cube()
         pygame.display.flip()
