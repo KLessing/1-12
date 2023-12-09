@@ -4,15 +4,15 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-verticies = (  
-    (-1, 1, 1), # 0: left top near
-    (1, 1, 1), # 1: right top near
-    (1, -1, 1), # 2: right down near
-    (-1, -1, 1), # 3: left down near
-    (-1, 1, -1), # 4: left top far
-    (1, 1, -1), # 5: right top far
-    (1, -1, -1), # 6: right down far
-    (-1, -1, -1), # 7: left down far
+verticies = ( 
+    (-1, 1, -1), # 0: left top near
+    (1, 1, -1), # 1: right top near
+    (1, -1, -1), # 2: right down near
+    (-1, -1, -1), # 3: left down near
+    (-1, 1, 1), # 4: left top far
+    (1, 1, 1), # 5: right top far
+    (1, -1, 1), # 6: right down far
+    (-1, -1, 1), # 7: left down far
 )
 
 surfaces = (
