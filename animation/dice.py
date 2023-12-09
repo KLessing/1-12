@@ -15,21 +15,6 @@ verticies = (
     (-1, -1, -1), # 7: left down far
 )
 
-edges = (
-    (0, 1),
-    (0, 3),
-    (0, 4),
-    (2, 1),
-    (2, 3),
-    (2, 6),
-    (5, 4),
-    (5, 6),
-    (5, 1),
-    (7, 4),
-    (7, 6),
-    (7, 3),
-)
-
 surfaces = (
     (0, 1, 2, 3),
     (1, 5, 6, 2),
@@ -50,13 +35,6 @@ def Cube():
             glTexCoord2fv(textureCoordinates[i])
             glVertex3fv(verticies[vertex])
     glEnd()
-
-    glBegin(GL_LINES)
-    for edge in edges:
-        for vertex in edge:
-            glVertex3fv(verticies[vertex])
-    glEnd()
-
 
 def main():
     pygame.init()
