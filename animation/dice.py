@@ -64,6 +64,9 @@ def main():
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
     my_clock = pygame.time.Clock()
 
+    # only render what is in front
+    glEnable(GL_DEPTH_TEST)
+
     # camera setup
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
     glTranslatef(0.0,0.0, -5)
@@ -74,8 +77,11 @@ def main():
 
     glBindTexture(GL_TEXTURE_2D, texID)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.get_width(), image.get_height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, datas)
+
+    # use bilinear interpolation
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+
     glEnable(GL_TEXTURE_2D)    
 
     while True:
