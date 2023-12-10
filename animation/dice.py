@@ -34,7 +34,7 @@ textureCoordinates = [
     [[0.50, 1.00], [0.75, 1.00], [0.75, 0.66], [0.50, 0.66]], # five
 ]
 
-def Cube():
+def draw():
     glEnable(GL_TEXTURE_2D)
     glBegin(GL_QUADS)
     for i, surface in enumerate(surfaces):
@@ -44,19 +44,16 @@ def Cube():
     glEnd()
     glDisable(GL_TEXTURE_2D)
 
-def main():
+def init():
     pygame.init()
     display = (1280, 720)
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
-    my_clock = pygame.time.Clock()
-
-    # only render what is in front
-    glEnable(GL_DEPTH_TEST)
 
     # camera setup
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
     glTranslatef(0.0,0.0, -5)
 
+def load_texture():
     image = pygame.image.load("dice_texture.jpg")
     datas = pygame.image.tobytes(image, 'RGBA')
     texID = glGenTextures(1)
@@ -68,6 +65,12 @@ def main():
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
 
+    # only render what is in front
+    glEnable(GL_DEPTH_TEST)
+
+def main():
+    init()
+    load_texture()
 
     while True:
         for event in pygame.event.get():
@@ -75,13 +78,13 @@ def main():
                 pygame.quit()
                 quit()
 
-        glRotatef(1, 3, 1, 1)
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-        Cube()
+        glRotatef(1, 3, 1, 1)
+        draw()
+
         pygame.display.flip()
 
         # Waste time so that frame rate becomes 60 fps
-        my_clock.tick(60)
-
+        pygame.time.Clock().tick(60)
 
 main()
