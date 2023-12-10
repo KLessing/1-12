@@ -34,6 +34,24 @@ textureCoordinates = [
     [[0.50, 1.00], [0.75, 1.00], [0.75, 0.66], [0.50, 0.66]], # five
 ]
 
+rotationValues = [
+    [0, 0], # one
+    [90, 0], # two
+    [0, 90], # three
+    [0, -90], # four
+    [-90, 0], # five
+    [180, 90] # six # TODO special case z value instead of y
+]
+
+# End positions:
+# glRotate(0, 0, 0, 0) # 1
+# glRotate(90, 1, 0, 0) # 2
+# glRotate(90, 0, 1, 0) # 3
+# glRotate(-90, 0, 1, 0) # 4
+# glRotate(-90, 1, 0, 0) # 5
+# glRotate(90, 0, 0, 1) # 6
+# glRotate(180, 1, 0, 0) # 6
+
 def draw():
     glEnable(GL_TEXTURE_2D)
     glBegin(GL_QUADS)
@@ -50,8 +68,8 @@ def init():
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
 
     # camera setup
-    gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
-    glTranslatef(0.0,0.0, -5)
+    gluPerspective(90, (display[0]/display[1]), 0.1, 50.0)
+    glTranslatef(0.0, 0.0, -5.0)
 
 def load_texture():
     image = pygame.image.load("dice_texture.jpg")
@@ -72,6 +90,9 @@ def main():
     init()
     load_texture()
 
+    x_angle = -270
+    y_angle = 360
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -79,8 +100,18 @@ def main():
                 quit()
 
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-        glRotatef(1, 3, 1, 1)
+
+        if x_angle != 90:
+            x_angle += 10
+
+        if y_angle != 0:
+            y_angle -= 10
+
+        glPushMatrix()
+        glRotate(y_angle % 360, 0, 1, 0)
+        glRotate(x_angle % 360, 1, 0, 0)
         draw()
+        glPopMatrix()        
 
         pygame.display.flip()
 
