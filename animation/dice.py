@@ -4,6 +4,8 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+import random
+
 verticies = ( 
     (-1, 1, -1), # 0: left top near
     (1, 1, -1), # 1: right top near
@@ -26,7 +28,7 @@ surfaces = (
 
 # note: y inverted
 textureCoordinates = [
-    [[0.25, 0.66], [0.25, 0.33], [0.00, 0.33], [0.00, 0.66]], # six
+    [[0.00, 0.66], [0.25, 0.66], [0.25, 0.33], [0.00, 0.33]], # six
     [[0.25, 0.66], [0.50, 0.66], [0.50, 0.33], [0.25, 0.33]], # four
     [[0.50, 0.66], [0.75, 0.66], [0.75, 0.33], [0.50, 0.33]], # one
     [[0.75, 0.66], [1.00, 0.66], [1.00, 0.33], [0.75, 0.33]], # three
@@ -40,7 +42,7 @@ rotationValues = [
     [0, 90], # three
     [0, -90], # four
     [-90, 0], # five
-    [180, 90] # six # TODO special case z value instead of y
+    [180, 0] # six
 ]
 
 # End positions:
@@ -86,12 +88,31 @@ def load_texture():
     # only render what is in front
     glEnable(GL_DEPTH_TEST)
 
+# animate the roll while duration is not 0
+def roll_animation(roll_number: int = 1, left_duration: int = 0):
+    if roll_number > 6 or roll_number < 1:
+        print("Invalid number to roll! Using 1 instead...")
+        roll_number = 1
+
+    glPushMatrix()
+    glRotate(left_duration + rotationValues[roll_number-1][0] % 360, 1, 0, 0) # x
+    glRotate(left_duration + rotationValues[roll_number-1][1] % 360, 0, 1, 0) # y
+    draw()
+    glPopMatrix()
+
 def main():
     init()
     load_texture()
 
-    x_angle = -270
-    y_angle = 360
+    # complete duration
+    animation_duration = 3000
+    # how fast is the animation
+    animation_rate = 50
+
+    roll = random.randrange(1, 7)
+
+    # duration left
+    left_duration = animation_duration
 
     while True:
         for event in pygame.event.get():
@@ -101,17 +122,10 @@ def main():
 
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
 
-        if x_angle != 90:
-            x_angle += 10
+        roll_animation(roll, left_duration)
 
-        if y_angle != 0:
-            y_angle -= 10
-
-        glPushMatrix()
-        glRotate(y_angle % 360, 0, 1, 0)
-        glRotate(x_angle % 360, 1, 0, 0)
-        draw()
-        glPopMatrix()        
+        if left_duration >= animation_rate:
+            left_duration -= animation_rate
 
         pygame.display.flip()
 
