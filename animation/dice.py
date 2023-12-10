@@ -57,8 +57,8 @@ def main():
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
     glTranslatef(0.0,0.0, -5)
 
-    image = pygame.image.load("dice_texture.jpg")   
-    datas = pygame.image.tostring(image, 'RGBA')
+    image = pygame.image.load("dice_texture.jpg")
+    datas = pygame.image.tobytes(image, 'RGBA')
     texID = glGenTextures(1)
 
     glBindTexture(GL_TEXTURE_2D, texID)
