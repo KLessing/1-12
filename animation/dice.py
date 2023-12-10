@@ -89,14 +89,14 @@ def load_texture():
     glEnable(GL_DEPTH_TEST)
 
 # animate the roll while duration is not 0
-def roll_animation(roll_number: int = 1, left_duration: int = 0):
+def roll_animation(roll_number: int = 1, remaining_duration: int = 0):
     if roll_number > 6 or roll_number < 1:
         print("Invalid number to roll! Using 1 instead...")
         roll_number = 1
 
     glPushMatrix()
-    glRotate(left_duration + rotationValues[roll_number-1][0] % 360, 1, 0, 0) # x
-    glRotate(left_duration + rotationValues[roll_number-1][1] % 360, 0, 1, 0) # y
+    glRotate(remaining_duration + rotationValues[roll_number-1][0] % 360, 1, 0, 0) # x
+    glRotate(remaining_duration + rotationValues[roll_number-1][1] % 360, 0, 1, 0) # y
     draw()
     glPopMatrix()
 
@@ -105,14 +105,15 @@ def main():
     load_texture()
 
     # complete duration
-    animation_duration = 3000
+    duration_value = random.randrange(3, 6)
+    animation_duration = duration_value * 100
     # how fast is the animation
-    animation_rate = 50
+    animation_rate = 4
 
     roll = random.randrange(1, 7)
 
-    # duration left
-    left_duration = animation_duration
+    # remaining duration value
+    remaining_duration = animation_duration
 
     while True:
         for event in pygame.event.get():
@@ -122,10 +123,10 @@ def main():
 
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
 
-        roll_animation(roll, left_duration)
+        roll_animation(roll, remaining_duration)
 
-        if left_duration >= animation_rate:
-            left_duration -= animation_rate
+        if remaining_duration >= animation_rate:
+            remaining_duration -= animation_rate
 
         pygame.display.flip()
 
