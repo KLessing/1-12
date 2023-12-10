@@ -24,17 +24,25 @@ surfaces = (
     (7, 6, 2, 3)
 )
 
-textureCoordinates = ((0, 0), (0, 1), (1, 1), (1, 0))
+# note: y inverted
+textureCoordinates = [
+    [[0.00, 0.66], [0.25, 0.66], [0.25, 0.33], [0.00, 0.33]], # six
+    [[0.25, 0.66], [0.50, 0.66], [0.50, 0.33], [0.25, 0.33]], # four
+    [[0.50, 0.66], [0.75, 0.66], [0.75, 0.33], [0.50, 0.33]], # one
+    [[0.75, 0.33], [1.00, 0.33], [1.00, 0.66], [0.75, 0.66]], # three
+    [[0.50, 0.33], [0.75, 0.33], [0.75, 0.00], [0.50, 0.00]], # two
+    [[0.50, 1.00], [0.75, 1.00], [0.75, 0.66], [0.50, 0.66]], # five
+]
 
 def Cube():
+    glEnable(GL_TEXTURE_2D)
     glBegin(GL_QUADS)
-    for surface in surfaces:
-        x = 0
-        for i, vertex in enumerate(surface):
-            x+=1
-            glTexCoord2fv(textureCoordinates[i])
+    for i, surface in enumerate(surfaces):
+        for j, vertex in enumerate(surface):            
+            glTexCoord2fv(textureCoordinates[i][j])
             glVertex3fv(verticies[vertex])
     glEnd()
+    glDisable(GL_TEXTURE_2D)
 
 def main():
     pygame.init()
@@ -49,7 +57,7 @@ def main():
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
     glTranslatef(0.0,0.0, -5)
 
-    image = pygame.image.load("../img/1.png")
+    image = pygame.image.load("dice_texture.jpg")   
     datas = pygame.image.tostring(image, 'RGBA')
     texID = glGenTextures(1)
 
@@ -60,7 +68,6 @@ def main():
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
 
-    glEnable(GL_TEXTURE_2D)    
 
     while True:
         for event in pygame.event.get():
