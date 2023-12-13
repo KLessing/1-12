@@ -86,7 +86,7 @@ class Dice():
         glPushMatrix()
 
         glTranslatef(self.pos[0], self.pos[1], self.pos[2])
-        glScalef(0.35, 0.35, 0.35)
+        glScalef(0.25, 0.25, 0.25)
         glRotate(self.remaining_duration + ROTATION_VALUES[self.roll-1][0] % 360, 1, 0, 0) # x
         glRotate(self.remaining_duration + ROTATION_VALUES[self.roll-1][1] % 360, 0, 1, 0) # y
         self.draw()

@@ -24,8 +24,8 @@ def init():
     pygame.display.set_mode(SCREEN_SIZE, DOUBLEBUF|OPENGL)
 
     # camera setup
-    gluPerspective(90, (SCREEN_SIZE[0]/SCREEN_SIZE[1]), 0.1, 50.0)
-    glTranslatef(0, 0, -2.5)
+    gluPerspective(65, (SCREEN_SIZE[0]/SCREEN_SIZE[1]), 0.1, 50.0)
+    glTranslatef(0, -0.5, -2.5)
 
 async def main():
 	init() 
