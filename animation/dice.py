@@ -47,7 +47,8 @@ ROTATION_VALUES = [
 ]
 
 class Dice():
-    def __init__(self):        
+    def __init__(self, pos):
+        self.pos = pos
         self.roll = 1
         self.remaining_duration = 0
         self.load_texture()
@@ -83,6 +84,9 @@ class Dice():
             self.remaining_duration -= ANIMATION_RATE
 
         glPushMatrix()
+
+        glTranslatef(self.pos[0], self.pos[1], self.pos[2])
+        glScalef(0.35, 0.35, 0.35)
         glRotate(self.remaining_duration + ROTATION_VALUES[self.roll-1][0] % 360, 1, 0, 0) # x
         glRotate(self.remaining_duration + ROTATION_VALUES[self.roll-1][1] % 360, 0, 1, 0) # y
         self.draw()
