@@ -41,7 +41,8 @@ async def main():
 				pygame.quit()
 				quit()
 			if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-				print("left click")
+				for d in dice:
+					d.select()
 			if event.type == pygame.MOUSEBUTTONUP and event.button == 3:
 				for d in dice:
 					d.trigger_animation()

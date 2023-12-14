@@ -51,6 +51,7 @@ class Dice():
         self.pos = pos
         self.roll = 1
         self.remaining_duration = 0
+        self.is_selected = False
         self.load_texture()
 
     def load_texture(self):
@@ -83,8 +84,12 @@ class Dice():
         if self.remaining_duration >= ANIMATION_RATE:
             self.remaining_duration -= ANIMATION_RATE
 
-        glPushMatrix()
+        if self.is_selected:
+            glColor(255, 0, 0)
+        else:
+            glColor(255, 255, 255)
 
+        glPushMatrix()
         glTranslatef(self.pos[0], self.pos[1], self.pos[2])
         glScalef(0.25, 0.25, 0.25)
         glRotate(self.remaining_duration + ROTATION_VALUES[self.roll-1][0] % 360, 1, 0, 0) # x
@@ -101,3 +106,7 @@ class Dice():
 
         # remaining duration value
         self.remaining_duration = animation_duration
+
+    def select(self):
+        self.is_selected = not self.is_selected
+
