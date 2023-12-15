@@ -10,13 +10,22 @@ from dice import Dice
 
 SCREEN_SIZE = (1280, 720)
 
-DICE_POS = [
-	(1, 1, 0),
-	(0, 1, 0),
+DICE_TRANSLATIONS = [
 	(-1, 1, 0),
-	(1, 0, 0),
+	(0, 1, 0),
+	(1, 1, 0),
+	(-1, 0, 0),
 	(0, 0, 0),
-	(-1, 0, 0),	
+	(1, 0, 0),
+]
+
+DICE_POS = [
+	[(325, 170), (450, 290)],
+	[(575, 170), (700, 290)],
+	[(825, 170), (955, 290)],
+	[(325, 420), (450, 545)],
+	[(575, 420), (700, 545)],
+	[(825, 420), (955, 545)],
 ]
 
 def init():
@@ -31,19 +40,22 @@ async def main():
 	init() 
 
 	dice = []
-	
-	for pos in DICE_POS:
-		dice.append(Dice(pos))
+	for i in range(6):
+		dice.append(Dice(DICE_TRANSLATIONS[i], DICE_POS[i][0], DICE_POS[i][1]))
 
 	while True:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
+				# x button
 				pygame.quit()
 				quit()
 			if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+				# left click
+				x, y = pygame.mouse.get_pos()
 				for d in dice:
-					d.select()
+					d.check_selection(x, y)
 			if event.type == pygame.MOUSEBUTTONUP and event.button == 3:
+				# right click
 				for d in dice:
 					d.trigger_animation()
 		

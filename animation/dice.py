@@ -47,8 +47,10 @@ ROTATION_VALUES = [
 ]
 
 class Dice():
-    def __init__(self, pos):
-        self.pos = pos
+    def __init__(self, translation, min_pos, max_pos):
+        self.pos = translation
+        self.min_pos = min_pos
+        self.max_pos = max_pos
         self.roll = 1
         self.remaining_duration = 0
         self.is_selected = False
@@ -106,6 +108,13 @@ class Dice():
 
         # remaining duration value
         self.remaining_duration = animation_duration
+
+    def check_selection(self, x, y):
+        if (x >= self.min_pos[0] and
+            y >= self.min_pos[1] and
+            x <= self.max_pos[0] and
+            y <= self.max_pos[1]):
+            self.select()
 
     def select(self):
         self.is_selected = not self.is_selected
