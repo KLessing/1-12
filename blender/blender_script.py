@@ -1,6 +1,7 @@
 import bpy
 import math
 
+PARENT_PATH = "C:\\Projects\\1-12\\blender\\images\\"
 dice = bpy.data.objects['Cube']
 start_frame = 1
 end_frame = 180
@@ -36,11 +37,14 @@ def animate_roll(degree: int, count: int, y: bool, z: bool):
     # insert keyframe at the last frame
     dice.keyframe_insert("rotation_euler", frame=end_frame)
 
-i = 5
-reset_rotation_values()
-animate_roll(rolls[i][0], roll_count, rolls[i][1], rolls[i][2])
-
-# generate images from animation
-# TODO set Frame Range Set in Camera object Accordingly
-#bpy.context.scene.render.filepath = ("C:\\Projects\\1-12\\blender\\images\\img")
-#bpy.ops.render.render(animation=True, write_still=True)
+for i, roll in enumerate(rolls):
+    reset_rotation_values()
+    animate_roll(roll[0], roll_count, roll[1], roll[2])
+    
+    # generate images from animation
+    path = PARENT_PATH + str(i + 1) + "\\"
+    bpy.context.scene.render.filepath = (path)
+    bpy.ops.render.render(animation=True, write_still=True)
+    
+    # TODO set Frame Range Set in Camera object Accordingly
+    # 180er end Frame needed
