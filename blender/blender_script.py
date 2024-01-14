@@ -7,6 +7,12 @@ start_frame = 1
 end_frame = 180
 roll_count = 2
 
+# set frame range 
+# (181 needed to get last frame in 10 steps)
+bpy.context.scene.frame_start = 1
+bpy.context.scene.frame_step = 10
+bpy.context.scene.frame_end = 181
+
 # Degree y z by index
 rolls = [
     [180, False, True],
@@ -43,8 +49,5 @@ for i, roll in enumerate(rolls):
     
     # generate images from animation
     path = PARENT_PATH + str(i + 1) + "\\"
-    bpy.context.scene.render.filepath = (path)
+    bpy.context.scene.render.filepath = path
     bpy.ops.render.render(animation=True, write_still=True)
-    
-    # TODO set Frame Range Set in Camera object Accordingly
-    # 180er end Frame needed
