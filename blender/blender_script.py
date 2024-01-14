@@ -13,6 +13,9 @@ bpy.context.scene.frame_start = start_frame
 bpy.context.scene.frame_end = end_frame
 bpy.context.scene.frame_step = 10
 
+bpy.context.scene.render.resolution_x = 240
+bpy.context.scene.render.resolution_y = 240
+
 # render transparent background
 bpy.context.scene.render.film_transparent = True
 
