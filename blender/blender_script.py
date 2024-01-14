@@ -3,15 +3,15 @@ import math
 
 PARENT_PATH = "C:\\Projects\\1-12\\blender\\images\\"
 dice = bpy.data.objects['Cube']
-start_frame = 1
-end_frame = 180
 roll_count = 2
 
-# set frame range 
-# (181 needed to get last frame in 10 steps)
-bpy.context.scene.frame_start = 1
+# set frame range for 16 images in 10 steps
+start_frame = 1
+end_frame = 151
+
+bpy.context.scene.frame_start = start_frame
+bpy.context.scene.frame_end = end_frame
 bpy.context.scene.frame_step = 10
-bpy.context.scene.frame_end = 181
 
 # render transparent background
 bpy.context.scene.render.film_transparent = True
