@@ -1,24 +1,26 @@
 from PIL import Image
 import os
-import array
 
-dir = os.getcwd()
-
-file_path1 = dir + "\\images\\1\\0001.png"
-file_path2 = dir + "\\images\\1\\0011.png"
-
-im1 = Image.open(file_path1)
-im2 = Image.open(file_path2)
-
-def merge(im1, im2):
-    w = im1.size[0] + im2.size[0]
-    h = max(im1.size[1], im2.size[1])
+def add_img(sprite: Image, img: Image, col: int):
+    w = sprite.size[0] + img.size[0]
+    h = 240 * col
     im = Image.new("RGBA", (w, h))
-
-    im.paste(im1)
-    im.paste(im2, (im1.size[0], 0))
+  
+    im.paste(sprite)
+    im.paste(img, (sprite.size[0], 0))
 
     return im
 
-sprite_sheet = merge(im1, im2)
+for i in range(1, 7):
+    dir = os.getcwd() + "\\images\\" + str(i)
+    files = os.listdir(dir)
+
+    # start with first img
+    sprite_sheet = Image.open(dir + "\\" + files[0])
+
+    for i in range(1, len(files)):
+        file = dir + "\\" + files[i]
+        img = Image.open(file)
+        sprite_sheet = add_img(sprite_sheet, img, 1)
+
 sprite_sheet.save("sprite_sheet.png")
