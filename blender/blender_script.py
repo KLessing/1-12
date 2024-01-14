@@ -2,25 +2,33 @@ import bpy
 import math
 
 dice = bpy.data.objects['Cube']
+start_frame = 1
+end_frame = 180
+roll_count = 2
+
+# 180 x z = 1
+# 270 x y = 2
+# 270 x z = 3
+# 90 x z = 4
+# 90 x y = 5
+# 0 / 180 / 360 x y = 6 
 
 # reset rotations
 dice.rotation_euler.x = 0
 dice.rotation_euler.y = 0
 dice.rotation_euler.z = 0
-
 # insert keyframe at frame one
-start_frame = 1
 dice.keyframe_insert("rotation_euler", frame=start_frame)
 
 # change the rotation of the cube
-degrees = 360
+# (negative to roll "away")
+degrees = 270 + (360 * roll_count)
 radians = math.radians(degrees)
-dice.rotation_euler.x = radians
-dice.rotation_euler.y = radians
-dice.rotation_euler.z = radians
+dice.rotation_euler.x = -radians
+#dice.rotation_euler.y = -radians
+dice.rotation_euler.z = -radians
 
 # insert keyframe at the last frame
-end_frame = 180
 dice.keyframe_insert("rotation_euler", frame=end_frame)
 
 # generate images from animation
