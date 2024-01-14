@@ -13,7 +13,10 @@ bpy.context.scene.frame_start = 1
 bpy.context.scene.frame_step = 10
 bpy.context.scene.frame_end = 181
 
-# Degree y z by index
+# render transparent background
+bpy.context.scene.render.film_transparent = True
+
+# degree y z by index
 rolls = [
     [180, False, True],
     [270, True, False],
