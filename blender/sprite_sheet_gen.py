@@ -1,20 +1,26 @@
 from PIL import Image
 import os
 
+ROW_COUNT = 6
+COL_COUNT = 16
+
 def add_img(sprite: Image, img: Image, y: int, x: int):
-    w = 240 * x
-    h = 240 * (y - 1)
-    im = Image.new("RGBA", (240 * 16, 240 * 6)) # Full Resolution
+    w = img.size[0] * x
+    h = img.size[1] * y
+
+    # Full Resolution
+    res = Image.new("RGBA", (img.size[0] * COL_COUNT, img.size[1] * ROW_COUNT))
   
-    im.paste(sprite)
-    im.paste(img, (w, h))
+    res.paste(sprite)
+    res.paste(img, (w, h))
 
-    return im
+    return res
 
+# init empty sprite sheet img
 sprite_sheet = Image.new("RGBA", (0, 0))
 
-for i in range(1, 7):
-    dir = os.getcwd() + "\\images\\" + str(i)
+for i in range(ROW_COUNT):
+    dir = os.getcwd() + "\\images\\" + str(i + 1)
     files = os.listdir(dir)
 
     for j in range(len(files)):
