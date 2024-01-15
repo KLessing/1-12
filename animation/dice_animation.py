@@ -1,31 +1,31 @@
 import pygame
 
 X_OFFSET = 0
-Y_OFFSET = 10
-IMG_WIDTH = 234
+Y_OFFSET = 0
+IMG_WIDTH = 240
 IMG_HEIGHT = 240
 SCREEN = ((1980, 1080))
-X_MAX = 16 # (zero indexed but moduloed)
-Y_MAX = 7
+X_MAX = 15 # (zero indexed but moduloed)
+Y_MAX = 6
 
-x = 0
+x = X_MAX
 y = 0
 
 surface = pygame.display.set_mode(SCREEN)
-sprite = pygame.image.load("dice_spritesheet.png").convert_alpha()
+sprite = pygame.image.load("sprite_sheet.png").convert_alpha()
 mid = (SCREEN[0]/2 - IMG_WIDTH / 2, SCREEN[1]/2 - IMG_HEIGHT / 2)
 clock = pygame.time.Clock()
-
 
 #game loop
 run = True
 while run:
-    x = (x + 1) % X_MAX
+    if x < X_MAX:
+        x += 1
 
     # reset view
     surface.fill((0, 0, 0, 0))
 
-    rect = pygame.Rect(X_OFFSET * x + IMG_WIDTH * x, Y_OFFSET * y + IMG_HEIGHT * y, IMG_WIDTH, IMG_HEIGHT)
+    rect = pygame.Rect(IMG_WIDTH * x, IMG_HEIGHT * y, IMG_WIDTH, IMG_HEIGHT)
     surface.blit(sprite, mid, rect)
 
     #event handler
@@ -34,15 +34,13 @@ while run:
             #quit game (press X)
             run = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            # left click            
-            x = (x + 1) % X_MAX
-            print("x =", x)
+            # left click 
+            x = 0
         if event.type == pygame.MOUSEBUTTONUP and event.button == 3:
             # right click
             y = (y + 1) % Y_MAX
-            print("y =", y)
 
-    clock.tick(10)
+    clock.tick(5)
     pygame.display.update()
 
 pygame.quit()
