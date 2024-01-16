@@ -3,7 +3,7 @@ import math
 
 PARENT_PATH = "C:\\Projects\\1-12\\blender\\images\\"
 dice = bpy.data.objects['Cube']
-roll_count = 2
+roll_count = 1
 
 # set frame range for 16 images in 10 steps
 start_frame = 1
