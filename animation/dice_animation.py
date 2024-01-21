@@ -12,7 +12,7 @@ x = X_MAX
 y = 0
 
 surface = pygame.display.set_mode(SCREEN)
-sprite = pygame.image.load("sprite_sheet.png").convert_alpha()
+sprite = pygame.image.load("../img/sprite_sheet_green.png").convert_alpha()
 mid = (SCREEN[0]/2 - IMG_WIDTH / 2, SCREEN[1]/2 - IMG_HEIGHT / 2)
 clock = pygame.time.Clock()
 
