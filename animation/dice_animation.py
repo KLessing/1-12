@@ -4,7 +4,7 @@ X_OFFSET = 0
 Y_OFFSET = 0
 IMG_WIDTH = 240
 IMG_HEIGHT = 240
-SCREEN = ((1980, 1080))
+SCREEN = ((1920, 1080))
 X_MAX = 15 # (zero indexed but moduloed)
 Y_MAX = 6
 
@@ -30,7 +30,7 @@ while run:
 
     #event handler
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT or (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE):
             #quit game (press X)
             run = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
