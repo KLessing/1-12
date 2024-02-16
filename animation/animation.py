@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import pygame
+from dice import Dice
+from utils.spritesheet import SpriteSheet
 
-X_OFFSET = 0
-Y_OFFSET = 0
-IMG_WIDTH = 240
-IMG_HEIGHT = 240
-SCREEN = ((1920, 1080))
+IMG_WIDTH = 100
+IMG_HEIGHT = 100
+SCREEN = (1280, 720)
 X_MAX = 15 # (zero indexed but moduloed)
 Y_MAX = 6
 
@@ -15,9 +15,10 @@ x = X_MAX
 y = 0
 
 surface = pygame.display.set_mode(SCREEN)
-sprite = pygame.image.load("../img/sprite_sheet_green.png").convert_alpha()
-mid = (SCREEN[0]/2 - IMG_WIDTH / 2, SCREEN[1]/2 - IMG_HEIGHT / 2)
+background = pygame.image.load('../img/background_1280px.jpg').convert_alpha()
+spritesheet = SpriteSheet()
 clock = pygame.time.Clock()
+mid = (SCREEN[0]/2 - IMG_WIDTH / 2, SCREEN[1]/2 - IMG_HEIGHT / 2)
 
 #game loop
 run = True
@@ -26,10 +27,8 @@ while run:
         x += 1
 
     # reset view
-    surface.fill((0, 0, 0, 0))
-
-    rect = pygame.Rect(IMG_WIDTH * x, IMG_HEIGHT * y, IMG_WIDTH, IMG_HEIGHT)
-    surface.blit(sprite, mid, rect)
+    surface.blit(background, [0, 0])
+    surface.blit(spritesheet.get_dice(0), mid)
 
     #event handler
     for event in pygame.event.get():
