@@ -1,9 +1,8 @@
 import pygame
 import random
+import utils.globals as globals
 
-from utils.globals import MAX_DICE_COUNT
 from utils.spritesheet import SpriteSheet
-
 from dice import Dice
 
 OFFSET = 30
@@ -15,7 +14,7 @@ class DiceController():
 		# init dice images
 		self.dice_img = {}
 		self.selected_dice_img = {}
-		for i in range(1, MAX_DICE_COUNT + 1):
+		for i in range(1, globals.MAX_DICE_COUNT + 1):
 			self.dice_img[i] = sprite_sheet.get_dice_img(i)
 			self.selected_dice_img[i] = sprite_sheet.get_dice_img(i)
 
@@ -29,8 +28,8 @@ class DiceController():
 		dice = []
 		for i in range(0, count):
 			# roll dice (1-6)
-			rdm = random.randrange(1, MAX_DICE_COUNT + 1)
-			dice.append(Dice(self.dice_img[rdm], self.selected_dice_img[rdm], rdm, i, count, screen_size))
+			rdm = random.randrange(1, globals.MAX_DICE_COUNT + 1)
+			dice.append(Dice(self.dice_img[rdm], self.selected_dice_img[rdm], rdm, self.get_pos(i, count, screen_size, globals.IMG_SIZE)))
 		# TODO start animation
 		return dice
 
