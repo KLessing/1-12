@@ -16,7 +16,7 @@ class DiceController():
 		self.selected_dice_img = {}
 		for i in range(1, globals.MAX_DICE_COUNT + 1):
 			self.dice_img[i] = sprite_sheet.get_dice_img(i)
-			self.selected_dice_img[i] = sprite_sheet.get_dice_img(i)
+			self.selected_dice_img[i] = sprite_sheet.get_dice_img(i, True)
 
 		# init empty dice instances
 		self.current_dice = []

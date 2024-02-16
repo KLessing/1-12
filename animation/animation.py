@@ -41,6 +41,7 @@ while run:
 
     for d in dice:
         d.draw(surface)
+        d.listen_for_click()       
 
     #event handler
     for event in pygame.event.get():
