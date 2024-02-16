@@ -17,6 +17,10 @@ class SpriteSheet:
         self.sheet = pygame.image.load("../img/sprite_sheet_green.png").convert_alpha()
 
     def get_dice(self, number: int):
+        if number < 1 or number > 6:
+            return
+        
+        number -= 1
         rect = pygame.Rect(SPRITE_WIDTH * X_MAX, SPRITE_HEIGHT * number, SPRITE_WIDTH, SPRITE_HEIGHT)
         image = pygame.Surface(rect.size, pygame.SRCALPHA)
         image.blit(self.sheet, (0, 0), rect)

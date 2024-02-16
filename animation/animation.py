@@ -28,7 +28,10 @@ while run:
 
     # reset view
     surface.blit(background, [0, 0])
-    surface.blit(spritesheet.get_dice(0), mid)
+
+    dice_img = spritesheet.get_dice(6)
+    if dice_img:
+        surface.blit(dice_img, mid)
 
     #event handler
     for event in pygame.event.get():
