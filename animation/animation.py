@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import pygame
-from dice import Dice
+from dice_controller import DiceController
 from utils.spritesheet import SpriteSheet
 
 IMG_WIDTH = 100
@@ -19,7 +19,10 @@ background = pygame.image.load('../img/background_1280px.jpg').convert_alpha()
 spritesheet = SpriteSheet()
 clock = pygame.time.Clock()
 mid = (SCREEN[0]/2 - IMG_WIDTH / 2, SCREEN[1]/2 - IMG_HEIGHT / 2)
-roll_images = spritesheet.get_roll(6)
+roll_images = spritesheet.get_roll_imgs(6)
+
+dc = DiceController()
+dice = dc.roll_dice(6, SCREEN)
 
 #game loop
 run = True
@@ -30,11 +33,14 @@ while run:
     # reset view
     surface.blit(background, [0, 0])
 
-    # dice_img = spritesheet.get_dice(6)
+    # dice_img = spritesheet.get_dice_img(6)
     # if dice_img:
     #     surface.blit(dice_img, mid)
 
-    surface.blit(roll_images[x], mid)
+    # surface.blit(roll_images[x], mid)
+
+    for d in dice:
+        d.draw(surface)
 
     #event handler
     for event in pygame.event.get():
