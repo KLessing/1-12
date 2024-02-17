@@ -17,6 +17,9 @@ class Dice():
 		self.delayer = 0
 
 	def listen_for_click(self) -> bool:
+		if self.animationStep < MAX:
+			return False
+
 		# Get mouse position
 		pos = pygame.mouse.get_pos()
 
