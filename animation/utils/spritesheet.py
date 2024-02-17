@@ -33,4 +33,4 @@ class SpriteSheet:
         return pygame.transform.scale(image, (globals.IMG_SIZE, globals.IMG_SIZE))
 
     def get_roll_imgs(self, number: int):
-        return [self.get_dice_img(number, x) for x in range(X_MAX + 1)]
+        return [self.get_dice_img(number, False, x) for x in range(X_MAX + 1)]

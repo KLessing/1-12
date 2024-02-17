@@ -12,10 +12,10 @@ class DiceController():
 		sprite_sheet = SpriteSheet()
 
 		# init dice images
-		self.dice_img = {}
+		self.dice_imgs = {}
 		self.selected_dice_img = {}
 		for i in range(1, globals.MAX_DICE_COUNT + 1):
-			self.dice_img[i] = sprite_sheet.get_dice_img(i)
+			self.dice_imgs[i] = sprite_sheet.get_roll_imgs(i)
 			self.selected_dice_img[i] = sprite_sheet.get_dice_img(i, True)
 
 		# init empty dice instances
@@ -29,8 +29,7 @@ class DiceController():
 		for i in range(0, count):
 			# roll dice (1-6)
 			rdm = random.randrange(1, globals.MAX_DICE_COUNT + 1)
-			dice.append(Dice(self.dice_img[rdm], self.selected_dice_img[rdm], rdm, self.get_pos(i, count, screen_size, globals.IMG_SIZE)))
-		# TODO start animation
+			dice.append(Dice(self.dice_imgs[rdm], self.selected_dice_img[rdm], rdm, self.get_pos(i, count, screen_size, globals.IMG_SIZE)))
 		return dice
 
 	# calc dice pos dynamically in screen mid according to dice index and count of all dice

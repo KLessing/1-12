@@ -27,17 +27,8 @@ dice = dc.roll_dice(6, SCREEN)
 #game loop
 run = True
 while run:
-    if x < X_MAX:
-        x += 1
-
     # reset view
     surface.blit(background, [0, 0])
-
-    # dice_img = spritesheet.get_dice_img(6)
-    # if dice_img:
-    #     surface.blit(dice_img, mid)
-
-    # surface.blit(roll_images[x], mid)
 
     for d in dice:
         d.draw(surface)
