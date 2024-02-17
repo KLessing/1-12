@@ -46,7 +46,7 @@ while run:
             # right click
             y = (y + 1) % Y_MAX
 
-    clock.tick(10)
+    clock.tick(60)
     pygame.display.update()
 
 pygame.quit()

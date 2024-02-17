@@ -29,7 +29,8 @@ class DiceController():
 		for i in range(0, count):
 			# roll dice (1-6)
 			rdm = random.randrange(1, globals.MAX_DICE_COUNT + 1)
-			dice.append(Dice(self.dice_imgs[rdm], self.selected_dice_img[rdm], rdm, self.get_pos(i, count, screen_size, globals.IMG_SIZE)))
+			delay = random.randrange(5, 15)
+			dice.append(Dice(self.dice_imgs[rdm], self.selected_dice_img[rdm], rdm, self.get_pos(i, count, screen_size, globals.IMG_SIZE), delay))
 		return dice
 
 	# calc dice pos dynamically in screen mid according to dice index and count of all dice

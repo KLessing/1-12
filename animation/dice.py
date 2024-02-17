@@ -6,13 +6,15 @@ OFFSET = 30
 MAX = 15
 
 class Dice():
-	def __init__(self, imgs: [pygame.image], s_img: pygame.image, value: int, pos: tuple):
+	def __init__(self, imgs: [pygame.image], s_img: pygame.image, value: int, pos: tuple, delay: int):
 		self.rect = pygame.Rect(pos[0], pos[1], globals.IMG_SIZE, globals.IMG_SIZE)
 		self.imgs = imgs
 		self.s_img = s_img
 		self.value = value
 		self.clicked = False
 		self.animationStep = 0
+		self.delay = delay
+		self.delayer = 0
 
 	def listen_for_click(self) -> bool:
 		# Get mouse position
@@ -29,11 +31,16 @@ class Dice():
 		
 		return False
 
-	def draw(self, surface: pygame.display):
+	def draw(self, surface: pygame.display):		
+		if self.animationStep < MAX:
+			if self.delayer < self.delay:
+				self.delayer += 1
+			else:
+				self.animationStep += 1
+				self.delayer = 0
+
 		if self.clicked:
 			surface.blit(self.s_img, (self.rect.x, self.rect.y))
 		else:
 			surface.blit(self.imgs[self.animationStep], (self.rect.x, self.rect.y))
-		
-		if self.animationStep < MAX:
-			self.animationStep += 1
+
