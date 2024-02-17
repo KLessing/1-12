@@ -2,10 +2,9 @@ import pygame
 
 import utils.globals as globals
 
-OFFSET = 30
 MAX = 15
 
-class Dice():
+class AnimatedDice():
 	def __init__(self, imgs: [pygame.image], s_img: pygame.image, value: int, pos: tuple, delay: int):
 		self.rect = pygame.Rect(pos[0], pos[1], globals.IMG_SIZE, globals.IMG_SIZE)
 		self.imgs = imgs

@@ -3,7 +3,7 @@ import random
 import utils.globals as globals
 
 from utils.spritesheet import SpriteSheet
-from dice import Dice
+from .animated_dice import AnimatedDice as Dice
 
 OFFSET = 30
 
@@ -18,18 +18,12 @@ class DiceController():
 			self.dice_imgs[i] = sprite_sheet.get_roll_imgs(i)
 			self.selected_dice_img[i] = sprite_sheet.get_dice_img(i, True)
 
-		# init empty dice instances
-		self.current_dice = []
-		self.used_dice = []
-		# needed for multiple possible combinations for first move (4 + 4 = 4 or 8) 
-		self.validated_combinations = set()
-
 	def roll_dice(self, count: int, screen_size):
 		dice = []
 		for i in range(0, count):
 			# roll dice (1-6)
 			rdm = random.randrange(1, globals.MAX_DICE_COUNT + 1)
-			delay = random.randrange(5, 15)
+			delay = random.randrange(5, 10)
 			dice.append(Dice(self.dice_imgs[rdm], self.selected_dice_img[rdm], rdm, self.get_pos(i, count, screen_size, globals.IMG_SIZE), delay))
 		return dice
 

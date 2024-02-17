@@ -11,8 +11,8 @@ X_MAX = 15 # (0 - 15)
 class SpriteSheet:
 
     def __init__(self):
-        self.sheet_green = pygame.image.load("../img/sprite_sheet_green.png").convert_alpha()
-        self.sheet_red = pygame.image.load("../img/sprite_sheet_red.png").convert_alpha()
+        self.sheet_green = pygame.image.load("img/sprite_sheet_green.png").convert_alpha()
+        self.sheet_red = pygame.image.load("img/sprite_sheet_red.png").convert_alpha()
 
     def get_dice_img(self, number: int, clicked: bool = False, x : int = X_MAX):
         if number <= 0 or number > globals.MAX_DICE_COUNT:
