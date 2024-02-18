@@ -138,15 +138,7 @@ class Game():
         self.scores[self.current_player_index].set_active(True)
 
     def __init_dice(self):
-        self.dice_controller = DiceController()       
-
-        # init dice images
-        self.dice_img = {}
-        self.selected_dice_img = {}
-        for i in range(1, MAX_DICE_COUNT + 1):
-            self.dice_img[i] = pygame.image.load('img/' + str(i) + '.png').convert_alpha()
-            self.selected_dice_img[i] = pygame.image.load('img/' + str(i) + '_selected.png').convert_alpha()
-
+        self.dice_controller = DiceController()
         # init empty dice instances
         self.current_dice = []
         self.used_dice = []
