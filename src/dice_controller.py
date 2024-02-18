@@ -4,6 +4,7 @@ import utils.globals as globals
 
 from utils.spritesheet import SpriteSheet
 from .animated_dice import AnimatedDice as Dice
+from .draw_only_dice import DrawOnlyDice
 
 OFFSET = 30
 
@@ -25,6 +26,12 @@ class DiceController():
 			rdm = random.randrange(1, globals.MAX_DICE_COUNT + 1)
 			delay = random.randrange(5, 10)
 			dice.append(Dice(self.dice_imgs[rdm], self.selected_dice_img[rdm], rdm, self.get_pos(i, count, screen_size, globals.IMG_SIZE), delay))
+		return dice
+
+	def get_used_dice(self, values: [int]):
+		dice = []
+		for index, value in enumerate(values):
+			dice.append(DrawOnlyDice(self.selected_dice_img[value], value, index, 0.5))
 		return dice
 
 	# calc dice pos dynamically in screen mid according to dice index and count of all dice
@@ -54,4 +61,4 @@ class DiceController():
 		dice_row_pos = (screen_size[0] // 2) - (dice_row_width // 2)
 		x = col_index * (width + OFFSET) + dice_row_pos
 			
-		return (x, y)	
+		return (x, y)

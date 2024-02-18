@@ -6,7 +6,6 @@ from utils.globals import MAX_DICE_COUNT
 
 from .button import Button
 from .dice_controller import DiceController
-from .draw_only_dice import DrawOnlyDice
 from .score import Score
 from .dice_comb_selection import DiceCombSelection
 from .settings import Settings
@@ -208,9 +207,7 @@ class Game():
     def __set_selected_dice(self):
         selected_dice_values = self.__get_all_selected_dice_values()
         self.used_dice.clear()
-
-        for index, value in enumerate(selected_dice_values):
-            self.used_dice.append(DrawOnlyDice(self.dice_img[value], value, index, 0.5))
+        self.used_dice = self.dice_controller.get_used_dice(selected_dice_values)
 
     """ --- Game Functions --- """
 
