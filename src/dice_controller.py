@@ -5,7 +5,7 @@ from utils.spritesheet import SpriteSheet
 from .animated_dice import AnimatedDice as Dice
 from .draw_only_dice import DrawOnlyDice
 
-OFFSET = 30
+OFFSET = 25
 
 class DiceController():
 	def __init__(self):
