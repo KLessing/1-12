@@ -1,4 +1,3 @@
-import pygame
 import random
 import utils.globals as globals
 
@@ -11,7 +10,8 @@ OFFSET = 30
 class DiceController():
 	def __init__(self):
 		sprite_sheet = SpriteSheet()
-
+        # init empty dice instances
+		self.current_dice = []
 		# init dice images
 		self.dice_imgs = {}
 		self.selected_dice_img = {}
@@ -19,15 +19,20 @@ class DiceController():
 			self.dice_imgs[i] = sprite_sheet.get_roll_imgs(i)
 			self.selected_dice_img[i] = sprite_sheet.get_dice_img(i, True)
 
+	def get_current_dice(self):
+		return self.current_dice
+
+	def get_selected_current_dice_values(self):
+		return [dice.value for dice in self.current_dice if dice.clicked]
+
 	# roll the new current dice, start animation and return dice
 	def roll_dice(self, count: int, screen_size):
-		dice = []
+		self.current_dice.clear()
 		for i in range(0, count):
 			# roll dice (1-6)
 			rdm = random.randrange(1, globals.MAX_DICE_COUNT + 1)
 			delay = random.randrange(5, 10)
-			dice.append(Dice(self.dice_imgs[rdm], self.selected_dice_img[rdm], rdm, self.get_mid_pos(i, count, screen_size, globals.IMG_SIZE), delay))
-		return dice
+			self.current_dice.append(Dice(self.dice_imgs[rdm], self.selected_dice_img[rdm], rdm, self.get_mid_pos(i, count, screen_size, globals.IMG_SIZE), delay))
 
 	def get_used_dice(self, values: [int]):
 		dice = []

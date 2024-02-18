@@ -44,7 +44,7 @@ class Game():
         self.screen.blit(self.background, [0, 0])
     
     def __draw_dice(self):
-        for dice in self.current_dice:
+        for dice in self.dice_controller.get_current_dice():
             dice.draw(self.screen)            
             if dice.listen_for_click():
                 self.__validate()
@@ -140,7 +140,6 @@ class Game():
     def __init_dice(self):
         self.dice_controller = DiceController()
         # init empty dice instances
-        self.current_dice = []
         self.used_dice = []
         # needed for multiple possible combinations for first move (4 + 4 = 4 or 8)
         self.validated_combinations = set()
@@ -186,14 +185,11 @@ class Game():
         
     """ --- Dice Functions --- """
 
-    def __get_selected_current_dice_values(self):
-        return [dice.value for dice in self.current_dice if dice.clicked]
-
     def __get_used_dice_values(self):
         return [dice.value for dice in self.used_dice]
 
     def __get_all_selected_dice_values(self):
-        res = self.__get_selected_current_dice_values() + self.__get_used_dice_values()
+        res = self.dice_controller.get_selected_current_dice_values() + self.__get_used_dice_values()
         return sorted(res, reverse=True)
 
     def __set_selected_dice(self):
@@ -232,9 +228,8 @@ class Game():
             if len(self.validated_combinations) == 1 and single_selection != self.scores[self.current_player_index].current_selection:
                 self.scores[self.current_player_index].set_selection(single_selection)
 
-        count = MAX_DICE_COUNT - len(self.used_dice)
-        self.current_dice.clear()
-        self.current_dice = self.dice_controller.roll_dice(count, self.screen_size)
+        count = MAX_DICE_COUNT - len(self.used_dice)        
+        self.dice_controller.roll_dice(count, self.screen_size)
 
         # not first move?
         if len(self.used_dice) > 0:
@@ -280,7 +275,7 @@ class Game():
 
         
     def __validate(self):
-        selection = self.__get_selected_current_dice_values()
+        selection = self.dice_controller.get_selected_current_dice_values()
         current_score: Score = self.scores[self.current_player_index]
 
         if len(selection) > 0:
