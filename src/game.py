@@ -50,7 +50,7 @@ class Game():
                 self.__validate()
     
     def __draw_used_dice(self):
-        for dice in self.used_dice:
+        for dice in self.dice_controller.get_used_dice():
             dice.draw(self.screen)
 
     def __draw_scores(self):
@@ -139,8 +139,6 @@ class Game():
 
     def __init_dice(self):
         self.dice_controller = DiceController()
-        # init empty dice instances
-        self.used_dice = []
         # needed for multiple possible combinations for first move (4 + 4 = 4 or 8)
         self.validated_combinations = set()
 
@@ -149,7 +147,7 @@ class Game():
     def __handle_confirm_move_btn(self):
         # draw confirm button and listen to click
         if self.confirm_move_btn.draw(self.screen):
-            self.__set_selected_dice()
+            self.dice_controller.set_used_dice()
             self.__move()
 
     def __handle_finish_move_btn(self):
@@ -183,20 +181,6 @@ class Game():
         self.__handle_selection_btn(lowest_number)
         self.__handle_selection_btn(lowest_number * 2)
         
-    """ --- Dice Functions --- """
-
-    def __get_used_dice_values(self):
-        return [dice.value for dice in self.used_dice]
-
-    def __get_all_selected_dice_values(self):
-        res = self.dice_controller.get_selected_current_dice_values() + self.__get_used_dice_values()
-        return sorted(res, reverse=True)
-
-    def __set_selected_dice(self):
-        selected_dice_values = self.__get_all_selected_dice_values()
-        self.used_dice.clear()
-        self.used_dice = self.dice_controller.get_used_dice(selected_dice_values)
-
     """ --- Game Functions --- """
 
     def __start_game(self, player_count):
@@ -228,13 +212,13 @@ class Game():
             if len(self.validated_combinations) == 1 and single_selection != self.scores[self.current_player_index].current_selection:
                 self.scores[self.current_player_index].set_selection(single_selection)
 
-        count = MAX_DICE_COUNT - len(self.used_dice)        
-        self.dice_controller.roll_dice(count, self.screen_size)
+        self.dice_controller.set_current_dice(self.screen_size)
+        used_dice_count = self.dice_controller.get_used_dice_count()
 
         # not first move?
-        if len(self.used_dice) > 0:
+        if used_dice_count > 0:
             # update score for current player and check for win
-            if self.scores[self.current_player_index].update(len(self.used_dice)):
+            if self.scores[self.current_player_index].update(used_dice_count):
                 self.__update_global_score()
                 self.game_state = "win"
             # is the current selection completely collected?
@@ -242,7 +226,7 @@ class Game():
                 #  end current move but keep player for next move
                 self.__end_move(True)
             # are all dice used?
-            elif len(self.used_dice) == MAX_DICE_COUNT:
+            elif used_dice_count == MAX_DICE_COUNT:
                 # end current move but keep player and selection for next move
                 self.__end_move(True, True)
 
@@ -260,7 +244,7 @@ class Game():
 
         # start new first move
         self.scores[self.current_player_index].reset_collected_count()
-        self.used_dice.clear()
+        self.dice_controller.clear_used_dice()
         self.__move()
 
     # update global negative score for all players who lost
