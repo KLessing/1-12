@@ -1,7 +1,8 @@
 import pygame
 
-from .dice import Dice
-
+from utils.spritesheet import SpriteSheet
+from .draw_only_dice import DrawOnlyDice
+from .dice_controller import DiceController
 
 OFFSET = 15
 LINE_OFFSET = 37
@@ -10,6 +11,8 @@ DEFAULT_COLOR = (255, 255, 255)
 
 class Settings():
 	def __init__(self, screen, screen_size: tuple):
+		self.sprite = SpriteSheet()
+		self.dice_controller = DiceController()
 		self.screen = screen
 		self.screen_size = screen_size
 		msg = "Choose Player Count"
@@ -22,8 +25,10 @@ class Settings():
 		# init dice images
 		self.dice_btns = {}
 		for i in range(1, MAX_PLAYER_COUNT + 1):
-			img = pygame.image.load('img/' + str(i) + '.png').convert_alpha()
-			self.dice_btns[i] = (Dice(img, img, i, i-1, MAX_PLAYER_COUNT, self.screen_size))
+			img = self.sprite.get_dice_img(i)
+			width = img.get_width()
+			pos = self.dice_controller.get_mid_pos(i-1, MAX_PLAYER_COUNT, self.screen_size, width)
+			self.dice_btns[i] = (DrawOnlyDice(img, pos, i, width))
 
 	def draw(self, surface: pygame.display):
 		# Draw Text

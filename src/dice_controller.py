@@ -50,7 +50,7 @@ class DiceController():
 			# roll dice (1-6)
 			rdm = random.randrange(1, globals.MAX_DICE_COUNT + 1)
 			delay = random.randrange(5, 10)
-			self.current_dice.append(Dice(self.dice_imgs[rdm], self.selected_dice_img[rdm], rdm, self.__get_mid_pos(i, count, screen_size, globals.IMG_SIZE), delay))
+			self.current_dice.append(Dice(self.dice_imgs[rdm], self.selected_dice_img[rdm], rdm, self.get_mid_pos(i, count, screen_size, globals.IMG_SIZE), delay))
 
 	def set_used_dice(self):
 		selected_dice_values = self.__get_all_selected_dice_values()
@@ -60,7 +60,7 @@ class DiceController():
 			self.used_dice.append(DrawOnlyDice(self.selected_dice_img[value], self.__get_top_pos(index, width), value, width))
 
 	# calc dice pos dynamically in screen mid according to dice index and count of all dice
-	def __get_mid_pos(self, index: int, count: int, screen_size: tuple, width: int) -> tuple:
+	def get_mid_pos(self, index: int, count: int, screen_size: tuple, width: int) -> tuple:
 		# separate all dice into two rows
 		# round down to whole number with //
 		separator = count // 2 

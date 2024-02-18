@@ -1,6 +1,5 @@
 from .button import Button
 from .animated_dice import AnimatedDice
-from .dice import Dice
 from .draw_only_dice import DrawOnlyDice
 from .dice_controller import DiceController
 from .score import Score
