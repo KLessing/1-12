@@ -18,6 +18,7 @@ class Game():
         self.screen_size = screen_size
         self.__global_init(CAPTION)
         self.game_state = "init"
+        self.settings = Settings(self.screen, self.screen_size)
 
     def handle_game_state(self):
         self.__draw_blank()
@@ -66,8 +67,8 @@ class Game():
     """ --- Handler Functions --- """
 
     def __handle_init_state(self):
-        settings = Settings(self.screen, self.screen_size)
-        clicked_number = settings.draw(self.screen)
+        # draw txt and listen for click
+        clicked_number = self.settings.draw(self.screen)
         if clicked_number > 0:
             self.__start_game(clicked_number)
 
