@@ -5,8 +5,7 @@ from utils.validations import validate_selection
 from utils.globals import MAX_DICE_COUNT
 
 from .button import Button
-from .dice import Dice
-from .draw_only_dice import DrawOnlyDice
+from .dice_controller import DiceController
 from .score import Score
 from .dice_comb_selection import DiceCombSelection
 from .settings import Settings
@@ -19,6 +18,7 @@ class Game():
         self.screen_size = screen_size
         self.__global_init(CAPTION)
         self.game_state = "init"
+        self.settings = Settings(self.screen, self.screen_size)
 
     def handle_game_state(self):
         self.__draw_blank()
@@ -45,13 +45,13 @@ class Game():
         self.screen.blit(self.background, [0, 0])
     
     def __draw_dice(self):
-        for dice in self.current_dice:
+        for dice in self.dice_controller.get_current_dice():
             dice.draw(self.screen)            
             if dice.listen_for_click():
                 self.__validate()
     
     def __draw_used_dice(self):
-        for dice in self.used_dice:
+        for dice in self.dice_controller.get_used_dice():
             dice.draw(self.screen)
 
     def __draw_scores(self):
@@ -67,8 +67,8 @@ class Game():
     """ --- Handler Functions --- """
 
     def __handle_init_state(self):
-        settings = Settings(self.screen, self.screen_size)
-        clicked_number = settings.draw(self.screen)
+        # draw txt and listen for click
+        clicked_number = self.settings.draw(self.screen)
         if clicked_number > 0:
             self.__start_game(clicked_number)
 
@@ -139,16 +139,7 @@ class Game():
         self.scores[self.current_player_index].set_active(True)
 
     def __init_dice(self):
-        # init dice images
-        self.dice_img = {}
-        self.selected_dice_img = {}
-        for i in range(1, MAX_DICE_COUNT + 1):
-            self.dice_img[i] = pygame.image.load('img/' + str(i) + '.png').convert_alpha()
-            self.selected_dice_img[i] = pygame.image.load('img/' + str(i) + '_selected.png').convert_alpha()
-        
-        # init empty dice instances
-        self.current_dice = []
-        self.used_dice = []
+        self.dice_controller = DiceController()
         # needed for multiple possible combinations for first move (4 + 4 = 4 or 8)
         self.validated_combinations = set()
 
@@ -157,7 +148,7 @@ class Game():
     def __handle_confirm_move_btn(self):
         # draw confirm button and listen to click
         if self.confirm_move_btn.draw(self.screen):
-            self.__set_selected_dice()
+            self.dice_controller.set_used_dice()
             self.__move()
 
     def __handle_finish_move_btn(self):
@@ -191,31 +182,6 @@ class Game():
         self.__handle_selection_btn(lowest_number)
         self.__handle_selection_btn(lowest_number * 2)
         
-    """ --- Dice Functions --- """
-
-    def __roll_dice(self, count: int):
-        for i in range(0, count):
-            # roll dice (1-6)
-            rdm = random.randrange(1, MAX_DICE_COUNT + 1)
-            self.current_dice.append(Dice(self.dice_img[rdm], self.selected_dice_img[rdm], rdm, i, count, self.screen_size))
-
-    def __get_selected_current_dice_values(self):
-        return [dice.value for dice in self.current_dice if dice.clicked]
-
-    def __get_used_dice_values(self):
-        return [dice.value for dice in self.used_dice]
-
-    def __get_all_selected_dice_values(self):
-        res = self.__get_selected_current_dice_values() + self.__get_used_dice_values()
-        return sorted(res, reverse=True)
-
-    def __set_selected_dice(self):
-        selected_dice_values = self.__get_all_selected_dice_values()
-        self.used_dice.clear()
-
-        for index, value in enumerate(selected_dice_values):
-            self.used_dice.append(DrawOnlyDice(self.dice_img[value], value, index, 0.5))
-
     """ --- Game Functions --- """
 
     def __start_game(self, player_count):
@@ -247,14 +213,13 @@ class Game():
             if len(self.validated_combinations) == 1 and single_selection != self.scores[self.current_player_index].current_selection:
                 self.scores[self.current_player_index].set_selection(single_selection)
 
-        count = MAX_DICE_COUNT - len(self.used_dice)
-        self.current_dice.clear()
-        self.__roll_dice(count)
+        self.dice_controller.set_current_dice(self.screen_size)
+        used_dice_count = self.dice_controller.get_used_dice_count()
 
         # not first move?
-        if len(self.used_dice) > 0:
+        if used_dice_count > 0:
             # update score for current player and check for win
-            if self.scores[self.current_player_index].update(len(self.used_dice)):
+            if self.scores[self.current_player_index].update(used_dice_count):
                 self.__update_global_score()
                 self.game_state = "win"
             # is the current selection completely collected?
@@ -262,7 +227,7 @@ class Game():
                 #  end current move but keep player for next move
                 self.__end_move(True)
             # are all dice used?
-            elif len(self.used_dice) == MAX_DICE_COUNT:
+            elif used_dice_count == MAX_DICE_COUNT:
                 # end current move but keep player and selection for next move
                 self.__end_move(True, True)
 
@@ -280,7 +245,7 @@ class Game():
 
         # start new first move
         self.scores[self.current_player_index].reset_collected_count()
-        self.used_dice.clear()
+        self.dice_controller.clear_used_dice()
         self.__move()
 
     # update global negative score for all players who lost
@@ -295,7 +260,7 @@ class Game():
 
         
     def __validate(self):
-        selection = self.__get_selected_current_dice_values()
+        selection = self.dice_controller.get_selected_current_dice_values()
         current_score: Score = self.scores[self.current_player_index]
 
         if len(selection) > 0:
