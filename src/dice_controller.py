@@ -1,4 +1,5 @@
 import random
+import time
 import utils.globals as globals
 
 from utils.spritesheet import SpriteSheet
@@ -46,6 +47,8 @@ class DiceController():
 	def set_current_dice(self, screen_size):
 		count = globals.MAX_DICE_COUNT - len(self.used_dice)
 		self.current_dice.clear()
+		# Seed with current time to microseconds precision
+		random.seed(int(time.time() * 1000000))
 		for i in range(0, count):
 			# roll dice (1-6)
 			rdm = random.randrange(1, globals.MAX_DICE_COUNT + 1)

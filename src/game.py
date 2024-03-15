@@ -1,5 +1,6 @@
 import pygame
 import random
+import time
 
 from utils.validations import validate_selection
 from utils.globals import MAX_DICE_COUNT
@@ -130,6 +131,8 @@ class Game():
         self.selected_double_number = None
 
     def __init_scores(self):
+        # Seed with current time to microseconds precision
+        random.seed(int(time.time() * 1000000))
         # choose random player to begin
         self.current_player_index = random.randrange(0, self.player_count)
         # init scores for all players
