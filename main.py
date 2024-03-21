@@ -6,7 +6,10 @@ import pygame
 
 from src import Game
 
-SCREEN_SIZE = (1280, 720)
+SCREEN_SIZE = (1440, 900) # 16:10
+# SCREEN_SIZE = (1280, 720) # 16:9
+# SCREEN_SIZE = (1920, 1080) # 16:9
+
 clock = pygame.time.Clock()
 
 async def main():

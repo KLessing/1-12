@@ -110,7 +110,7 @@ class Game():
         #create display window
         self.screen = pygame.display.set_mode(self.screen_size)
         # init background image
-        self.background = pygame.image.load('img/background_1280px.jpg').convert_alpha()
+        self.background = pygame.image.load('img/background_1440x900.png').convert_alpha()
 
     def __init_buttons(self):
         # init button images
