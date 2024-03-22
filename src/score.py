@@ -3,6 +3,7 @@ import pygame
 from utils.globals import MAX_DICE_COUNT
 
 OFFSET = 15
+NAME_OFFSET = 100
 LINE_OFFSET = 37
 LINE_CENTER = 10
 WIDTH = 370
@@ -29,7 +30,7 @@ class Score():
 		player_name = "PLAYER " + str(self.player_index + 1)
 		player_font = pygame.font.Font(None, 42)
 		self.player_text = player_font.render(player_name , True, DEFAULT_COLOR)
-		self.player_rect = self.player_text.get_rect(center=(screen_width/2, LINE_OFFSET + OFFSET))
+		self.player_rect = self.player_text.get_rect(center=(screen_width/2, LINE_OFFSET + NAME_OFFSET))
 
 		# use default font for score (init needed)
 		self.score_font = pygame.font.Font(None, 30)

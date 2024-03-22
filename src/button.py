@@ -2,7 +2,8 @@ import pygame
 
 from utils.globals import CLICK_DELAY_MS
 
-OFFSET = 25
+X_OFFSET = 100
+Y_OFFSET = 100
 
 class Button():
 	def __init__(self, img: pygame.image, scale: float, pos: str, screen_size: tuple, disabled_img: pygame.image = None):
@@ -46,8 +47,8 @@ class Button():
 	
 	# calc pos for bottom mid
 	def get_pos(self, pos: str, screen_size: tuple, width: int, height: int) -> tuple:
-		return (screen_size[0] // 2 + (OFFSET if pos == "right" else - width - OFFSET),
-		  		screen_size[1] - height - OFFSET)
+		return (screen_size[0] // 2 + (X_OFFSET if pos == "right" else - width - X_OFFSET),
+		  		screen_size[1] - height - Y_OFFSET)
 
 	def enable(self):
 		self.disabled = False
