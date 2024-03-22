@@ -5,7 +5,7 @@ from utils.globals import MAX_DICE_COUNT
 OFFSET = 15
 NAME_OFFSET = 100
 LINE_OFFSET = 37
-LINE_CENTER = 10
+LINE_CENTER = 25
 WIDTH = 370
 HEIGTH = 540
 MAX_PLAYER_COUNT = 4
@@ -25,6 +25,9 @@ class Score():
 		# 5 columns, first column contains the number, start at second column for each player index
 		column_size = WIDTH // 5
 		self.x_pos = screen_width - (column_size * (MAX_PLAYER_COUNT - player_index) - OFFSET)
+
+		self.score_img = pygame.image.load('img/score-trans_370x540.png')
+		self.score_pos = (screen_width - self.score_img.get_width(), 0)
 
 		self.player_index = player_index
 		player_name = "PLAYER " + str(self.player_index + 1)
@@ -47,6 +50,7 @@ class Score():
 			surface.blit(self.player_text, self.player_rect)
 
 		# draw score
+		surface.blit(self.score_img, self.score_pos)
 		for line, text in enumerate(self.text):
 			pos = self.get_pos(line)
 			rect = pygame.Rect(pos[0], pos[1], WIDTH, HEIGTH)
