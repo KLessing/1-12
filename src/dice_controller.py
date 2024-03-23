@@ -7,6 +7,7 @@ from .animated_dice import AnimatedDice as Dice
 from .draw_only_dice import DrawOnlyDice
 
 OFFSET = 25
+DRAW_ONLY_OFFSET = 115
 
 class DiceController():
 	def __init__(self):
@@ -91,10 +92,10 @@ class DiceController():
 			
 		return (x, y)
 
-	# calc pos for two rows in top left corner
+	# calc pos for two rows in top left corner (max 4)
 	def __get_top_pos(self, index: int, width: int) -> tuple:
-		y = OFFSET
-		if index >= 3:
-			y += width + OFFSET
-			index -= 3
-		return (index * width + (index + 1) * OFFSET , y)
+		y = DRAW_ONLY_OFFSET
+		if index >= 2:
+			y += width + OFFSET * 2
+			index -= 2
+		return (index * width + (index + 1) * OFFSET * 2, y)
