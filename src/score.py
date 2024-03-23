@@ -4,9 +4,9 @@ from utils.globals import MAX_DICE_COUNT
 
 OFFSET = 15
 NAME_OFFSET = 100
-LINE_OFFSET = 37
+CELL_SIZE = 36
 SCORE_OFFSET = 50
-LINE_CENTER = 25
+LINE_OFFSET = 12
 WIDTH = 370
 HEIGTH = 540
 MAX_PLAYER_COUNT = 4
@@ -22,21 +22,20 @@ class Score():
 		# rest values sum for each lost game
 		self.global_score = 0
 
-		# score is drawn in the top right
-		# 5 columns, first column contains the number, start at second column for each player index
-		column_size = WIDTH // 5
-		self.x_pos = screen_width - (column_size * (MAX_PLAYER_COUNT - player_index) - OFFSET)
-
 		# convert alpha to keep transparency (while optimizing blitting)
 		self.score_img = pygame.image.load('img/score-trans_375x510.png').convert_alpha()
 		# center right horizontally and align to playername vertically
-		self.score_pos = (screen_width - self.score_img.get_width() - SCORE_OFFSET, NAME_OFFSET + LINE_CENTER)
+		self.score_pos = (screen_width - self.score_img.get_width() - SCORE_OFFSET, NAME_OFFSET + LINE_OFFSET)
+
+		# 5 columns, first column contains the number, start at second column for each player index
+		column_size = self.score_img.get_width() // 5
+		self.x_pos = self.score_img.get_width() - (column_size * (MAX_PLAYER_COUNT - player_index) - OFFSET)
 
 		self.player_index = player_index
 		player_name = "PLAYER " + str(self.player_index + 1)
 		player_font = pygame.font.Font(None, 42)
 		self.player_text = player_font.render(player_name , True, DEFAULT_COLOR)
-		self.player_rect = self.player_text.get_rect(center=(screen_width/2, LINE_OFFSET + NAME_OFFSET))
+		self.player_rect = self.player_text.get_rect(center=(screen_width/2, CELL_SIZE + NAME_OFFSET))
 
 		# use default font for score (init needed)
 		self.score_font = pygame.font.Font(None, 30)
@@ -53,14 +52,15 @@ class Score():
 			surface.blit(self.player_text, self.player_rect)
 
 		# draw score
-		surface.blit(self.score_img, self.score_pos)
 		for line, text in enumerate(self.text):
 			pos = self.get_pos(line)
 			rect = pygame.Rect(pos[0], pos[1], WIDTH, HEIGTH)
-			surface.blit(text, rect)
+			self.score_img.blit(text, rect)
+
+		surface.blit(self.score_img, self.score_pos)
 	
 	def get_pos(self, line: str) -> tuple:
-		return (self.x_pos , line * LINE_OFFSET + LINE_CENTER)
+		return (self.x_pos , line * CELL_SIZE + LINE_OFFSET)
 	
 	# selection = highlight these numbers
 	# (empty param = only standard colored numbers)
