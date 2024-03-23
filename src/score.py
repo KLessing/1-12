@@ -26,7 +26,8 @@ class Score():
 		column_size = WIDTH // 5
 		self.x_pos = screen_width - (column_size * (MAX_PLAYER_COUNT - player_index) - OFFSET)
 
-		self.score_img = pygame.image.load('img/score-trans_370x540.png')
+		# convert alpha to keep transparency (while optimizing blitting)
+		self.score_img = pygame.image.load('img/score-trans_375x500.png').convert_alpha()
 		self.score_pos = (screen_width - self.score_img.get_width(), 0)
 
 		self.player_index = player_index
