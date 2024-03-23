@@ -4,7 +4,7 @@ from utils.globals import MAX_DICE_COUNT
 
 MAX_PLAYER_COUNT = 4
 
-NAME_OFFSET = 100
+Y_OFFSET = 100
 
 SCORE_OFFSET = 50
 CELL_HEIGHT = 36
@@ -26,17 +26,17 @@ class Score():
 		# convert alpha to keep transparency (while optimizing blitting)
 		self.score_img = pygame.image.load('img/score-trans_375x510.png').convert_alpha()
 		# center right horizontally and align to playername vertically
-		self.score_pos = (screen_width - self.score_img.get_width() - SCORE_OFFSET, NAME_OFFSET + CELL_Y_OFFSET)
+		self.score_pos = (screen_width - self.score_img.get_width() - SCORE_OFFSET, Y_OFFSET + CELL_Y_OFFSET)
 
 		# 5 columns, first column contains the number, start at second column for each player index
-		column_size = self.score_img.get_width() // 5
-		self.x_pos = self.score_img.get_width() - (column_size * (MAX_PLAYER_COUNT - player_index) - CELL_X_OFFSET)
+		cell_width = self.score_img.get_width() // 5
+		self.player_score_x_pos = self.score_img.get_width() - (cell_width * (MAX_PLAYER_COUNT - player_index) - CELL_X_OFFSET)
 
 		self.player_index = player_index
 		player_name = "PLAYER " + str(self.player_index + 1)
 		player_font = pygame.font.Font(None, 42)
 		self.player_text = player_font.render(player_name , True, DEFAULT_COLOR)
-		self.player_rect = self.player_text.get_rect(center=(screen_width/2, CELL_HEIGHT + NAME_OFFSET))
+		self.player_rect = self.player_text.get_rect(center=(screen_width/2, Y_OFFSET + CELL_HEIGHT))
 
 		# use default font for score (init needed)
 		self.score_font = pygame.font.Font(None, 30)
@@ -60,7 +60,7 @@ class Score():
 		surface.blit(self.score_img, self.score_pos)
 	
 	def get_pos(self, line: str) -> tuple:
-		return (self.x_pos , line * CELL_HEIGHT + CELL_Y_OFFSET)
+		return (self.player_score_x_pos , line * CELL_HEIGHT + CELL_Y_OFFSET)
 	
 	# selection = highlight these numbers
 	# (empty param = only standard colored numbers)
