@@ -5,6 +5,7 @@ from utils.globals import MAX_DICE_COUNT
 OFFSET = 15
 NAME_OFFSET = 100
 LINE_OFFSET = 37
+SCORE_OFFSET = 50
 LINE_CENTER = 25
 WIDTH = 370
 HEIGTH = 540
@@ -28,7 +29,8 @@ class Score():
 
 		# convert alpha to keep transparency (while optimizing blitting)
 		self.score_img = pygame.image.load('img/score-trans_375x500.png').convert_alpha()
-		self.score_pos = (screen_width - self.score_img.get_width(), 0)
+		# center right horizontally and align to playername vertically
+		self.score_pos = (screen_width - self.score_img.get_width() - SCORE_OFFSET, NAME_OFFSET + LINE_CENTER)
 
 		self.player_index = player_index
 		player_name = "PLAYER " + str(self.player_index + 1)
