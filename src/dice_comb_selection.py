@@ -9,7 +9,7 @@ class DiceCombSelection():
 	def __init__(self, screen_size):
 		self.selection_btn_img = {}
 		for i in RELEVANT_NUMBERS:
-			self.selection_btn_img[i] = pygame.image.load(f"img/button_{i}.png").convert_alpha()
+			self.selection_btn_img[i] = pygame.image.load(f"img/button_{i}.png").convert()
 
 		# width is equal for all images
 		width = self.selection_btn_img[4].get_width()

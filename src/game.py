@@ -109,17 +109,17 @@ class Game():
         pygame.display.set_caption(caption)
         #create display window
         self.screen = pygame.display.set_mode(self.screen_size)
-        # init background image
-        self.background = pygame.image.load('img/background_1280px.jpg').convert_alpha()
+        # init background image (use convert for blitting optimization)
+        self.background = pygame.image.load('img/background_1440x900.png').convert()
 
     def __init_buttons(self):
         # init button images
-        confirm_move_btn_enabled_img = pygame.image.load('img/button_confirm-move.png').convert_alpha()
-        confirm_move_btn_disabled_img = pygame.image.load('img/disabled_button_confirm-move.png').convert_alpha()
-        end_move_btn_enabled_img = pygame.image.load('img/button_end-move.png').convert_alpha()
-        end_move_btn_disabled_img = pygame.image.load('img/disabled_button_end-move.png').convert_alpha()
-        new_game_btn_img = pygame.image.load('img/button_new-game.png').convert_alpha()
-        end_game_btn_img = pygame.image.load('img/button_end-game.png').convert_alpha()
+        confirm_move_btn_enabled_img = pygame.image.load('img/button_confirm-move.png').convert()
+        confirm_move_btn_disabled_img = pygame.image.load('img/disabled_button_confirm-move.png').convert()
+        end_move_btn_enabled_img = pygame.image.load('img/button_end-move.png').convert()
+        end_move_btn_disabled_img = pygame.image.load('img/disabled_button_end-move.png').convert()
+        new_game_btn_img = pygame.image.load('img/button_new-game.png').convert()
+        end_game_btn_img = pygame.image.load('img/button_end-game.png').convert()
 
         # init global button instances
         self.confirm_move_btn = Button(confirm_move_btn_enabled_img, 1, "right", self.screen_size, confirm_move_btn_disabled_img)

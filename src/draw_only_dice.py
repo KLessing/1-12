@@ -1,7 +1,5 @@
 import pygame
 
-from utils.globals import CLICK_DELAY_MS
-
 class DrawOnlyDice():
 	def __init__(self, img: pygame.image, pos: tuple, value: int, width: int):
 		self.rect = pygame.Rect(pos[0], pos[1], width, width)

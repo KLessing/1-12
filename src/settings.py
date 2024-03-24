@@ -4,7 +4,7 @@ from utils.spritesheet import SpriteSheet
 from .draw_only_dice import DrawOnlyDice
 from .dice_controller import DiceController
 
-OFFSET = 15
+OFFSET = 100
 LINE_OFFSET = 37
 MAX_PLAYER_COUNT = 4
 DEFAULT_COLOR = (255, 255, 255)
